@@ -1,0 +1,36 @@
+{
+  "name": "NCKU_news_analysis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev" : "webpack --mode development ./news_site/frontend/src/index.js --output ./news_site/frontend/static/frontend/main.js",
+    "build" : "webpack --mode production ./news_site/frontend/src/index.js --output ./news_site/frontend/static/frontend/main.js",
+    "default-config": "cp config.ini.default config.ini"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kksweet8845/NCKU_news_analysis.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kksweet8845/NCKU_news_analysis/issues"
+  },
+  "homepage": "https://github.com/kksweet8845/NCKU_news_analysis#readme",
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
+  }
+}

@@ -1,0 +1,10 @@
+[DEFAULT]
+
+
+[DATABASE]
+engine =
+name =
+user =
+password =
+host =
+port =
