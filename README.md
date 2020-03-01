@@ -14,7 +14,7 @@ $ npm run default-config # go to modify the config.ini file
 ```
 You need to set up `engine`, `name`, `user`, `password`, `host`, `port`.
 
-- Some simple django commands
+## Some simple django commands
 
 run server(inside news_site folder)
 ```
