@@ -2,9 +2,9 @@
 
 
 [DATABASE]
-engine =
-name =
-user =
-password =
-host =
-port =
+engine = django.db.backends.mysql
+name = newsdb
+user = <YourName>
+password = <YourPassword>
+host = localhost
+port = 3306
