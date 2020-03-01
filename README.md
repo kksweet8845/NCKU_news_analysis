@@ -6,7 +6,7 @@
 - Install dependencies
 ```
 $ npm install
-$ pip install -r requirement.txt
+$ pip install -r requirements.txt
 ```
 - Set up configurations
 ```
