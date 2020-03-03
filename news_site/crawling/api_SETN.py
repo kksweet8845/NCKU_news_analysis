@@ -1,11 +1,11 @@
+from newsdb.models import New, Subject, Brand, Brand_sub
+
 import requests
 from bs4 import BeautifulSoup
-# import mysql.connector
 import time, datetime, pytz
 
-class WebCrawler:
+class SETNCrawler:
     def __init__(self):
-        # self.cnx = mysql.connector.connect(user='root', database='SETN')
         self.sub_ID = 0
 
     def getNewsInfo(self, url):
@@ -34,8 +34,8 @@ class WebCrawler:
         return title
     
     def getDate(self, soup):
-        date = soup.find('time', class_='page-date').text
-        return date
+        date = soup.find('time', class_='page-date').text.split(" ")
+        return str(datetime.datetime.strptime(date[0], "%Y/%m/%d")).split(" ")[0]
 
     def getAuthor(self, soup):
         author = soup.find('span', class_='reporter')
@@ -62,28 +62,12 @@ class WebCrawler:
         return content_join[:2000]
     
     def getSubjectUrl(self):
-        
         return ['https://www.setn.com/ViewAll.aspx?PageGroupID=41', 
                 'https://www.setn.com/ViewAll.aspx?PageGroupID=6',
                 'https://www.setn.com/ViewAll.aspx?PageGroupID=5',
                 'https://www.setn.com/ViewAll.aspx?PageGroupID=2',
                 'https://www.setn.com/ViewAll.aspx?PageGroupID=34',
                 'https://www.setn.com/ViewAll.aspx?PageGroupID=4']
-
-    # def insertSubjectUrl(self, url):
-    #     for i in range(6):
-    #         url = self.getSubjectUrl()[i]
-    #         subject = self.getSubject(url)
-    #         cursor = self.cnx.cursor()
-    #         sql = "INSERT INTO brands_sub(brand_ID, sub_ID, index_href, ajax_href) VALUES(%s, %s, %s, %s)"
-    #         val = ('4', str(subject), url, url + '&p=1')
-    #         cursor.execute(sql, val)
-    #         self.cnx.commit()
-
-    #     if(cursor.rowcount > 0):
-    #         return True
-    #     else:
-    #         return False
     
     def getSubject(self, url):
         if(self.sub_ID==0):
@@ -135,7 +119,7 @@ class WebCrawler:
                     news_url = news.find('a')['href']
                     temp = self.getNewsInfo(url = 'https://www.setn.com%s' % news_url)
                     news_info.append(temp)
-                    timestamp_news = datetime.datetime.strptime(temp["date"], "%Y/%m/%d %H:%M:%S").timestamp()
+                    timestamp_news = datetime.datetime.strptime(temp["date"], "%Y-%m-%d").timestamp()
 
                     if timestamp_news < timestamp_today_begin:
                         news_today = False
@@ -145,22 +129,20 @@ class WebCrawler:
                     break
         
         return news_info
-
-    # def insertNews(self, newsList):
-    #     cursor = self.cnx.cursor()
-    #     sql = "INSERT INTO news(title, content, author, brand_ID, subject, date, url) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-    #     val = [(news['title'], news['content'], news['author'], str(news['brand_ID']), str(news['sub_ID']), news['date'], news['url'] ) for news in newsList]
-    #     cursor.executemany(sql, val)
-    #     self.cnx.commit()
-
-    #     if(cursor.rowcount > 0):
-    #         return True
-    #     else:
-    #         return False
-
-web_Crawler = WebCrawler()
-get_subject_url = web_Crawler.getSubjectUrl()
-# a = web_Crawler.insertSubjectUrl(get_subject_url)
-get_news_today = web_Crawler.getNewsToday(get_subject_url)
-# b = web_Crawler.insertNews(get_news_today)
-print( get_news_today )
+    
+    def insertNews(self, newsList):
+        for news in newsList:
+            try:
+                tmp = New(
+                    title=news['title'],
+                    content=news['content'],
+                    author= news['author'],
+                    brand_id=news['brand_ID'],
+                    sub_id= news['sub_ID'],
+                    date=news['date'],
+                    url=news['url']
+                )
+                tmp.save()
+            except:
+                print(news)
+        return True

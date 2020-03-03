@@ -4,8 +4,8 @@ import pandas as pd
 import numpy as np
 import re
 import datetime
-from fake_useragent import UserAgent
-import mysql.connector
+# from fake_useragent import UserAgent
+# import mysql.connector
 
 class chinatimes_crawler():
     def __init__(self):
@@ -13,26 +13,16 @@ class chinatimes_crawler():
         self.name = ['社會', '政治', '國際', '財經', '體育', '兩岸', '生活']
         self.df = pd.DataFrame(columns=['title', 'date', 'author', 'content', 'sub_ID', 'brand_ID', 'reference'])
         
-        self.mycursor = self.mydb.cursor()
+        # self.mycursor = self.mydb.cursor()
         self.sql = "INSERT INTO news_table (title, content, author, brand_ID, sub_ID, date, url) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         
         self.subject_dict = {'社會': 1,'政治': 2,'國際':3 ,'財經':4,'體育':5,'兩岸':6,'生活':7}
         self.brand_dict = {'TVBS': 1,'Yahoo': 2,'大紀元':3 ,'三立':4,'上報':5,'中天':6,'中央社':7,'中時電子報': 8,'今日新聞': 9,'公視':10 ,'自由時報':11,'民視新聞':12,'風傳媒':13,
                   '東森ETtoday':14,'新頭殼': 15,'聯合新聞網': 16,'蘋果電子報':17 ,'華視':18, 'chinatimes': 8}
         
-    def insert(self):
-        val = []
-        for i in range(len(self.df)):
-            val.append((self.df.title[i], self.df.content[i], self.df.author[i], self.df.brand_ID[i], self.df.sub_ID[i],
-                       self.df.date[i], self.df.url[i]))
-        
-        self.mycursor.executemany(self.sql, val)
-        self.mydb.commit()
         
     def get_content(self, url_str, kind, df, timeLimit=True):
-        ua = UserAgent()
-        headers = {'User-Agent': ua.chrome}
-        req = requests.get(url_str, headers=headers)
+        req = requests.get(url_str, timeout=10)
         if req.status_code != 200:
             print(req.status_code)
 
@@ -44,6 +34,8 @@ class chinatimes_crawler():
         except:
             time_str = f'{datetime.date.today()}'
         time_str = time_str.replace('/', '-')
+        self.count += 1
+        print( self.count , time_str )
         # timeToken True means accepts this df
         timeToken = True
         if(timeLimit):
