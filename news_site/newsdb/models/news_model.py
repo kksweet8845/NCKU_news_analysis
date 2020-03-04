@@ -26,6 +26,10 @@ class New(models.Model):
     update_time = models.DateTimeField(
         default=timezone.now
     )
+    url = models.CharField(
+        max_length=1000,
+        default=''
+    )
     def __str__(self):
         return ""
     class Meta:
