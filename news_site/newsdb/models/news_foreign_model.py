@@ -38,7 +38,7 @@ class NewsForeign(models.Model):
     url  = models.CharField(
         max_length=1000
     )
-    isHeadline = models.BooleanField(
+    is_headline = models.BooleanField(
         default= False
     )
 

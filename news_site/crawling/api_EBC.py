@@ -157,7 +157,7 @@ class EBCCrawler:
                     break
                 
                 # check the news subject is what we want
-                if temp[ 'sub_ID' ] != 0:
+                if temp[ 'sub_id' ] != 0:
                     news_info.append(temp)
             
             if not news_today:

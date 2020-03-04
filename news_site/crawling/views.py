@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .api import ltn_crawling
 from .api_SETN import SETNCrawler
 from .api_EBC import EBCCrawler
+from .api_aljazeera import AljazeeraCrawler
 from newsdb.models import Subject, Brand, Brand_sub
 # Create your views here.
 
@@ -21,6 +22,12 @@ def test_SETN_craling(request):
 
 def test_EBC_craling(request):
     crawler = EBCCrawler()
+    news_today = crawler.get_news_today()
+    result = crawler.insert_news(news_today)
+    return HttpResponse(news_today)
+
+def test_Aljazeera_craling(request):
+    crawler = AljazeeraCrawler()
     news_today = crawler.get_news_today()
     result = crawler.insert_news(news_today)
     return HttpResponse(news_today)
