@@ -7,7 +7,7 @@ import requests
 import pytz
 
 # standard library
-import time, datetime
+import datetime
 
 class EBCCrawler:
     def __init__ (self):

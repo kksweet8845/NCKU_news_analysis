@@ -1,5 +1,5 @@
-# local Django
-from newsdb.models import NewsForeign
+# # local Django
+# from newsdb.models import NewsForeign
 
 # third-party
 from bs4 import BeautifulSoup
@@ -9,31 +9,26 @@ import pytz
 
 # standard library
 from datetime import datetime, date
+import time
 
-class AljazeeraCrawler:
+class RFICrawler:
 
     def __init__(self):
         self.subjects = {
-            'news': {
-                'sub_id': 3,
-                'sub_url': 'b3da62e1-3aab-4ada-825c-1e177ae44daf',
-            },
-            'opinions': {
-                'sub_id': 3, 
-                'sub_url': 'cbcba57a-04e8-4af9-a759-01a4526feda6',
-            },
-            'economy': {
-                'sub_id': 4,
-                'sub_url': 'd2919248-67b5-4bb6-a818-0e9577b9c172',
-            },
-            'technology': {
-                'sub_id': 7,
-                'sub_url': '1a323933-8c6e-443b-a809-6dc2a154d648',
-            },
-            'medicine': {
-                'sub_id': 7,
-                'sub_url': '87517cae-57bf-4b76-9bef-e556e229003d',
-            }
+            '中國': 6,
+            '港澳台': 6,
+            '法國': 3, 
+            '亞洲': 3,
+            '非洲': 3,
+            '中東': 3, 
+            '歐洲': 3,
+            '美洲': 3,
+            '人權': 7,
+            '政治': 2,
+            '經貿': 4,
+            '社會': 1,
+            '生態': 7,
+            '科技與文化': 7,
         }
 
     def get_news_info (self, url, sub):
@@ -83,6 +78,28 @@ class AljazeeraCrawler:
             return "".join( content.split() )
         except:
             return None
+    
+    def crawling_news_category ( self ):
+        news_list = []
+
+        for sub in self.subjects:
+            res = requests.get('http://www.rfi.fr/tw/%E4%B8%AD%E5%9C%8B/', timeout=10)
+            soup = BeautifulSoup(res.text, 'lxml')
+            print( soup )
+            news_headline = soup.find('div', class_='m-item-list-article')
+            print( news_headline )
+            href = news_headline.find('a')['href']
+            print( href )
+
+            # for news in news_category:
+            #     href = news.find('a')['href']
+            #     url  = 'https://chinese.aljazeera.net%s' % href
+            #     print( url )
+
+            #     temp_news = self.get_news_info( url, sub )
+            #     print( temp_news )
+            # except: 
+            #     print( 'error in crasling news category' )
     
     def get_news_today( self ):
         timezone = pytz.timezone('Asia/Taipei')
@@ -135,3 +152,6 @@ class AljazeeraCrawler:
             except:
                 print( news )
         return True
+
+crawler = RFICrawler()
+crawler.crawling_news_category()
