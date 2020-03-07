@@ -10,12 +10,12 @@ class New(models.Model):
         default=''
     )
     content = models.CharField(
-        max_length=2000,
+        max_length=4000,
         blank=False,
         default=''
     )
     author  = models.CharField(
-        max_length=15
+        max_length=50
     )
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     sub = models.ForeignKey(Subject, on_delete=models.CASCADE)
