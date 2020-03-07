@@ -127,10 +127,10 @@ class pts_crawling:
         ls = []
         result = []
         pool = ThreadPool(processes=4)
-        for i in tqdm(range(1, 51), total=50, desc="AJAX"):
+        for i in range(1, 51):
             ls.append(pool.apply_async(self.aux_request_ajax, (cid, type_cn, i)))
 
-        for i in tqdm(ls, total=len(ls)):
+        for i in ls:
             tmp = i.get()
             if tmp != None:
                 result.extend(tmp)
@@ -153,7 +153,6 @@ class pts_crawling:
                     cid = dnewsUrl.split('/')[-1]
                     ls.append(pool.apply_async(self.request_newsUrl, (dnewsUrl, dm['name'])))
                     ls.append(pool.apply_async(self.request_ajax, (cid, dm['name'])))
-
         for i in tqdm(ls, total=len(ls)):
             newsUrl.extend(i.get())
         self.newsUrl = newsUrl

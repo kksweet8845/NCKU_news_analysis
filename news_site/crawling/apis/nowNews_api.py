@@ -159,7 +159,10 @@ class nowNews_crawling:
             newsDate = test_soup.select('time.entry-date')[0].attrs['datetime']
             newsDate = re.search('[0-9]+-[0-9]+-[0-9]+', newsDate).group(0)
         except IndexError:
+            print(test_soup.prettify())
+            print(test_soup.select('time.entry-date'))
             print(dn['url'])
+            print('Time')
             newsDate = "1999-01-01"
             pass
         if date == 'all' or newsDate in date:
@@ -167,6 +170,8 @@ class nowNews_crawling:
             content = ' '.join(list(contents))
             try:
                 author = test_soup.select('div.td-post-author-name')[0].get_text().strip()
+                author = author.replace(' ', '')
+                author = author.replace('-', '')
             except IndexError:
                 print(dn['url'])
                 author = "None"

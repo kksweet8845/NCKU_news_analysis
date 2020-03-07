@@ -8,6 +8,7 @@ from tqdm import tqdm
 from datetime import date
 from multiprocessing import Pool
 from multiprocessing.pool import ThreadPool
+from datetime import datetime
 
 class ltn_crawling:
     brand_name = "自由時報"
@@ -63,13 +64,21 @@ class ltn_crawling:
             sub_news = sub_news[0]
         else:
             return ls
-        sub_news = sub_news.select('div > ul > li > a.listS_h')
+        sub_news = sub_news.select('div > ul > li > a.tit')
         for ds in sub_news:
+            time = ds.select('span.time')[0].get_text().strip()
+            try:
+                time = datetime.strptime(time, '%Y-%m-%d %H:%M')
+            except ValueError:
+                cur = date.today()
+                time = datetime.strptime(time, '%H:%M')
+                time = time.replace(year=cur.year, month=cur.month, day=cur.day)
             tmp = ds.attrs
             ls.append({
                 'url' : tmp['href'],
                 'title' : tmp['data-desc'],
-                'sub': sub
+                'sub': sub,
+                'date': time
             })
         return ls
 
@@ -81,10 +90,18 @@ class ltn_crawling:
             text = json.loads(res.text)['data']
             if isinstance(text,dict) and len(text.keys()):
                 for key in text.keys():
+                    time = text[key]['time']
+                    try:
+                        time = datetime.strptime(time, '%Y-%m-%d %H:%M')
+                    except ValueError:
+                        cur = date.today()
+                        time = datetime.strptime(time, '%H:%M')
+                        time = time.replace(year=cur.year, month=cur.month, day=cur.day)
                     tmp = {
                         'url': text[key]['url'],
                         'sub': sub,
-                        'title': text[key]['title']
+                        'title': text[key]['title'],
+                        'date': time
                     }
                     ls.append(tmp)
         except ValueError:
@@ -133,14 +150,14 @@ class ltn_crawling:
         d = data
         res = requests.get(d['url'])
         res_soup = bs(res.text, 'html.parser')
-        newsDate = res_soup.select('span.time')[0].get_text()
-        newsDate = re.search('[0-9]+-[0-9]+-[0-9]+', newsDate).group(0)
-        if date != 'all':
-            if len(date) > 0 and newsDate not in date:
-                return
+        # newsDate = res_soup.select('span.time')[0].get_text()
+        # newsDate = re.search('[0-9]+-[0-9]+-[0-9]+', newsDate).group(0)
+        # if date != 'all':
+        #     if len(date) > 0 and newsDate not in date:
+        #         return
         result = res_soup.select('div.boxTitle > p:not(.appE1121, .before_ir, .after_ir, .ga_event)')
         result = map(lambda x: x.get_text(), result)
-        result = '$$$'.join(list(result)[1:-1])
+        result = ' '.join(list(result)[1:-1])
         try:
             author = re.search('〔記者([\S]+?)／', result).group(1)
         except AttributeError:
@@ -151,18 +168,26 @@ class ltn_crawling:
             'author' : author,
             'brand': self.brand,
             'sub' : d['sub'],
-            'date' : newsDate.strip(),
+            'date' : "{}-{}-{}".format(date.year, date.month, date.day),
             'url': d['url']
         }
 
 
-    def crawlingNewsContent(self, date=[]):
+    def crawlingNewsContent(self, date=[datetime.now()]):
         final_news = []
         news = self.news
         ls = []
         pool = Pool(processes=8)
         for d in tqdm(news, total=len(news)):
-            ls.append(pool.apply_async(self.request_newsContent, (d, date)))
+            dtime = d['date']
+            print(dtime)
+            if date == 'all':
+                ls.append(pool.apply_async(self.request_newsContent, (d, dtime)))
+                continue
+            for dd in date:
+                if dtime.year == dd.year and dtime.month == dd.month and dtime.day == dd.day:
+                    ls.append(pool.apply_async(self.request_newsContent, (d, dtime)))
+                    break
 
         for i in tqdm(ls, total=len(ls)):
             tmp = i.get()
@@ -185,14 +210,14 @@ class ltn_crawling:
                 return False
         return True
 
-    def getNews(self, date=[date.today().isoformat()]):
+    def getNews(self, date=[datetime.now()]):
         """ """
         self.crawlingNewsUrl()
         return self.crawlingNewsContent(date=date)
 
     def getNewsToday(self):
         """ """
-        return self.getNews(date=[date.today().isoformat()])
+        return self.getNews(date=[datetime.now()])
 
     def insertNews(self, news):
         for dn in news:

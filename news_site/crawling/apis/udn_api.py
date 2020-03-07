@@ -192,16 +192,27 @@ class udn_crawling:
         }, more_other))
         for di in tqdm(contents, total=len(contents), desc="L2-news"):
             try:
-                url = di.h3.a.attrs['href']
-                time = di.div.time.get_text()
+                a_tag = di.select('h3 > a')[0]
+                news_url = a_tag.attrs['href']
+                if hasattr(a_tag.attrs, 'title'):
+                    title = a_tag.attrs['title']
+                else:
+                    continue
+            except IndexError:
+                # print(a_tag.attrs)
+                a_tag = di.select('h2 > a')[0]
+                # print(a_tag.attrs)
+                news_url = a_tag.attrs['href']
+                title = a_tag.attrs['title']
+            try:
+                time = di.select('div.sotry-list__info > time.story-list__info')[0].get_text()
                 time = re.search('[0-9]+-[0-9]+-[0-9]+', time).group(0)
             except:
-                url = di.h3.a.attrs['href']
                 time = '1999-01-01'
             if date == 'all' or time in date:
                 ls.append({
-                    'url': self.domain + url,
-                    'title': di.h3.a.get_text(),
+                    'url': self.domain + news_url,
+                    'title': title,
                     'type_cn': self.sub.get(sub_name=type_cn),
                     'time': time
                 })
@@ -245,13 +256,13 @@ class udn_crawling:
             author = res_soup.select('span.article-content__author')[0].get_text().strip()
             author = re.search('記者([\S]+?)／',author).group(1)
         except:
-            author = ""
+            author = "None"
         return {
             'title': dn['title'],
             'content': contents,
             'author': author,
             'brand': self.brand,
-            'type_cn': dn['type_cn'],
+            'sub': dn['type_cn'],
             'date': dn['time'],
             'url': dn['url']
         }
@@ -278,7 +289,7 @@ class udn_crawling:
         """ """
 
         self.crawl_category()
-        self.crawl_newsUrl(type_cn='all', date='all')
+        self.crawl_newsUrl(type_cn='all', date=date)
         return self.crawl_newsContent()
 
     def getNewsToday(self):

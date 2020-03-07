@@ -79,7 +79,7 @@ class cts_crawling:
         for j in contents:
             time = j.select('span.newstime')[0].get_text()
             time = time.replace('/', '-')
-            time = re.search('[0-9]+-[0-9]+-[0-9]', time).group(0)
+            time = re.search('[0-9]+-[0-9]+-[0-9]+', time).group(0)
             if date == 'all' or time in date:
                 href = j.attrs['href']
                 title = j.attrs['title']
@@ -112,6 +112,8 @@ class cts_crawling:
         res = requests.get(i['href'])
         res_soup = bs(res.content, 'html.parser')
         contents = res_soup.select('div.artical-content > p')
+        if len(contents) == 0:
+            contents = res_soup.select('div.artical-content p')
         try:
             author = contents[0].get_text()
             author = re.search('([\S]+)', author).group(0)
@@ -125,7 +127,7 @@ class cts_crawling:
             'title': i['title'],
             'content': contents,
             'author': author,
-            'brand': self.brand_ID,
+            'brand': self.brand,
             'sub': i['sub'],
             'date': i['time'],
             'url': i['href']
@@ -153,9 +155,6 @@ class cts_crawling:
 
     def insertNews(self, news):
         for dn in news:
-            try:
-                tmp = New(**dn)
-                tmp.save()
-            except:
-                print(tmp)
+            tmp = New(**dn)
+            tmp.save()
         return True
