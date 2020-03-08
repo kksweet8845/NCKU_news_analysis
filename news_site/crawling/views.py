@@ -4,7 +4,7 @@ from .api import ltn_crawling
 from .api_SETN import SETNCrawler
 from .api_EBC import EBCCrawler
 from .api_TVBS import TVBSCrawler
-from .api_aljazeera import AljazeeraCrawler
+from .api_asahi import AsahiCrawler
 from .api_CNA import CNACrawler
 from .api_upmedia import UpmediaCrawler
 from newsdb.models import Subject, Brand, Brand_sub
@@ -29,8 +29,8 @@ def test_EBC_craling(request):
     result = crawler.insert_news(news_today)
     return HttpResponse(news_today)
 
-def test_Aljazeera_craling(request):
-    crawler = AljazeeraCrawler()
+def test_Asahi_craling(request):
+    crawler = AsahiCrawler()
     news_today = crawler.get_news_today()
     result = crawler.insert_news(news_today)
     return HttpResponse(news_today)

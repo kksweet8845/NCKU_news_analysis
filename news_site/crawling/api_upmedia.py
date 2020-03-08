@@ -32,7 +32,7 @@ class UpmediaCrawler:
             'date':    self.get_date(soup),
             'author':  self.get_author(soup),
         }
-    
+
     def get_news_soup (self, url):
         res = requests.get(url, timeout=10, headers={'User-Agent': 'Mozilla/5.0'})
         soup = BeautifulSoup(res.text, 'lxml')
@@ -44,7 +44,7 @@ class UpmediaCrawler:
             return "".join( title.split() )
         except:
             return None
-    
+
     def get_date (self, soup):
         try:
             date_string = soup.find('div', class_='author').contents[1]

@@ -37,7 +37,7 @@ class CNACrawler:
             'date':    self.get_date(soup),
             'author':  self.get_author(soup),
         }
-    
+
     def get_news_soup (self, url):
         res = requests.get(url, timeout=10)
         soup = BeautifulSoup(res.text, 'lxml')
@@ -59,7 +59,7 @@ class CNACrawler:
             return title
         except:
             return None
-    
+
     def get_date (self, soup):
         try:
             time_DOM = soup.find('div', class_='centralContent').find('div', class_='updatetime')
@@ -67,7 +67,7 @@ class CNACrawler:
             return(str(datetime.strptime(date_string, "%Y/%m/%d %H:%M").date()))
         except:
             return None
-    
+
     def get_content (self, soup):
         try:
             content = soup.find('div', class_='centralContent').find('div', class_='paragraph').get_text()
@@ -80,7 +80,6 @@ class CNACrawler:
         date_today = datetime.now(timezone).date()
 
         news_info = []
-        page = 1
         for sub in self.subjects:
             is_news_today = True
             for page in range(1, 20):
@@ -95,10 +94,10 @@ class CNACrawler:
                         else:
                             is_news_today = False
                             break
-                
+
                 if is_news_today == False:
                     break
-        
+
         return news_info
 
     def insert_news( self, newsList ):

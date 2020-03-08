@@ -27,7 +27,7 @@ class NewtalkCrawler:
             # 'date':    self.get_date(soup),
             # 'author':  self.get_author(soup),
         }
-    
+
     def get_news_soup (self, url):
         res = requests.get(url, timeout=10, headers={'User-Agent': 'Mozilla/5.0'})
         soup = BeautifulSoup(res.text, 'lxml')
@@ -35,12 +35,11 @@ class NewtalkCrawler:
 
     def get_title (self, soup):
         try:
-            print( soup )
             title = soup.find('h1', class_='content_title').get_text()
             return "".join( title.split() )
         except:
             return None
-    
+
     def get_date (self, soup):
         try:
             date_string = soup.find('div', class_='author').contents[1]
@@ -55,7 +54,7 @@ class NewtalkCrawler:
             return author
         except:
             return None
-    
+
     def get_content (self, soup):
         news_DOM = soup.find('div', id='news-info').find('div', class_='editor').find_all('p')
         content = ''
@@ -86,6 +85,7 @@ class NewtalkCrawler:
             for page in range(1,10):
                 try:
                     res  = requests.get('https://www.upmedia.mg/news_list.php?currentPage=%d&Type=%s?' % (page, sub), timeout=10, headers={'User-Agent': 'Mozilla/5.0'})
+                    res.encoding='GBK'
                     soup = BeautifulSoup(res.text, 'lxml')
                     news_category_DOM = soup.find('div', id='news-list')
                     href = news_category_DOM.find('dl', class_='main').find('a')['href']
@@ -114,10 +114,10 @@ class NewtalkCrawler:
                     except:
                         temp_news = None
                         print( 'error in get news category' )
-                
+
                 if is_news_today == False:
                     break
-        
+
         return news_list
 
     def insert_news( self, newsList ):

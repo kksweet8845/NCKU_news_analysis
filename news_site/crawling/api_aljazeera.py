@@ -19,7 +19,7 @@ class AljazeeraCrawler:
                 'sub_url': 'b3da62e1-3aab-4ada-825c-1e177ae44daf',
             },
             'opinions': {
-                'sub_id': 3, 
+                'sub_id': 3,
                 'sub_url': 'cbcba57a-04e8-4af9-a759-01a4526feda6',
             },
             'economy': {
@@ -48,7 +48,7 @@ class AljazeeraCrawler:
             'date':    self.get_date(url),
             'author':  cc.convert(self.get_author(soup)),
         }
-    
+
     def get_news_soup (self, url):
         res = requests.get(url, timeout=10)
         soup = BeautifulSoup(res.text, 'lxml')
@@ -60,7 +60,7 @@ class AljazeeraCrawler:
             return title
         except:
             return None
-    
+
     def get_date (self, url):
         try:
             url = url.split('/')
@@ -76,14 +76,14 @@ class AljazeeraCrawler:
         except:
             print( 'author error' )
             return None
-    
+
     def get_content (self, soup):
         try:
             content = soup.find('div', class_='article-content').get_text()
             return "".join( content.split() )
         except:
             return None
-    
+
     def get_news_today( self ):
         timezone = pytz.timezone('Asia/Taipei')
         date_today = datetime.now(timezone).date()
@@ -107,12 +107,12 @@ class AljazeeraCrawler:
                         else:
                             is_news_today = False
                             break
-                    
+
                     if is_news_today == False:
                         break
-                except: 
-                    print( 'error in crasling news category' )
-        
+                except:
+                    print('error in crasling news category')
+
         return news_list
 
     def get_subject_url( self ):
