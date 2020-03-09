@@ -15,6 +15,14 @@ class EpochTimesCrawler:
     def __init__(self):
         self.subjects = {
             'news413': 6,
+            'news412': 3,
+            'news418': 3,
+            'news415': 6,
+            'news414': 6,
+            'news994': 1,
+            'news403': 5,
+            'news420': 4,
+            'news2008': 7,
         }
 
     def get_news_info (self, url, sub):
