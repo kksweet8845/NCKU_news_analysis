@@ -9,11 +9,7 @@ from django.http import HttpResponse
 from crawling.foreign_news_apis import *
 
 # dimestic media
-from .api_SETN import SETNCrawler
-from .api_EBC import EBCCrawler
-from .api_TVBS import TVBSCrawler
-from .api_CNA import CNACrawler
-from .api_upmedia import UpmediaCrawler
+from crawling.dimestic_news_apis import *
 
 from crawling.apis import ltn_crawling, nowNews_crawling, pts_crawling, udn_crawling, cts_crawling, ftvnews_crawling
 from newsdb.models import Subject, Brand, Brand_sub
@@ -32,6 +28,23 @@ def get_foreign_news_today(request):
         JoongAngCrawler,
         EpochTimesCrawler,
         HuanqiuCrawler
+    ]
+
+    for api in apis:
+        try:
+            crawler = api()
+            news_today = crawler.get_news_today()
+            result = crawler.insert_news(news_today)
+        except Exception as e:
+            print(e)
+            print('error in crawler')
+            continue
+
+    return HttpResponse(True)
+
+def get_dimestic_news_today(request):
+    apis = [
+        EBCCrawler,
     ]
 
     for api in apis:
