@@ -120,7 +120,6 @@ class NewtalkCrawler:
                     try:
                         url = news_DOM.find('div', class_='news_title').find('a')['href']
                         temp_news = self.get_news_info( url, sub )
-                        print(temp_news['date'])
 
                         if temp_news['date'] == str(datetime.now(timezone).date()):
                             news_list.append( temp_news )

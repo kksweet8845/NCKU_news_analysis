@@ -4,3 +4,5 @@ from .newtalk_api import NewtalkCrawler
 from .SETN_api import SETNCrawler
 from .TVBS_api import TVBSCrawler
 from .upmedia_api import UpmediaCrawler
+from .storm_api import StormCrawler
+from .chinatimes_api import ChinatimesCrawler

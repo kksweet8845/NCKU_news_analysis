@@ -24,7 +24,7 @@ class EBCCrawler:
             'date':    self.get_date(soup),
             'author':  self.get_author(soup),
         }
-    
+
     def get_news_soup (self, url):
         res = requests.get(url, timeout=10)
         soup = BeautifulSoup(res.text, 'lxml')

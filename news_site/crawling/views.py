@@ -44,7 +44,14 @@ def get_foreign_news_today(request):
 
 def get_dimestic_news_today(request):
     apis = [
+        CNACrawler,
         EBCCrawler,
+        NewtalkCrawler,
+        SETNCrawler,
+        TVBSCrawler,
+        UpmediaCrawler,
+        StormCrawler,
+        ChinatimesCrawler,
     ]
 
     for api in apis:
