@@ -10,7 +10,7 @@ class New(models.Model):
         default=''
     )
     content = models.CharField(
-        max_length=2000,
+        max_length=4000,
         blank=False,
         default=''
     )
@@ -28,8 +28,9 @@ class New(models.Model):
     update_time = models.DateTimeField(
         default=timezone.now
     )
-    url  = models.CharField(
-        max_length=1000
+    url = models.CharField(
+        max_length=1000,
+        default=''
     )
     def __str__(self):
         return ""
