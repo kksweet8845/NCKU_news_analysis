@@ -10,7 +10,7 @@ class New(models.Model):
         default=''
     )
     content = models.CharField(
-        max_length=4000,
+        max_length=6000,
         blank=False,
         default=''
     )
