@@ -16,6 +16,7 @@ export class WordCloud extends PureComponent {
             <Container maxWidth="lg">
                 <Paper elevation={3} square style={paperStyle}>
                     <h1>Word Cloud</h1>
+                    <div id="wordClould"></div>
                 </Paper>
             </Container>
         )

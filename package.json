@@ -7,7 +7,8 @@
     "dev": "webpack --mode development ./news_site/frontend/src/index.js --output ./news_site/frontend/static/frontend/main.js",
     "build": "webpack --mode production ./news_site/frontend/src/index.js --output ./news_site/frontend/static/frontend/main.js",
     "default-config": "cp config.ini.default config.ini",
-    "build:react-js": "cross-env NODE_ENC=development webpack --watch --config webpack.react.config.js"
+    "build:react-js": "cross-env NODE_ENC=development webpack --watch --config webpack.react.config.js",
+    "install:chartist": "bower install chartist-plugin-fill-donut --save"
   },
   "repository": {
     "type": "git",
@@ -34,6 +35,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
+    "bower": "^1.8.8",
     "classnames": "^2.2.6",
     "cross-env": "^7.0.2",
     "file-loader": "^5.1.0",

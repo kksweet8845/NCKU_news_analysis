@@ -16,11 +16,12 @@ export class KeyWordContent extends PureComponent {
             <Container maxWidth="lg" className="container">
                 <div className="inner">
                     <div className="title">
-                        <span> 義大利 </span>
+                        <span> 義大利222 </span>
                     </div>
                     <Container>
                         <Paper elevation={3} style={paperStyle}>
                             <h1> Graph Area </h1>
+                            <div id="chart1"></div>
                         </Paper>
                     </Container>
                     <Publisher/>

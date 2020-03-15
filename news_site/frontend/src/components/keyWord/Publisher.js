@@ -21,9 +21,7 @@ export class Publisher extends PureComponent {
                 <Grid container spacing={5}>
                     <Grid item xs={4}>
                         <Paper elevation={3} style={paperStyle}>
-                            <h1>
-                                Sensation Indicator graph
-                            </h1>
+                            <div id="chart2"></div>
                         </Paper>
                     </Grid>
                     <Grid item xs={8}>
