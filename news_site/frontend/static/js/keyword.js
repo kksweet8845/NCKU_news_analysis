@@ -71,7 +71,7 @@ chart.on('draw', function(data) {
 
 
 function collision(){
-  let width = window.innerWidth, height = 200, sizeDivisor = 0.5, nodePadding = 2.5;
+  let width = window.innerWidth * 0.6, height = 200, sizeDivisor = 0.4, nodePadding = 2.5;
 
   let svg = d3.select("#wordClould")
       .append("svg")
@@ -87,29 +87,25 @@ function collision(){
       .force("charge", d3.forceManyBody().strength(-15));
   let data = [
     {
-      'country': 'Afghanistan',
-      'gdp': 18.4,
-      'continent': 'Asia',
+      'title': '中天',
+      'count': 14,
     },
     {
-      'country': 'Albania',
-      'gdp': 12.14,
-      'continent': 'Europe',
+      'title': '蘋果',
+      'count': 16,
     },
     {
-      'country': 'Algeria',
-      'gdp': 16.32,
-      'continent': 'Africa',
+      'title': '風傳媒',
+      'count': 18,
     },
     {
-      'country': 'Angola',
-      'gdp': 20.94,
-      'continent': 'Africa',
+      'title': '三立',
+      'count': 12,
     },
   ]
   let graph = []
   for(let d of data){
-    d.size = d.gdp / sizeDivisor
+    d.size = d.count / sizeDivisor
     d.size < 3 ? d.radius = 3 : d.radius = d.size;
     graph.push(d)
   }
@@ -138,33 +134,38 @@ function collision(){
           .on("drag", dragged)
           .on("end", dragended))
 
-          
-
   d3.selectAll('g.node g')
     .append("circle")
       .attr("r", function(d) { return d.radius; })
-      .attr("fill", function(d) { return color(d.continent); })
-  
+      .attr("fill", function(d) { return color(d.count); })
+
   d3.selectAll('g.node g')
     .append('text')
+    .attr('x', 0)
+    .attr('y', 0)
     .text(function (d){
-      return d.country
+      return d.title
     })
     .attr('text-anchor', 'middle')
-    .style("font-size", 12)
-
+    .style('font-size', 12)
+    .append('tspan')
+    .attr('x', 0)
+    .attr('dy', '1.2em')
+    .text(function (d){
+      return d.count
+    })
 
   function dragstarted(d) {
     if (!d3.event.active) simulation.alphaTarget(.03).restart();
     d.fx = d.x;
     d.fy = d.y;
   }
-  
+
   function dragged(d) {
     d.fx = d3.event.x;
     d.fy = d3.event.y;
   }
-  
+
   function dragended(d) {
     if (!d3.event.active) simulation.alphaTarget(.03);
     d.fx = null;
