@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev" : "webpack --mode development ./news_site/frontend/src/index.js --output ./news_site/frontend/static/frontend/main.js",
-    "build" : "webpack --mode production ./news_site/frontend/src/index.js --output ./news_site/frontend/static/frontend/main.js",
-    "default-config": "cp config.ini.default config.ini"
+    "dev": "webpack --mode development ./news_site/frontend/src/index.js --output ./news_site/frontend/static/frontend/main.js",
+    "build": "webpack --mode production ./news_site/frontend/src/index.js --output ./news_site/frontend/static/frontend/main.js",
+    "default-config": "cp config.ini.default config.ini",
+    "build:react-js": "cross-env NODE_ENC=development webpack --watch --config webpack.react.config.js"
   },
   "repository": {
     "type": "git",
@@ -25,12 +26,23 @@
     "@babel/preset-react": "^7.8.3",
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "css-loader": "^3.4.2",
+    "style-loader": "^1.1.3",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "@material-ui/core": "^4.9.5",
+    "@material-ui/icons": "^4.9.1",
+    "classnames": "^2.2.6",
+    "cross-env": "^7.0.2",
+    "file-loader": "^5.1.0",
+    "image-webpack-loader": "^6.0.0",
+    "node-sass": "^4.13.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.0",
-    "react-dom": "^16.13.0"
+    "react-dom": "^16.13.0",
+    "react-router-dom": "^5.1.2",
+    "sass-loader": "^8.0.2"
   }
 }

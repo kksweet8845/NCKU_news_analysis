@@ -2,7 +2,7 @@
 config.ini
 .vscode
 node_modules
-
+config.js
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
