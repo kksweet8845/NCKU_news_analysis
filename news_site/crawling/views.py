@@ -4,44 +4,45 @@ from crawling.apis import ltn_crawling, nowNews_crawling, pts_crawling, udn_craw
 from newsdb.models import Subject, Brand, Brand_sub
 from multiprocessing import Pool
 from newsdb.serializers import NewSerializer
+from datetime import datetime
 # Create your views here.
 
 def test_ltn_crawling(request):
     c = ltn_crawling()
-    # data = c.getNews(date='all')
-    data = c.getNewsToday()
+    data = c.getNews(date=['2020-03-08', '2020-03-09', '2020-03-01', '2020-03-11'])
+    # data = c.getNewsToday()
     result = c.insertNews(data)
     return HttpResponse(data)
 
 def test_nowNews_crawling(request):
     c = nowNews_crawling()
-    # data = c.getNews(date=)
-    data = c.getNewsToday()
+    data = c.getNews(date=['2020-03-08', '2020-03-09', '2020-03-01', '2020-03-11'])
+    # data = c.getNewsToday()
     result = c.insertNews(data)
     return HttpResponse(data[:500])
 
 def test_pts_crawling(request):
     c = pts_crawling()
-    data = c.getNews(date='all')
+    data = c.getNews(date=['2020-03-08', '2020-03-09', '2020-03-01', '2020-03-11'])
     result = c.insertNews(data)
     return HttpResponse(data)
 
 def test_udn_crawling(request):
     c = udn_crawling()
-    data = c.getNews(date=['2020-03-05', '2020-03-06', '2020-03-07'])
+    data = c.getNews(date=['2020-03-08', '2020-03-09', '2020-03-01', '2020-03-11'])
     # data = c.getNewsToday()
-    # result = c.insertNews(data)
+    result = c.insertNews(data)
     return HttpResponse(data)
 
 def test_cts_crawling(request):
     c = cts_crawling()
-    data = c.getNews(date=['2020-03-05', '2020-03-06', '2020-03-07'])
+    data = c.getNews(date=['2020-03-08', '2020-03-09', '2020-03-01', '2020-03-11'])
     result = c.insertNews(data)
     return HttpResponse(data)
 
 def test_ftvnews_crawling(request):
     c = ftvnews_crawling()
-    data = c.getNews(date=['2020-03-05', '2020-03-06', '2020-03-07'])
+    data = c.getNews(date=['2020-03-08', '2020-03-09', '2020-03-01', '2020-03-11'])
     result = c.insertNews(data)
     return HttpResponse(data)
 
@@ -49,21 +50,21 @@ def todayNews_crawling(request):
     ls = [
         ltn_crawling(),
         nowNews_crawling(),
-        pts_crawling(),
         udn_crawling(),
-        ftvnews_crawling()
+        ftvnews_crawling(),
+        pts_crawling()
     ]
-
+    errors = []
     for i in ls:
-        data = i.getNewsToday()
-        for j in data:
-            n = NewSerializer(data=j)
-            try:
-                if not n.is_valid():
-                    raise ValueError
-            except ValueError:
-                print(n.errors)
-                pass
-        # result = i.insertNews(data)
+        data = i.getNews(date=['2020-03-08', '2020-03-09', '2020-03-01', '2020-03-11'])
+        # for j in data:
+        #     n = NewSerializer(data=j)
+            # try:
+            #     if not n.is_valid():
+            #         raise ValueError
+            # except ValueError:
+            #     errors.append({'error': n.errors, 'data': n.data})
+            #     pass
+        result = i.insertNews(data)
 
-    return HttpResponse(True)
+    return HttpResponse(errors)

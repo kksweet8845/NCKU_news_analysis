@@ -180,7 +180,6 @@ class ltn_crawling:
         pool = Pool(processes=8)
         for d in tqdm(news, total=len(news)):
             dtime = d['date']
-            print(dtime)
             if date == 'all':
                 ls.append(pool.apply_async(self.request_newsContent, (d, dtime)))
                 continue
@@ -213,7 +212,10 @@ class ltn_crawling:
     def getNews(self, date=[datetime.now()]):
         """ """
         self.crawlingNewsUrl()
-        return self.crawlingNewsContent(date=date)
+        ls = []
+        for i in date:
+            ls.append(datetime.strptime(i, '%Y-%m-%d'))
+        return self.crawlingNewsContent(date=ls)
 
     def getNewsToday(self):
         """ """
