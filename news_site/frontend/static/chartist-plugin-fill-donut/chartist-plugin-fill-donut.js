@@ -1,3 +1,12 @@
+;(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['chartist'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('chartist'));
+  } else {
+    root['Chartist.plugins.fillDonut'] = factory(root.Chartist);
+  }
+}(this, function(Chartist) {
 /**
  * Chartist.js plugin to pre fill donuts with animations
  * author: moxx
@@ -132,3 +141,8 @@
         };
     };
 }(document, Chartist)); // jshint ignore:line
+
+return Chartist.plugins.fillDonut;
+}));
+
+//# sourceMappingURL=chartist-plugin-fill-donut.js.map
