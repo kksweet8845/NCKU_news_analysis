@@ -1,13 +1,15 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
+
+/** Component */
 import Header from './layout/Header'
-// import ContentBody from './layout/ContentBody'
-import { Container } from '@material-ui/core'
-import { Grid } from '@material-ui/core'
 import WordCloud from './keyWord/WordCloud'
 import KeyWordContent from './keyWord/KeyWordContent'
+
+/** Css  */
 import './css/App.css'
-class App extends Component {
+
+class KeywordApp extends Component {
     render() {
         return (
             <div>
@@ -19,4 +21,4 @@ class App extends Component {
     }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'))
+ReactDOM.render(<KeywordApp />, document.getElementById('app'))

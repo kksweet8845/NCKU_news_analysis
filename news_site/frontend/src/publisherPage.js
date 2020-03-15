@@ -1,0 +1,1 @@
+import PublisherApp from './components/PublisherApp'

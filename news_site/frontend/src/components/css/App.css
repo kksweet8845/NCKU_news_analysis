@@ -1,0 +1,40 @@
+.container {
+    border: 2px solid green;
+    border-radius: 20px;
+    padding: 0 0;
+    margin: 30px 3px;
+}
+
+.title, .text {
+    display: flex;
+    justify-content: center;
+}
+
+.title span {
+    background: #ffffff;
+    font-size: 3em;
+    margin-top: -0.65em;
+    border: 2px solid green;
+}
+
+
+.text span {
+    background: #ffffff;
+    font-size: 1.8em;
+    margin-bottom: -0.65em;
+    border: 2px solid green;
+}
+
+
+.small-title {
+    display: flex;
+    justify-content: left;
+}
+
+.small-title span {
+    background: #ffffff;
+    font-size: 2em;
+    margin-top: -0.65em;
+    border: 2px solid green;
+}
+
