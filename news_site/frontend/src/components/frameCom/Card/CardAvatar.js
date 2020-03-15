@@ -6,33 +6,31 @@ import PropTypes from "prop-types";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
-
 // core components
-import styles from "assets/jss/material-dashboard-react/components/cardStyle.js";
+
+import styles from "assets/jss/material-dashboard-react/components/cardAvatarStyle.js";
 
 const useStyles = makeStyles(styles);
 
-export default function Card(props) {
+export default function CardAvatar(props) {
   const classes = useStyles();
-  const { className, children, plain, profile, chart, ...rest } = props;
-  const cardClasses = classNames({
-    [classes.card]: true,
-    [classes.cardPlain]: plain,
-    [classes.cardProfile]: profile,
-    [classes.cardChart]: chart,
+  const { children, className, plain, profile, ...rest } = props;
+  const cardAvatarClasses = classNames({
+    [classes.cardAvatar]: true,
+    [classes.cardAvatarProfile]: profile,
+    [classes.cardAvatarPlain]: plain,
     [className]: className !== undefined
   });
   return (
-    <div className={cardClasses} {...rest}>
+    <div className={cardAvatarClasses} {...rest}>
       {children}
     </div>
   );
 }
 
-Card.propTypes = {
+CardAvatar.propTypes = {
+  children: PropTypes.node.isRequired,
   className: PropTypes.string,
-  plain: PropTypes.bool,
   profile: PropTypes.bool,
-  chart: PropTypes.bool,
-  children: PropTypes.node
+  plain: PropTypes.bool
 };

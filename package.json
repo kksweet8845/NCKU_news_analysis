@@ -34,6 +34,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
+    "chartist": "^0.11.4",
     "classnames": "^2.2.6",
     "cross-env": "^7.0.2",
     "file-loader": "^5.1.0",
@@ -41,6 +42,7 @@
     "node-sass": "^4.13.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.0",
+    "react-chartist": "^0.14.3",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",
     "sass-loader": "^8.0.2"
