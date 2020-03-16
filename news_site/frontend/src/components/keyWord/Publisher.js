@@ -14,6 +14,9 @@ import CardHeader from "components/Card/CardHeader"
 import CardIcon from "components/Card/CardIcon"
 import SnackbarContent from "components/Snackbar/SnackbarContent"
 import ChartistGraph from "react-chartist"
+import Chartist from 'chartist'
+import 'chartist-plugin-fill-donut'
+
 
 const paperStyle = {
     width: '100%',
@@ -85,10 +88,22 @@ function Publisher(props) {
     }
     var options = {
         donut: true,
-        donutWidth: 60,
+        donutWidth: 20,
         donutSolid: true,
         startAngle: 270,
-        showLabel: true
+        showLabel: true,
+        plugins: [
+            Chartist.plugins.fillDonut({
+                items: [{
+                    content: '<i class="fa fa-tachometer"></i>',
+                    position: 'bottom',
+                    offsetY : 10,
+                    offsetX: -2
+                }, {
+                    content: '<h3>40</h3>'
+                }]
+            })
+        ]
     }
 
     let listOfNews = props.news
