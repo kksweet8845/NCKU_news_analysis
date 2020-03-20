@@ -27,7 +27,7 @@ class NYTCrawler:
             'sub_id':    self.subjects[sub],
             'url':     url,
             'title':   self.get_title(soup),
-            'content': self.get_content(soup),
+            'content': self.get_content(soup)[:2000],
             'date':    self.get_date(soup),
             'author':  self.get_author(soup),
         }
@@ -119,6 +119,7 @@ class NYTCrawler:
                     is_headline= False,
                 )
                 tmp.save()
-            except:
+            except Exception as e:
+                print( e )
                 print( news )
         return True

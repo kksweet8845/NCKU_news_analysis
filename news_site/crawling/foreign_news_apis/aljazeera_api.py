@@ -1,6 +1,9 @@
 # local Django
 from newsdb.models import NewsForeign
 
+# Django
+from django.shortcuts import get_object_or_404
+
 # third-party
 from bs4 import BeautifulSoup
 from opencc import OpenCC
@@ -9,6 +12,7 @@ import pytz
 
 # standard library
 from datetime import datetime, date
+import re
 
 class AljazeeraCrawler:
 
@@ -35,6 +39,7 @@ class AljazeeraCrawler:
                 'sub_url': '87517cae-57bf-4b76-9bef-e556e229003d',
             }
         }
+        self.brand_id = 1
 
     def get_news_info (self, url, sub):
         soup = self.get_news_soup(url)
@@ -80,9 +85,29 @@ class AljazeeraCrawler:
     def get_content (self, soup):
         try:
             content = soup.find('div', class_='article-content').get_text()
-            return "".join( content.split() )
+            return "".join( content.split() )[:2000]
         except:
             return None
+    
+    def get_news_headline(self):
+        try:
+            res = requests.get('https://chinese.aljazeera.net/', timeout=10)
+            soup = BeautifulSoup(res.text, 'lxml')
+            
+            headline_DOM = soup.select('div.main-story div.main-story__content div.image a')[0]
+            href = headline_DOM['href']
+            url  = 'https://chinese.aljazeera.net%s' % href
+
+            headline_news =  NewsForeign.objects.filter(url = url)[0]
+            headline_news.is_headline = 1
+            headline_news.save()
+
+            return True
+            
+        except Exception as e:
+            print(e)
+            return False
+    
 
     def get_news_today( self ):
         timezone = pytz.timezone('Asia/Taipei')
@@ -91,7 +116,7 @@ class AljazeeraCrawler:
         news_list = []
         for sub in self.subjects:
             is_news_today = True
-            for page in range(1, 2):
+            for page in range(1, 20):
                 try:
                     res = requests.get('https://chinese.aljazeera.net/getsummarypages/%s/%d' % (self.subjects[sub]['sub_url'], page), timeout=10)
                     soup = BeautifulSoup(res.text, 'lxml')
@@ -100,6 +125,7 @@ class AljazeeraCrawler:
                     for news in news_category:
                         href = news.find('a')['href']
                         url  = 'https://chinese.aljazeera.net%s' % href
+
                         temp_news = self.get_news_info( url, sub )
 
                         if temp_news['date'] == str(datetime.now(timezone).date()):
@@ -110,8 +136,20 @@ class AljazeeraCrawler:
 
                     if is_news_today == False:
                         break
-                except:
+                except Exception as e:
+                    print(e)
                     print('error in crasling news category')
+
+        return news_list
+
+    def get_news_by_date(self, date_list):
+        news_list = []
+        for date in date_list:
+            for sub in self.subjects:
+                url_list = self.get_url_by_date( sub, datetime.strptime(date, '%Y-%m-%d').date() )
+                for url in url_list:
+                    temp_news = self.get_news_info( url, sub, str(date) )
+                    news_list.append( temp_news )
 
         return news_list
 

@@ -31,6 +31,7 @@ class HuanqiuCrawler:
                 'sub_url': Template('https://world.huanqiu.com/api/list?node=%22/e3pmh22ph/e3pmh2398%22,%22/e3pmh22ph/e3pmh26vv%22,%22/e3pmh22ph/e3pn6efsl%22&offset=$offset&limit=$limit')
             },
         }
+        self.brand_id = 9
 
     def get_news_info (self, url, sub):
         soup = self.get_news_soup(url)
@@ -87,6 +88,28 @@ class HuanqiuCrawler:
         except:
             print('error in get_content')
             return None
+
+    def get_news_headline(self):
+        try:
+            res = requests.get(
+                url = 'https://www.huanqiu.com/', 
+                timeout=10,
+                verify = False
+            )
+            soup = BeautifulSoup(res.text, 'lxml')
+            
+            headline_DOM = soup.select('div.conFir div.rightFir div dl.r1 dt a')[0]
+            url = headline_DOM['href']
+
+            headline_news =  NewsForeign.objects.filter(url = url)[0]
+            headline_news.is_headline = 1
+            headline_news.save()
+
+            return True
+            
+        except Exception as e:
+            print(e)
+            return False
 
     def get_news_today( self ):
         timezone = pytz.timezone('Asia/Taipei')

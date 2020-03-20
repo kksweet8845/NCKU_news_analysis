@@ -16,6 +16,7 @@ class BBCCrawler:
             'business': 4,
             'chinese_news': 6
         }
+        self.brand_id = 2
 
     def get_news_info (self, url, sub):
         soup = self.get_news_soup(url)
@@ -71,6 +72,25 @@ class BBCCrawler:
         except:
             print('error in get_content')
             return None
+
+    def get_news_headline(self):
+        try:
+            res = requests.get('https://www.bbc.com/zhongwen/trad', timeout=10)
+            soup = BeautifulSoup(res.text, 'lxml')
+
+            headline_DOM = soup.select('div#comp-top-story-1 div.buzzard div.buzzard-item a')[0]
+            href = headline_DOM['href']
+            url = 'https://www.bbc.com%s' % href
+
+            headline_news =  NewsForeign.objects.get(url = url)
+            headline_news.is_headline = 1
+            headline_news.save()
+
+            return True
+
+        except Exception as e:
+            print(e)
+            return False
 
     def get_news_today( self ):
         news_today = True

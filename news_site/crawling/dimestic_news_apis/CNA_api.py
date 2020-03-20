@@ -26,15 +26,15 @@ class CNACrawler:
             'aloc': 7,
         }
 
-    def get_news_info (self, url, sub):
+    def get_news_info (self, url, sub, date):
         soup = self.get_news_soup(url)
         return {
             'brand_id':  7,
             'sub_id':    self.subjects[sub],
             'url':     url,
             'title':   self.get_title(soup),
-            'content': self.get_content(soup)[:2000],
-            'date':    self.get_date(soup),
+            'content': self.get_content(soup),
+            'date':    date,
             'author':  self.get_author(soup),
         }
 
@@ -60,45 +60,50 @@ class CNACrawler:
         except:
             return None
 
-    def get_date (self, soup):
-        try:
-            time_DOM = soup.find('div', class_='centralContent').find('div', class_='updatetime')
-            date_string = time_DOM.find('span').get_text()
-            return(str(datetime.strptime(date_string, "%Y/%m/%d %H:%M").date()))
-        except:
-            return None
-
     def get_content (self, soup):
         try:
             content = soup.find('div', class_='centralContent').find('div', class_='paragraph').get_text()
-            return "".join( content.split() )
+            return "".join( content.split() )[:2000]
         except:
             return None
-
-    def get_news_today( self ):
+    
+    def get_url_by_date(self, sub, date):
+        flag = True
+        url_category = []
+        for page in range(1, 20):
+            res = requests.get(url = 'https://www.cna.com.tw/cna2018api/api/simplelist/categorycode/%s/pageidx/%d/' % (sub, page))
+            news_list = res.json()['result']['SimpleItems']
+            for news in news_list:
+                if news['IsAd'] == 'N':
+                    if datetime.strptime(news['CreateTime'], '%Y/%m/%d %H:%M').date() > date:
+                        continue
+                    elif datetime.strptime(news['CreateTime'], '%Y/%m/%d %H:%M').date() == date:
+                        url_category.append(news['PageUrl'])
+                    else:
+                        flag = False
+                        break
+            
+            if flag == False:
+                break
+        
+        return url_category
+    
+    def get_news_today(self):
         timezone = pytz.timezone('Asia/Taipei')
         date_today = datetime.now(timezone).date()
 
-        news_info = []
-        for sub in self.subjects:
-            is_news_today = True
-            for page in range(1, 20):
-                res = requests.get(url = 'https://www.cna.com.tw/cna2018api/api/simplelist/categorycode/%s/pageidx/%d/' % (sub, page))
-                news_list = res.json()['result']['SimpleItems']
+        return self.get_news_by_date( [str(date_today)] )
+    
+    def get_news_by_date( self, date_list ):
+        news_list = []
+        for date in date_list:
+            for sub in self.subjects:
+                url_list = self.get_url_by_date( sub, datetime.strptime(date, '%Y-%m-%d').date() )
+                for url in url_list:
+                    temp_news = self.get_news_info( url, sub, str(date) )
+                    news_list.append( temp_news )
 
-                for news in news_list:
-                    if news['IsAd'] == 'N':
-                        temp_news = self.get_news_info(news['PageUrl'], sub)
-                        if temp_news['date'] == str(datetime.now(timezone).date()):
-                            news_info.append( temp_news )
-                        else:
-                            is_news_today = False
-                            break
-
-                if is_news_today == False:
-                    break
-
-        return news_info
+        return news_list      
 
     def insert_news( self, newsList ):
         for news in newsList:

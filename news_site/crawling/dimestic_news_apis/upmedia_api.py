@@ -21,7 +21,7 @@ class UpmediaCrawler:
             '154': 3
         }
 
-    def get_news_info (self, url, sub):
+    def get_news_info (self, url, sub, date):
         soup = self.get_news_soup(url)
         return {
             'brand_id':  5,
@@ -29,7 +29,7 @@ class UpmediaCrawler:
             'url':     url,
             'title':   self.get_title(soup),
             'content': self.get_content(soup)[:2000],
-            'date':    self.get_date(soup),
+            'date':    date,
             'author':  self.get_author(soup),
         }
 
@@ -67,48 +67,68 @@ class UpmediaCrawler:
             content += DOM.get_text()
         return "".join( content.split() )
 
+    def get_url_by_date(self, sub, date):
+        flag = True
+        url_category = []
+        for page in range(1, 20):
+            try:
+                res  = requests.get('https://www.upmedia.mg/news_list.php?currentPage=%d&Type=%s?' % (page, sub), timeout=10, headers={'User-Agent': 'Mozilla/5.0'})
+                soup = BeautifulSoup(res.text, 'lxml')
+                news_category_DOM = soup.find('div', id='news-list')
+                href = news_category_DOM.find('dl', class_='main').find('a')['href']
+                news_date = news_category_DOM.select('dl.main dd div.author')[0].contents[1]
+                news_date = ''.join(news_date.split())
+                if datetime.strptime(news_date, '%Y年%m月%d日%H:%M').date() > date:
+                    continue
+                elif datetime.strptime(news_date, '%Y年%m月%d日%H:%M').date() == date:
+                    url_category.append( 'https://www.upmedia.mg/%s' % href )
+                else:
+                    flag = False
+                    break
+            except Exception as e:
+                print(e)
+                print( 'error in get main news' )     
+                continue
+
+            news_category = news_category_DOM.find_all('div', class_='top-dl')
+            for news_DOM in news_category:
+                try:
+                    news_date = news_DOM.find('div', class_='time').get_text()
+                    news_date = ''.join(news_date.split())
+                    href = news_DOM.find('dt').find('a')['href']
+
+                    if datetime.strptime(news_date, '%Y年%m月%d日%H:%M').date() > date:
+                        continue
+                    elif datetime.strptime(news_date, '%Y年%m月%d日%H:%M').date() == date:
+                        url_category.append( 'https://www.upmedia.mg/%s' % href )
+                    else:
+                        flag = False
+                        break
+                except:
+                    print( 'error in get news category' )
+                    continue
+            
+            if flag == False:
+                break
+        
+        return url_category
+
+
     def get_news_today( self ):
         timezone = pytz.timezone('Asia/Taipei')
         date_today = datetime.now(timezone).date()
 
+        return self.get_news_by_date( [str(date_today)] )
+
+    def get_news_by_date(self, date_list):
         news_list = []
-        for sub in self.subjects:
-            is_news_today = True
-            for page in range(1,10):
-                try:
-                    res  = requests.get('https://www.upmedia.mg/news_list.php?currentPage=%d&Type=%s?' % (page, sub), timeout=10, headers={'User-Agent': 'Mozilla/5.0'})
-                    soup = BeautifulSoup(res.text, 'lxml')
-                    news_category_DOM = soup.find('div', id='news-list')
-                    href = news_category_DOM.find('dl', class_='main').find('a')['href']
-                    url = 'https://www.upmedia.mg/%s' % href
+        for date in date_list:
+            for sub in self.subjects:
+                url_list = self.get_url_by_date( sub, datetime.strptime(date, '%Y-%m-%d').date() )
+                for url in url_list:
+                    temp_news = self.get_news_info( url, sub, str(date) )
+                    news_list.append( temp_news )
 
-                    temp_news = self.get_news_info( url, sub )
-                    if temp_news['date'] == str(datetime.now(timezone).date()):
-                        news_list.append( temp_news )
-                except:
-                    temp_news = None
-                    print( 'error in get main news' )
-
-                news_category = news_category_DOM.find_all('div', class_='top-dl')
-                for news_DOM in news_category:
-                    try:
-                        href = news_DOM.find('dt').find('a')['href']
-                        url = 'https://www.upmedia.mg/%s' % href
-
-                        temp_news = self.get_news_info( url, sub )
-
-                        if temp_news['date'] == str(datetime.now(timezone).date()):
-                            news_list.append( temp_news )
-                        else:
-                            is_news_today = False
-                            break
-                    except:
-                        temp_news = None
-                        print( 'error in get news category' )
-                
-                if is_news_today == False:
-                    break
-        
         return news_list
 
     def insert_news( self, newsList ):

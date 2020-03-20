@@ -102,7 +102,7 @@ class SETNCrawler:
         return news_info
     
 
-    def get_news_today(self, url):
+    def get_news_today(self):
         timezone = pytz.timezone('Asia/Taipei')
         news_today = True
         time_today_begin = str(datetime.datetime.now(timezone).date())
@@ -130,7 +130,7 @@ class SETNCrawler:
         
         return news_info
     
-    def insertNews(self, newsList):
+    def insert_news(self, newsList):
         for news in newsList:
             try:
                 tmp = New(

@@ -15,6 +15,7 @@ class JoongAngCrawler:
             '001001': 4,
             '002001': 3,
         }
+        self.brand_id = 8
 
     def get_news_info (self, url = None, sub = None, date = None):
         soup = self.get_news_soup(url)
@@ -64,6 +65,25 @@ class JoongAngCrawler:
         except:
             print('error in get_content')
             return None
+
+    def get_news_headline(self):
+        try:
+            res = requests.get('https://chinese.joins.com/big5/', timeout=10)
+            soup = BeautifulSoup(res.text, 'lxml')
+            
+            headline_DOM = soup.select('td#mainCenter div.m1 div.centerTit a')[0]
+            href = headline_DOM['href']
+            url  = 'https://chinese.joins.com/big5%s' % href[1:]
+
+            headline_news =  NewsForeign.objects.get(url = url)
+            headline_news.is_headline = 1
+            headline_news.save()
+
+            return True
+            
+        except Exception as e:
+            print(e)
+            return False
 
     def get_news_today( self ):
         news_today = True

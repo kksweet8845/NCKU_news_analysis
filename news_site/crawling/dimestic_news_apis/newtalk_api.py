@@ -8,6 +8,7 @@ import pytz
 
 # standard library
 from datetime import datetime, date
+import re
 
 class NewtalkCrawler:
 
@@ -23,7 +24,7 @@ class NewtalkCrawler:
             '102/體育': 5,
         }
 
-    def get_news_info (self, url, sub):
+    def get_news_info (self, url, sub, date):
         soup = self.get_news_soup(url)
         if soup != None:
             return {
@@ -31,8 +32,8 @@ class NewtalkCrawler:
                 'sub_id':    self.subjects[sub],
                 'url':     url,
                 'title':   self.get_title(soup),
-                'content': self.get_content(soup)[:2000],
-                'date':    self.get_date(soup),
+                'content': self.get_content(soup),
+                'date':    date,
                 'author':  self.get_author(soup),
             }
         else:
@@ -55,14 +56,6 @@ class NewtalkCrawler:
         except:
             return None
 
-    def get_date (self, soup):
-        try:
-            date_string = soup.find('div', class_='content_date').get_text().split('|')[0]
-            date_string = "".join( date_string.split() )
-            return(str(datetime.strptime(date_string, "發布%Y.%m.%d").date()))
-        except:
-            return None
-
     def get_author (self, soup):
         try:
             author = soup.find('div', class_='content_reporter').find('a').get_text()
@@ -77,62 +70,85 @@ class NewtalkCrawler:
             for DOM in news_DOM:
                 if DOM.name == 'p':
                     content += DOM.get_text()
-            return "".join( content.split() )
+            return "".join( content.split() )[:2000]
         except Exception as e:
             print( 'error in get_content' )
             print(e)
             return None
 
+    def get_url_by_date(self, sub, date):
+        flag = True
+        url_category = []
+        for page in range(1, 10):
+            try:
+                res  = requests.get('https://newtalk.tw/news/subcategory/%s/%d' % (sub, page), timeout=10, headers={'User-Agent': 'Mozilla/5.0'})
+                res.encoding = res.apparent_encoding
+                soup = BeautifulSoup(res.text, 'lxml')
+            except Exception as e:
+                print( e )
+                print( 'error in get news categoty' )
+                continue
+
+            news_category_DOM = soup.find_all('div', class_='news_box1')
+            for news_DOM in news_category_DOM:
+                try:
+                    url = news_DOM.find('div', class_='news-title').find('a')['href']
+                    news_date = re.search( r'https://newtalk.tw/news/(.*)/(.*)/(.*)', url ).group(2)
+
+                    if datetime.strptime(news_date, '%Y-%m-%d').date() > date:
+                        continue
+                    elif datetime.strptime(news_date, '%Y-%m-%d').date() == date:
+                        url_category.append( url )
+                    else:
+                        flag = False
+                        break
+
+                except Exception as e:
+                    print( 'error in crawling news category' )
+                    print( e )
+                    continue
+            
+            if flag == False:
+                break
+
+            news_category_DOM = soup.find('div', id='category').find_all('div', class_='news-list-item')
+            for news_DOM in news_category_DOM:
+                try:
+                    url = news_DOM.find('div', class_='news_title').find('a')['href']
+                    news_date = re.search( r'https://newtalk.tw/news/(.*)/(.*)/(.*)', url ).group(2)
+
+                    if datetime.strptime(news_date, '%Y-%m-%d').date() > date:
+                        continue
+                    elif datetime.strptime(news_date, '%Y-%m-%d').date() == date:
+                        url_category.append( url )
+                    else:
+                        flag = False
+                        break
+
+                except Exception as e:
+                    print( 'error in crawling news gategory' )
+                    print( e )
+                    continue
+        
+            if flag == False:
+                break
+        return url_category
+
     def get_news_today( self ):
         timezone = pytz.timezone('Asia/Taipei')
         date_today = datetime.now(timezone).date()
 
+        return self.get_news_by_date( [str(date_today)] )
 
+    def get_news_by_date(self, date_list):
         news_list = []
-        for sub in self.subjects:
-            is_news_today = True
-            for page in range(1,20):
-                try:
-                    res  = requests.get('https://newtalk.tw/news/subcategory/%s/%d' % (sub, page), timeout=10, headers={'User-Agent': 'Mozilla/5.0'})
-                    res.encoding = res.apparent_encoding
-                    soup = BeautifulSoup(res.text, 'lxml')
-                except Exception as e:
-                    print( e )
-                    print( 'error in get news categoty' )
-                    continue
+        for date in date_list:
+            for sub in self.subjects:
+                url_list = self.get_url_by_date( sub, datetime.strptime(date, '%Y-%m-%d').date() )
+                for url in url_list:
+                    temp_news = self.get_news_info( url, sub, str(date) )
+                    news_list.append( temp_news )
 
-                news_category_DOM = soup.find_all('div', class_='news_box1')
-                for news_DOM in news_category_DOM:
-                    try:
-                        url = news_DOM.find('div', class_='news-title').find('a')['href']
-                        temp_news = self.get_news_info( url, sub )
-
-                        if temp_news['date'] == str(datetime.now(timezone).date()):
-                            news_list.append( temp_news )
-                    except Exception as e:
-                        print( 'error in crawling news gategory' )
-                        print( e )
-                        continue
-
-
-                news_category_DOM = soup.find('div', id='category').find_all('div', class_='news-list-item')
-                for news_DOM in news_category_DOM:
-                    try:
-                        url = news_DOM.find('div', class_='news_title').find('a')['href']
-                        temp_news = self.get_news_info( url, sub )
-
-                        if temp_news['date'] == str(datetime.now(timezone).date()):
-                            news_list.append( temp_news )
-                        else:
-                            is_news_today = False
-                            break
-                    except Exception as e:
-                        print( 'error in crawling news gategory' )
-                        print( e )
-                        continue
-
-                if is_news_today == False:
-                    break
         return news_list
 
     def insert_news( self, newsList ):

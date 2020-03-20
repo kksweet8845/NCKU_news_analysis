@@ -74,6 +74,23 @@ class EpochTimesCrawler:
                 content += DOM.get_text()
         return "".join( content.split() )
 
+    def get_news_headline(self):
+        try:
+            res  = requests.get('https://www.epochtimes.com/b5/n24hr.htm', timeout=10, headers={'User-Agent': 'Mozilla/5.0'})
+            soup = BeautifulSoup(res.text, 'lxml')       
+            
+            headline_DOM = soup.select('div#leftcol div.topbox div.left a')[0]
+            url = headline_DOM['href']
+
+            headline_news =  NewsForeign.objects.get(url = url)
+            headline_news.is_headline = 1
+            headline_news.save()
+
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
     def get_news_today( self ):
         timezone = pytz.timezone('Asia/Taipei')
         date_today = datetime.now(timezone).date()

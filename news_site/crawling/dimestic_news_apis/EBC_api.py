@@ -7,13 +7,13 @@ import requests
 import pytz
 
 # standard library
-import datetime
+from datetime import datetime
 
 class EBCCrawler:
     def __init__ (self):
         self.page_num = 2
 
-    def get_news_info (self, url):
+    def get_news_info (self, url, date):
         soup = self.get_news_soup(url)
         return {
             'brand_id':  14,
@@ -21,7 +21,7 @@ class EBCCrawler:
             'url':     url,
             'title':   self.get_title(soup),
             'content': self.get_content(soup),
-            'date':    self.get_date(soup),
+            'date':    date,
             'author':  self.get_author(soup),
         }
 
@@ -37,16 +37,6 @@ class EBCCrawler:
         except:
             return None
         return title
-    
-    def get_date (self, soup):
-        try:
-            temp = soup.select('.info')[0]
-            date_string = temp.select('.small-gray-text')[0].get_text()
-            date_list = date_string.split(" ")
-            date_string = date_list[0]
-            return str(datetime.datetime.strptime(date_string, "%Y/%m/%d")).split(" ")[0]
-        except:
-            return None
 
     def get_author (self, soup):
         try:
@@ -83,87 +73,72 @@ class EBCCrawler:
             return 0
     
     def get_content (self, soup):
-        temp = soup.find('span', {"data-reactroot": True})
-        temp = temp.find_all('p')
-        content = ""
-        if len(temp) == 0:
-            content = soup.find('span', {"data-reactroot": True}).get_text()
-        for node in temp:
-            if node.findChild() == None:
-                if len(node.get_text()) > 0:
-                    content += node.get_text()
-                elif node.contents != None and len(node.contents) > 0:
-                    print(node.contents[0])
-                    content += node.contents
-        content = "".join(content.split())
-        return content
-    
-    def get_news (self, news_num = 30, start_page = 1):
-        if news_num > 600:
-            news_num = 600
-        page_num = int((news_num - 1) / 30 + 1)
-        news_info = []
+        try:
+            temp = soup.find('span', {"data-reactroot": True})
+            temp = temp.find_all('p')
+            content = ""
+            if len(temp) == 0:
+                content = soup.find('span', {"data-reactroot": True}).get_text()
+            for node in temp:
+                if node.findChild() == None:
+                    if len(node.get_text()) > 0:
+                        content += node.get_text()
+                    elif node.contents != None and len(node.contents) > 0:
+                        print(node.contents[0])
+                        content += node.contents
+            content = "".join(content.split())
+            return content[:2000]
+        except:
+            print('error in get_content')
+            return None
 
-        count = 0
-        for page in reversed(range(start_page, page_num + start_page)):
-            res = requests.get('https://news.ebc.net.tw/Realtime?page=%d' % page, timeout=10)
-            soup = BeautifulSoup(res.text, 'lxml')
-            news_list_area = soup.select('.news-list-area')[0]
-            news_list = news_list_area.select('.white-box')
-
-            # read the news content
-            for news in reversed(news_list):
-                if 'list-ad' in news['class']:
-                    continue
-                count += 1
-                print(  count )
-                news_url = news.find_all('a')[0]['href']
-                temp = self.get_news_info(url='https://news.ebc.net.tw%s' % news_url)
-
-                # check the news subject is what we want
-                if temp[ 'sub_ID' ] != 0:
-                    news_info.append(temp)
-        
-        return news_info
-    
-    def get_news_today( self ):
-        max_page = 20
-        news_today = True
+    def get_url_by_date(self, date):
         timezone = pytz.timezone('Asia/Taipei')
-        time_today_begin = str(datetime.datetime.now(timezone).date())
-        timestamp_today_begin = datetime.datetime.strptime(time_today_begin, "%Y-%m-%d").timestamp()
-        news_info = []
-        
-        for page in range(1, max_page + 1):
+        date_today = datetime.now(timezone).date()
+        flag = True
+        url_category = []
+        for page in range(1, 21):
             res = requests.get('https://news.ebc.net.tw/Realtime?page=%d' % page, timeout=10)
             soup = BeautifulSoup(res.text, 'lxml')
             news_list_area = soup.select('.news-list-area')[0]
             news_list = news_list_area.select('.white-box')
 
-            # read the news content
             for news in news_list:
-                # ad block filter
                 if 'list-ad' in news['class']:
                     continue
                 
-                # get news url
-                news_url = news.find_all('a')[0]['href']
-                temp = self.get_news_info(url='https://news.ebc.net.tw%s' % news_url)
-
-                # check whether the news today or not
-                timestamp_news = datetime.datetime.strptime(temp["date"], "%Y-%m-%d").timestamp()
-                if timestamp_news < timestamp_today_begin:
-                    news_today = False
+                news_date = news.select('a > div.text > span.small-gray-text')[0].get_text().split(' ')[0]
+                news_date = '%s/%s' % (str( date_today.year ), news_date)
+                if datetime.strptime(news_date, '%Y/%m/%d').date() > date:
+                    continue
+                elif datetime.strptime(news_date, '%Y/%m/%d').date() == date:
+                    news_url = news.find_all('a')[0]['href']
+                    url_category.append ('https://news.ebc.net.tw%s' % news_url)
+                else:
+                    flag = False
                     break
-                
-                # check the news subject is what we want
-                if temp[ 'sub_id' ] != 0:
-                    news_info.append(temp)
             
-            if not news_today:
-                break
+            if flag == False:
+                return url_category
         
-        return news_info
+        return url_category
+
+    def get_news_today( self ):
+        timezone = pytz.timezone('Asia/Taipei')
+        date_today = datetime.now(timezone).date()
+
+        return self.get_news_by_date( [str(date_today)] )
+
+    def get_news_by_date(self, date_list):
+        news_list = []
+        for date in date_list:
+            url_list = self.get_url_by_date( datetime.strptime(date, '%Y-%m-%d').date() )
+            for url in url_list:
+                temp_news = self.get_news_info( url, str(date) )
+                if temp_news['brand_id'] != 0:
+                    news_list.append( temp_news )
+
+        return news_list
 
     def get_subject_url( self ):
         return ['https://news.ebc.net.tw/realtime']
@@ -181,6 +156,7 @@ class EBCCrawler:
                     url=news['url']
                 )
                 tmp.save()
-            except: 
+            except Exception as e:
+                print( e ) 
                 print( news )
         return True

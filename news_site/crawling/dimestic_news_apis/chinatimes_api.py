@@ -7,7 +7,7 @@ import requests
 import pytz
 
 # standard library
-from datetime import datetime, date
+from datetime import datetime
 
 class ChinatimesCrawler:
 
@@ -29,7 +29,7 @@ class ChinatimesCrawler:
             'sub_id':    self.subjects[sub],
             'url':     url,
             'title':   self.get_title(soup),
-            'content': self.get_content(soup)[:2000],
+            'content': self.get_content(soup),
             'date':    date,
             'author':  self.get_author(soup),
         }
@@ -54,19 +54,19 @@ class ChinatimesCrawler:
             return None
 
     def get_content (self, soup):
-        news_DOM = soup.select('div.article-body p')
-        content = ''
-        for DOM in news_DOM:
-            content += DOM.get_text()
-        return "".join( content.split() )
-
-    def get_news_today_category(self, sub):
-        timezone = pytz.timezone('Asia/Taipei')
-        date_today = datetime.now(timezone).date()
-        is_date_today = True
-
+        try:
+            news_DOM = soup.select('div.article-body p')
+            content = ''
+            for DOM in news_DOM:
+                content += DOM.get_text()
+            return "".join( content.split() )[:2000]
+        except:
+            return None
+    
+    def get_url_by_date(self, sub, date):
+        flag = True
         url_category = []
-        for page in range(1, 2):
+        for page in range(1, 20):
             res  = requests.get('https://www.chinatimes.com/%s?page=%d&chdtv' % (sub, page), timeout=10, headers={'User-Agent': 'Mozilla/5.0'})
             soup = BeautifulSoup(res.text, 'lxml')
             news_DOM_list = soup.select('section.article-list ul.vertical-list li')
@@ -74,27 +74,35 @@ class ChinatimesCrawler:
             for news_DOM in news_DOM_list:
                 news_date = news_DOM.select('div.row div.col div.meta-info time')[0]['datetime']
                 news_href  = news_DOM.select('div.row div.col h3.title a')[0]['href']
-                if str(datetime.strptime(news_date, '%Y-%m-%d %H:%M').date()) != str(date_today):
-                    is_date_today = False
-                    break
-                else:
+
+                if datetime.strptime(news_date, '%Y-%m-%d %H:%M').date() > date:
+                    continue
+                elif datetime.strptime(news_date, '%Y-%m-%d %H:%M').date() == date:
                     url_category.append( 'https://www.chinatimes.com%s' % news_href )
+                else:
+                    flag = False
+                    break
 
-            if is_date_today == False:
+            if flag == False:
                 break
-
+        
         return url_category
+
 
     def get_news_today( self ):
         timezone = pytz.timezone('Asia/Taipei')
         date_today = datetime.now(timezone).date()
 
+        return self.get_news_by_date( [str(date_today)] )
+    
+    def get_news_by_date(self, date_list):
         news_list = []
-        for sub in self.subjects:
-            url_list = self.get_news_today_category( sub )
-            for url in url_list:
-                temp_news = self.get_news_info( url, sub, str(date_today) )
-                news_list.append( temp_news )
+        for date in date_list:
+            for sub in self.subjects:
+                url_list = self.get_url_by_date( sub, datetime.strptime(date, '%Y-%m-%d').date() )
+                for url in url_list:
+                    temp_news = self.get_news_info( url, sub, str(date) )
+                    news_list.append( temp_news )
 
         return news_list
 

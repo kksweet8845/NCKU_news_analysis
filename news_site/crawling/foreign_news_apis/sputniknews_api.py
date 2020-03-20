@@ -22,6 +22,7 @@ class SputniknewsCrawler:
             'sport': 5,
             'science': 7,
         }
+        self.brand_id = 7
 
     def get_news_info (self, url, sub):
         soup = self.get_news_soup(url)
@@ -69,6 +70,25 @@ class SputniknewsCrawler:
         except:
             print('error in get_content')
             return None
+
+    def get_news_headline(self):
+        try:
+            res = requests.get('http://big5.sputniknews.cn/#latest-stripe', timeout=10)
+            soup = BeautifulSoup(res.text, 'lxml')
+            
+            headline_DOM = soup.select('div.l-maincolumn div.b-stories-box div.b-stories-index ul.b-stories__list li.b-story-index div.b-story h2.b-story_title a')[0]
+            href = headline_DOM['href']
+            url  = 'http://big5.sputniknews.cn%s' % href
+
+            headline_news =  NewsForeign.objects.filter(url = url)[0]
+            headline_news.is_headline = 1
+            headline_news.save()
+
+            return True
+            
+        except Exception as e:
+            print(e)
+            return False
 
     def get_news_today( self ):
         news_today = True

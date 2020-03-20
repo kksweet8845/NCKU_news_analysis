@@ -21,15 +21,15 @@ class TVBSCrawler:
             'focus': 7,
         }
 
-    def get_news_info (self, url, sub):
+    def get_news_info (self, url, sub, date):
         soup = self.get_news_soup(url)
         return {
             'brand_id':  1,
             'sub_id':    self.subjects[sub],
             'url':     url,
             'title':   self.get_title(soup),
-            'content': self.get_content(soup)[:2000],
-            'date':    self.get_date(soup),
+            'content': self.get_content(soup),
+            'date':    date,
             'author':  self.get_author(soup),
         }
     
@@ -63,35 +63,47 @@ class TVBSCrawler:
     def get_content (self, soup):
         try:
             content = soup.find('div', id='news_detail_div').get_text()
-            return "".join( content.split() )
+            return "".join( content.split() )[:2000]
         except:
             return None
     
+    def get_url_by_date(self, sub, date):
+        flag = True
+        url_category = []
+
+        res = requests.get('https://news.tvbs.com.tw/%s' % sub, timeout=10)
+        soup = BeautifulSoup(res.text, 'lxml')
+        news_category = soup.find('ul', id='block_pc').find_all('li')
+
+        for news in news_category:
+            news_date = news.select('a div.time')[0].get_text()
+            href = news.find('a')['href']
+            url  = 'https://news.tvbs.com.tw%s' % href
+            if datetime.strptime(news_date, '%Y/%m/%d %H:%M').date() > date:
+                continue
+            elif datetime.strptime(news_date, '%Y/%m/%d %H:%M').date() == date:
+                url_category.append( url )
+            else:
+                flag = False
+                break
+        
+        return url_category
+
     def get_news_today( self ):
-        timezone = pytz.timezone('Asia/Taipei')
+        timezone   = pytz.timezone('Asia/Taipei')
         date_today = datetime.now(timezone).date()
 
+        return self.get_news_by_date( [str(date_today)] )
+
+    def get_news_by_date(self, date_list):
         news_list = []
-        for sub in self.subjects:
-            try:
-                res = requests.get('https://news.tvbs.com.tw/%s' % sub, timeout=10)
-                soup = BeautifulSoup(res.text, 'lxml')
-                news_category = soup.find('ul', id='block_pc').find_all('li')
+        for date in date_list:
+            for sub in self.subjects:
+                url_list = self.get_url_by_date( sub, datetime.strptime(date, '%Y-%m-%d').date() )
+                for url in url_list:
+                    temp_news = self.get_news_info( url, sub, str(date) )
+                    news_list.append( temp_news )
 
-                for news in news_category:
-                    href = news.find('a')['href']
-                    url  = 'https://news.tvbs.com.tw%s' % href
-
-                    temp_news = self.get_news_info( url, sub )
-
-                    if temp_news['date'] == str(datetime.now(timezone).date()):
-                        news_list.append( temp_news )
-                    else:
-                        is_news_today = False
-                        break
-            except: 
-                print( 'error in crasling news category' )
-        
         return news_list
 
     def insert_news( self, newsList ):

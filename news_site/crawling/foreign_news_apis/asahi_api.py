@@ -1,5 +1,6 @@
 # local Django
 from newsdb.models import NewsForeign
+from newsdb.models import BrandForeign
 
 # third-party
 from bs4 import BeautifulSoup
@@ -19,6 +20,7 @@ class AsahiCrawler:
             'business': 4,
             'technology': 7,
         }
+        self.brand_id = 6
 
     def get_news_info (self, url, sub):
         soup = self.get_news_soup(url)
@@ -51,7 +53,25 @@ class AsahiCrawler:
     def get_content (self, soup):
         content = soup.find(class_="ArticleText").get_text()
 
-        return "".join(content.split())
+        return "".join(content.split())[:2000]
+
+    def get_news_headline(self):
+        try:
+            res = requests.get('https://asahichinese-f.com/', timeout=10)
+            soup = BeautifulSoup(res.text, 'lxml')
+
+            headline_DOM = soup.select('div.ZhTopNews ul.TopNewsR li.Fst a')[0]
+            href = headline_DOM['href']
+            url =  'https://asahichinese-f.com%s' % href
+
+            headline_news =  NewsForeign.objects.get(url = url)
+            headline_news.is_headline = 1
+            headline_news.save()
+
+            return True
+        except Exception as e:
+            print(e)
+            return False
 
     def get_news_today( self ):
         timezone = pytz.timezone('Asia/Taipei')

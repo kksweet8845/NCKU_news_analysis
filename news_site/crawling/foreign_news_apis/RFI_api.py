@@ -29,6 +29,7 @@ class RFICrawler:
             '生態': 7,
             '科技與文化': 7,
         }
+        self.brand_id = 2
 
     def get_news_info (self, url, sub):
         soup = self.get_news_soup(url)
@@ -82,6 +83,31 @@ class RFICrawler:
             return "".join( content.split() )
         except:
             return None
+
+    def get_news_headline(self):
+        try:
+            res = requests.get(
+                    url = 'http://www.rfi.fr/tw/',
+                    timeout = 10,
+                    headers = {'User-Agent': 'Mozilla/5.0'}
+                )
+            soup = BeautifulSoup(res.text, 'lxml')
+            
+            headline_DOM = soup.select('div.m-item-list-article--main-article a')[0]
+            href = headline_DOM['href']
+            url  = 'http://www.rfi.fr%s' % href
+
+            print(url)
+
+            headline_news =  NewsForeign.objects.get(url = url)
+            headline_news.is_headline = 1
+            headline_news.save()
+
+            return True
+            
+        except Exception as e:
+            print(e)
+            return False
 
     def get_news_today( self ):
         timezone = pytz.timezone('Asia/Taipei')

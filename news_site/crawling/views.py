@@ -35,6 +35,7 @@ def get_foreign_news_today(request):
             crawler = api()
             news_today = crawler.get_news_today()
             result = crawler.insert_news(news_today)
+            crawler.get_news_headline()
         except Exception as e:
             print(e)
             print('error in crawler')
@@ -44,10 +45,10 @@ def get_foreign_news_today(request):
 
 def get_dimestic_news_today(request):
     apis = [
+        SETNCrawler,
         CNACrawler,
         EBCCrawler,
         NewtalkCrawler,
-        SETNCrawler,
         TVBSCrawler,
         UpmediaCrawler,
         StormCrawler,
@@ -59,6 +60,8 @@ def get_dimestic_news_today(request):
             crawler = api()
             news_today = crawler.get_news_today()
             result = crawler.insert_news(news_today)
+
+            print('successful')
         except Exception as e:
             print(e)
             print('error in crawler')
@@ -97,6 +100,14 @@ def test_cts_crawling(request):
     c = cts_crawling()
     data = c.getNews(date=['2020-03-05', '2020-03-06', '2020-03-07'])
     result = c.insertNews(data)
+    return HttpResponse(data)
+
+def test_chinatimes_crawling(request):
+    c = SputniknewsCrawler()
+    # data = c.get_news_today()
+    # data = c.get_news_by_date(date_list=['2020-03-12'])
+    # result = c.insert_news(data)
+    data = c.get_news_headline()
     return HttpResponse(data)
 
 def test_ftvnews_crawling(request):
