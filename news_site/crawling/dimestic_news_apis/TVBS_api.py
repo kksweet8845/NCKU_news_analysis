@@ -62,9 +62,20 @@ class TVBSCrawler:
     
     def get_content (self, soup):
         try:
-            content = soup.find('div', id='news_detail_div').get_text()
+            content = ''
+            content_DOM = soup.find('div', id='news_detail_div').contents
+            
+            skip_str = 'htmlPUBLIC"-//W3C//DTDHTML4.0Transitional//EN""http://www.w3.org/TR/REC-html40/loose.dtd'
+
+            for item in content_DOM:
+                if item.name is None and 'bs4.element.Doctype' not in str(type(item)): 
+                    content += item
+                elif item.name == 'p':
+                    content += item.get_text()
+
             return "".join( content.split() )[:2000]
-        except:
+        except Exception as e:
+            print(e)
             return None
     
     def get_url_by_date(self, sub, date):
@@ -109,16 +120,18 @@ class TVBSCrawler:
     def insert_news( self, newsList ):
         for news in newsList:
             try:
-                tmp = New(
-                    title=news['title'],
-                    content= news['content'],
-                    author= news['author'],
-                    brand_id=news['brand_id'],
-                    sub_id= news['sub_id'],
-                    date=news['date'],
-                    url=news['url'],
-                )
-                tmp.save()
+                temp_news = New.objects.filter(url=news['url'])
+                if len(temp_news) == 0:
+                    tmp = New(
+                        title=news['title'],
+                        content= news['content'],
+                        author= news['author'],
+                        brand_id=news['brand_id'],
+                        sub_id= news['sub_id'],
+                        date=news['date'],
+                        url=news['url'],
+                    )
+                    tmp.save()
             except Exception as e:
                 print( e )
         return True

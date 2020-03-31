@@ -154,16 +154,18 @@ class NewtalkCrawler:
     def insert_news( self, newsList ):
         for news in newsList:
             try:
-                tmp = New(
-                    title=news['title'],
-                    content= news['content'],
-                    author= news['author'],
-                    brand_id=news['brand_id'],
-                    sub_id= news['sub_id'],
-                    date=news['date'],
-                    url=news['url'],
-                )
-                tmp.save()
+                temp_news = New.objects.filter(url=news['url'])
+                if len(temp_news) == 0:
+                    tmp = New(
+                        title=news['title'],
+                        content= news['content'],
+                        author= news['author'],
+                        brand_id=news['brand_id'],
+                        sub_id= news['sub_id'],
+                        date=news['date'],
+                        url=news['url'],
+                    )
+                    tmp.save()
             except Exception as e:
                 print( e )
         return True

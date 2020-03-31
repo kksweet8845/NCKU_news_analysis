@@ -67,23 +67,28 @@ class ChinatimesCrawler:
         flag = True
         url_category = []
         for page in range(1, 20):
-            res  = requests.get('https://www.chinatimes.com/%s?page=%d&chdtv' % (sub, page), timeout=10, headers={'User-Agent': 'Mozilla/5.0'})
-            soup = BeautifulSoup(res.text, 'lxml')
-            news_DOM_list = soup.select('section.article-list ul.vertical-list li')
+            try:
+                res  = requests.get('https://www.chinatimes.com/%s?page=%d&chdtv' % (sub, page), timeout=10, headers={'User-Agent': 'Mozilla/5.0'})
+                soup = BeautifulSoup(res.text, 'lxml')
+                news_DOM_list = soup.select('section.article-list ul.vertical-list li')
 
-            for news_DOM in news_DOM_list:
-                news_date = news_DOM.select('div.row div.col div.meta-info time')[0]['datetime']
-                news_href  = news_DOM.select('div.row div.col h3.title a')[0]['href']
+                for news_DOM in news_DOM_list:
+                    news_date = news_DOM.select('div.row div.col div.meta-info time')[0]['datetime']
+                    news_href  = news_DOM.select('div.row div.col h3.title a')[0]['href']
 
-                if datetime.strptime(news_date, '%Y-%m-%d %H:%M').date() > date:
-                    continue
-                elif datetime.strptime(news_date, '%Y-%m-%d %H:%M').date() == date:
-                    url_category.append( 'https://www.chinatimes.com%s' % news_href )
-                else:
-                    flag = False
+                    if datetime.strptime(news_date, '%Y-%m-%d %H:%M').date() > date:
+                        continue
+                    elif datetime.strptime(news_date, '%Y-%m-%d %H:%M').date() == date:
+                        url_category.append( 'https://www.chinatimes.com%s' % news_href )
+                    else:
+                        flag = False
+                        break
+
+                if flag == False:
                     break
-
-            if flag == False:
+            except Exception as e:
+                print(e) 
+                print('error in get news url')
                 break
         
         return url_category
@@ -109,16 +114,18 @@ class ChinatimesCrawler:
     def insert_news( self, newsList ):
         for news in newsList:
             try:
-                tmp = New(
-                    title=news['title'],
-                    content= news['content'],
-                    author= news['author'],
-                    brand_id=news['brand_id'],
-                    sub_id= news['sub_id'],
-                    date=news['date'],
-                    url=news['url'],
-                )
-                tmp.save()
+                temp_news = New.objects.filter(url=news['url'])
+                if len(temp_news) == 0:
+                    tmp = New(
+                        title=news['title'],
+                        content= news['content'],
+                        author= news['author'],
+                        brand_id=news['brand_id'],
+                        sub_id= news['sub_id'],
+                        date=news['date'],
+                        url=news['url'],
+                    )
+                    tmp.save()
             except Exception as e:
                 print( e )
         return True

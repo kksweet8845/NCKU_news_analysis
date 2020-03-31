@@ -133,16 +133,18 @@ class SETNCrawler:
     def insert_news(self, newsList):
         for news in newsList:
             try:
-                tmp = New(
-                    title=news['title'],
-                    content=news['content'],
-                    author= news['author'],
-                    brand_id=news['brand_ID'],
-                    sub_id= news['sub_ID'],
-                    date=news['date'],
-                    url=news['url']
-                )
-                tmp.save()
+                temp_news = New.objects.filter(url=news['url'])
+                if len(temp_news) == 0:
+                    tmp = New(
+                        title=news['title'],
+                        content=news['content'],
+                        author= news['author'],
+                        brand_id=news['brand_ID'],
+                        sub_id= news['sub_ID'],
+                        date=news['date'],
+                        url=news['url']
+                    )
+                    tmp.save()
             except:
                 print(news)
         return True

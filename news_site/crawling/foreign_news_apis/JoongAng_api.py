@@ -117,17 +117,19 @@ class JoongAngCrawler:
     def insert_news( self, newsList ):
         for news in newsList:
             try:
-                tmp = NewsForeign(
-                    title=news['title'],
-                    content=news['content'],
-                    author= news['author'],
-                    brand_id=news['brand_id'],
-                    sub_id= news['sub_id'],
-                    date=news['date'],
-                    url=news['url'],
-                    is_headline= False,
-                )
-                tmp.save()
+                temp_news = NewsForeign.objects.filter(url = news['url'])
+                if len(temp_news) == 0:
+                    tmp = NewsForeign(
+                        title=news['title'],
+                        content=news['content'],
+                        author= news['author'],
+                        brand_id=news['brand_id'],
+                        sub_id= news['sub_id'],
+                        date=news['date'],
+                        url=news['url'],
+                        is_headline= False,
+                    )
+                    tmp.save()
             except Exception as e:
                 print( e )
         return True

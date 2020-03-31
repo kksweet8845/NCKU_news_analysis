@@ -19,6 +19,7 @@ class NYTCrawler:
             'education': 7,
             'culture': 7,
         }
+        self.brand_id = 3
 
     def get_news_info (self, url, sub):
         soup = self.get_news_soup(url)
@@ -76,6 +77,25 @@ class NYTCrawler:
         except:
             return None
 
+    def get_news_headline(self):
+        try:
+            res = requests.get('https://cn.nytimes.com/', timeout=10)
+            soup = BeautifulSoup(res.text, 'lxml')
+            
+            headline_DOM = soup.select('div#photoSpot div.first div.first div.photoWrapper a')[0]
+            href = headline_DOM['href']
+            url  = 'https://cn.nytimes.com/%s' % href
+
+            headline_news =  NewsForeign.objects.get(url = url)
+            headline_news.is_headline = 1
+            headline_news.save()
+
+            return True
+            
+        except Exception as e:
+            print(e)
+            return False
+
     def get_news_today( self ):
         timezone = pytz.timezone('Asia/Taipei')
         date_today = datetime.now(timezone).date()
@@ -108,17 +128,19 @@ class NYTCrawler:
     def insert_news( self, news_list ):
         for news in news_list:
             try:
-                tmp = NewsForeign(
-                    title=news['title'],
-                    content=news['content'],
-                    author= news['author'],
-                    brand_id=news['brand_id'],
-                    sub_id= news['sub_id'],
-                    date=news['date'],
-                    url=news['url'],
-                    is_headline= False,
-                )
-                tmp.save()
+                temp_news = NewsForeign.objects.filter(url = news['url'])
+                if len(temp_news) == 0:
+                    tmp = NewsForeign(
+                        title=news['title'],
+                        content=news['content'],
+                        author= news['author'],
+                        brand_id=news['brand_id'],
+                        sub_id= news['sub_id'],
+                        date=news['date'],
+                        url=news['url'],
+                        is_headline= False,
+                    )
+                    tmp.save()
             except Exception as e:
                 print( e )
                 print( news )

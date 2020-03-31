@@ -1,5 +1,5 @@
 # local Django
-from newsdb.models import Subject, Brand, Brand_sub
+from newsdb.models import Subject, Brand, Brand_sub, New
 
 # Django
 from django.shortcuts import render
@@ -103,11 +103,11 @@ def test_cts_crawling(request):
     return HttpResponse(data)
 
 def test_chinatimes_crawling(request):
-    c = SputniknewsCrawler()
+    c = TVBSCrawler()
     # data = c.get_news_today()
-    # data = c.get_news_by_date(date_list=['2020-03-12'])
-    # result = c.insert_news(data)
-    data = c.get_news_headline()
+    data = c.get_news_by_date(date_list=['2020-03-26'])
+    result = c.insert_news(data)
+    # data = c.get_news_headline()
     return HttpResponse(data)
 
 def test_ftvnews_crawling(request):
