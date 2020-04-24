@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'newsdb.apps.NewsdbConfig',
     'frontend',
-    'crawling.apps.CrawlingConfig'
+    'crawling.apps.CrawlingConfig',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
