@@ -38,3 +38,15 @@
     border: 2px solid green;
 }
 
+svg {
+    overflow: scroll;
+}
+
+
+div.hideScroll::-webkit-scrollbar {
+    display: none;
+}
+
+text {
+    font-family: Georgia, "Times New Roman", "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", serif;
+}

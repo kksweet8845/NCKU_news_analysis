@@ -19,6 +19,10 @@ var styles = {
       fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
       marginBottom: "3px",
       textDecoration: "none"
+    },
+    relativeKeyword: {
+        height: '300px',
+        overflowY: 'scroll'
     }
   };
 
@@ -28,14 +32,15 @@ function NewsSel(props) {
 
     const classes = useStyles()
 
-    let numOfNews = props.news.length
+    let numOfkeyword = props.news.length
     let news = props.news.map(d => <li>{d}</li>)
+
     return (
-        <Card >
+        <Card>
             <CardHeader>
-                <h2 className={classes.cardTitle}>{numOfNews}則新聞</h2>
+                <h2 className={classes.cardTitle}>{numOfkeyword} 個相關關鍵字 </h2>
             </CardHeader>
-            <CardBody>
+            <CardBody className={classes.relativeKeyword}>
                 <ul>
                     {news}
                 </ul>

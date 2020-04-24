@@ -9,3 +9,6 @@ def keywordPage(request):
 
 def publisherPage(request):
     return render(request, 'publisher.html')
+
+def foreignPage(request):
+    return render(request, 'foreign.html')

@@ -23,52 +23,6 @@ const paperStyle = {
     textAlign: 'center'
 }
 
-// export class Publisher extends PureComponent {
-//     render() {
-
-
-
-//         var data = {
-//             series: [20,10,30,40]
-//         }
-//         var options = {
-//             donut: true,
-//             donutWidth: 60,
-//             donutSolid: true,
-//             startAngle: 270,
-//             showLabel: true
-//         }
-
-//         let listOfNews = this.props.news
-//         const newsComponents = listOfNews.map((x) =>
-//             <SnackbarContent message={x} />)
-
-
-//         return (
-//             <Card>
-//                 <CardHeader color={this.props.color}>
-//                     <h4>{this.props.name}</h4>
-//                 </CardHeader>
-//                 <CardBody>
-//                     <GridContainer>
-//                         <GridItem xs={12} sm={12} md={4} lg={4}>
-//                             <ChartistGraph
-//                                 className={"ct-chart"}
-//                                 data={data}
-//                                 options={options}
-//                                 type={"Pie"}
-//                             />
-//                         </GridItem>
-//                         <GridItem xs={12} sm={12} md={4} lg={8}>
-//                             {newsComponents}
-//                         </GridItem>
-//                     </GridContainer>
-//                 </CardBody>
-//             </Card>
-//         )
-//     }
-// }
-
 const useStyles = makeStyles({
     title: {
         float: "left",
@@ -108,7 +62,7 @@ function Publisher(props) {
 
     let listOfNews = props.news
     const newsComponents = listOfNews.map((x) =>
-        <SnackbarContent message={x} />)
+        <SnackbarContent message={<a href={x.url}>{x.title}</a>} />)
 
 
     return (
@@ -127,6 +81,7 @@ function Publisher(props) {
                         />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={8} lg={8}>
+                        <h2> 相關新聞 </h2>
                         {newsComponents}
                     </GridItem>
                 </GridContainer>

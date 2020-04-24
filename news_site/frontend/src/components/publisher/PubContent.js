@@ -1,16 +1,16 @@
-import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect } from 'react'
 import className from 'classnames'
 //core components
 import Card from "components/Card/Card"
 import CardBody from "components/Card/CardBody"
 import CardHeader from "components/Card/CardHeader"
-import { Container, makeStyles } from "@material-ui/core"
+import { Container, makeStyles, CircularProgress } from "@material-ui/core"
 import GridContainer from "components/Grid/GridContainer"
 import GridItem from "components/Grid/GridItem"
 // chartist
 import ChartistGraph from "react-chartist"
-
+import Chartist from 'chartist'
+import 'chartist-plugin-fill-donut'
 // custom components
 import KeywordNews from "./KeywordNews"
 import NewsSel from "./NewsSel"
@@ -28,6 +28,10 @@ const styles = {
     },
     textCenter: {
         textAlign: "center"
+    },
+    cardCollection: {
+        maxHeight: '1000px',
+        overflowY: 'scroll'
     }
 }
 
@@ -41,86 +45,81 @@ export default function PubContent(props) {
     }
     var options = {
         donut: true,
-        donutWidth: 60,
+        donutWidth: 20,
         donutSolid: true,
         startAngle: 270,
-        showLabel: true
+        showLabel: true,
+        plugins: [
+            Chartist.plugins.fillDonut({
+                items: [{
+                    content: '<i class="fa fa-tachometer"></i>',
+                    position: 'bottom',
+                    offsetY : 10,
+                    offsetX: -2
+                }, {
+                    content: '<h3>40</h3>'
+                }]
+            })
+        ]
     }
-
-    let newsData = [
-        {
-            title: '武漢肺炎',
-            numOfNews: 12,
-            newsPreview: [
-                '反送終',
-                '每天都是可以吃的'
-            ]
-        },
-        {
-            title: '香港',
-            numOfNews: 12,
-            newsPreview: [
-                '反送終',
-                '每天都是可以吃的'
-            ]
-        },
-        {
-            title: '反送中',
-            numOfNews: 12,
-            newsPreview: [
-                '反送終',
-                '每天都是可以吃的'
-            ]
-        },
-        {
-            title: '美國川普',
-            numOfNews: 12,
-            newsPreview: [
-                '反送終',
-                '每天都是可以吃的'
-            ]
-        },
-        {
-            title: '比爾概資',
-            numOfNews: 12,
-            newsPreview: [
-                '反送終',
-                '每天都是可以吃的'
-            ]
-        }
-    ]
-
-    return (
-        <Container maxWidth="lg">
-            <Card>
-                <CardHeader color="primary" className={classes.publisherTitle}>
-                    <h1 className={classes.textCenter}>公視</h1>
-                </CardHeader>
-                <CardBody>
-                    <Container>
-                        <GridContainer>
-                            <GridItem xs={12} sm={12} md={4} lg={4}>
-                                <div className={classes.pie}>
-                                    <ChartistGraph
-                                        className={"ct-chart"}
-                                        data={data}
-                                        options={options}
-                                        type={"Pie"}
-                                    />
-                                </div>
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={8} lg={8}>
-                                <NewsSel news={newsData.map(d=>d.title)}/>
-                            </GridItem>
-                        </GridContainer>
-                    </Container>
-                    <Container>
-                        {newsData.map(d => <KeywordNews
-                            data={d}
-                        />)}
-                    </Container>
-                </CardBody>
-            </Card>
-        </Container>
-    )
+    if(props.ready){
+        return (
+            <Container maxWidth="lg">
+                <Card>
+                    <CardHeader color="primary" className={classes.publisherTitle}>
+                        <h1 className={classes.textCenter}>{props.data.brand}</h1>
+                    </CardHeader>
+                    <CardBody>
+                        <Container>
+                            <GridContainer>
+                                <GridItem xs={12} sm={12} md={4} lg={4}>
+                                    <div className={classes.pie}>
+                                        <ChartistGraph
+                                            className={"ct-chart"}
+                                            data={data}
+                                            options={options}
+                                            type={"Pie"}
+                                        />
+                                    </div>
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={8} lg={8}>
+                                    <NewsSel news={props.data.news.map(d=>d.keyword)}/>
+                                </GridItem>
+                            </GridContainer>
+                        </Container>
+                        <Container className={classes.cardCollection}>
+                            {props.data.news.map(d => <KeywordNews
+                                data={d}
+                            />)}
+                        </Container>
+                    </CardBody>
+                </Card>
+            </Container>
+        )
+    }else{
+        return (
+            <Container maxWidth="lg">
+                <Card>
+                    <CardHeader color="primary" className={classes.publisherTitle}>
+                        <CircularProgress />
+                    </CardHeader>
+                    <CardBody>
+                        <Container>
+                            <GridContainer>
+                                <GridItem xs={12} sm={12} md={4} lg={4}>
+                                    <CircularProgress />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={8} lg={8}>
+                                    <CircularProgress />
+                                </GridItem>
+                            </GridContainer>
+                        </Container>
+                        <Container>
+                            <CircularProgress />
+                        </Container>
+                    </CardBody>
+                </Card>
+            </Container>
+        )
+    }
 }

@@ -3,5 +3,6 @@ from . import views
 urlpatterns = [
     path('', views.index),
     path('keyword', views.keywordPage),
-    path('publisher', views.publisherPage)
+    path('publisher', views.publisherPage),
+    path('foreign', views.foreignPage)
 ]

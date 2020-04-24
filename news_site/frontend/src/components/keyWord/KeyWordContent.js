@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Container } from '@material-ui/core'
+import { Container, CircularProgress } from '@material-ui/core'
 import { Paper } from '@material-ui/core'
 import Publisher from './Publisher'
 
@@ -9,6 +9,14 @@ import CardBody from "components/Card/CardBody"
 import CardHeader from "components/Card/CardHeader"
 // chartist
 import ChartistGraph from "react-chartist"
+import {
+    BrowserRouter as Router,
+    Route,
+    Switch,
+    Link,
+    useParams,
+    useRouteMatch
+} from 'react-router-dom'
 
 const paperStyle = {
     height: '300px',
@@ -17,6 +25,12 @@ const paperStyle = {
 }
 
 export class KeyWordContent extends PureComponent {
+
+
+    constructor(props) {
+        super(props)
+    }
+
     render() {
 
         var data = {
@@ -42,59 +56,61 @@ export class KeyWordContent extends PureComponent {
             showArea: true
         }
 
-        let publishers = [
-        {
-            name: '中天',
-            news: ['蔡英文', '誠實中']
-        },
-        {
-            name: '自由時報',
-            news: ['蔡一文','誠實中']
-        },
-        {
-            name: '自由時報',
-            news: ['蔡一文','誠實中']
-        },
-        {
-            name: '自由時報',
-            news: ['蔡一文','誠實中']
-        },
-        {
-            name: '自由時報',
-            news: ['蔡一文','誠實中']
-        }]
         let color = ["info", "success", "warning", "danger"]
-        return (
-            <Container maxWidth="lg">
-                <Card>
-                    <CardHeader color="primary">
-                        <h2> 義大利 </h2>
-                    </CardHeader>
-                    <CardBody>
-                        <Container>
-                            <ChartistGraph
-                                className={"ct-chart"}
-                                data={lineChartData}
-                                options={lineChartOptions}
-                                type={"Line"}
-                            />
-                        </Container>
-                        <Container>
-                            {publishers.map((d,i,arr) => {
-                                return (
-                                    <Publisher
-                                        name={d.name}
-                                        news={d.news}
-                                        color={color[i%4]}
-                                    />
-                                )
-                            })}
-                        </Container>
-                    </CardBody>
-                </Card>
-            </Container>
-        )
+        if(this.props.ready){
+            return (
+                <Container maxWidth="lg">
+                    <Card>
+                        <CardHeader color="primary">
+                            <h2>{this.props.data.keyword}</h2>
+                        </CardHeader>
+                        <CardBody>
+                            <Container>
+                                <ChartistGraph
+                                    className={"ct-chart"}
+                                    data={lineChartData}
+                                    options={lineChartOptions}
+                                    type={"Line"}
+                                />
+                            </Container>
+                            <Container>
+                                {
+                                    this.props.data.news.map((d, i, arr) => {
+                                        return (
+                                            <Publisher
+                                                name={d.pubName}
+                                                news={d.news}
+                                                color={color[i%4]}
+                                            />
+                                        )
+                                    })
+                                }
+                            </Container>
+                        </CardBody>
+                    </Card>
+                </Container>
+            )
+        }
+        else {
+            return (
+                <Container maxWidth="lg">
+                    <Card>
+                        <CardHeader color="primary">
+                        </CardHeader>
+                        <CardBody>
+                            <Container>
+                                <CircularProgress />
+                            </Container>
+                            <Container>
+                                <CircularProgress />
+                            </Container>
+                        </CardBody>
+                    </Card>
+                </Container>
+            )
+        }
     }
 }
+
 
 export default KeyWordContent
