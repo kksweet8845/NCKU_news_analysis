@@ -46,17 +46,24 @@ class ftvnews_crawling:
             content = bs(i['Content'], 'html.parser')
         try:
             author = content.select('p')[-1].get_text()
+            author = re.search(r'[（(][\S]+[)）]', author).group(0)
         except IndexError:
             try:
                 author = content.select('li')[-1].get_text()
+                author = re.search(r'[（(][\S]+[)）]', author).group(0)
             except IndexError:
-                print(i['Content'])
-                print('-'*100)
-                print(i['Preface'])
-                author = "None"
+                author = ''
+            except AttributeError:
+                author = ''
+                pass
+        except AttributeError:
+            author = ''
+            pass
         author = author.replace(' ', '')
+        if author == '':
+            author = '綜合報導'
         content = content.get_text()
-        if date == 'all' or time in date:
+        if (date == 'all' or time in date) and content != '':
             return {
                 'title': i['Title'],
                 'url': i['WebLink'],
@@ -98,7 +105,9 @@ class ftvnews_crawling:
             result.extend(i.get())
 
         for i in news['ITEM']:
-            result.append(self.encap(i, info['type_cn'], date))
+            tmp = self.encap(i, info['type_cn'], date)
+            if tmp != None:
+                result.append(self.encap(i, info['type_cn'], date))
         return result
 
 

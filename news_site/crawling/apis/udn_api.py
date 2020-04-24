@@ -213,8 +213,8 @@ class udn_crawling:
                 ls.append({
                     'url': self.domain + news_url,
                     'title': title,
-                    'type_cn': self.sub.get(sub_name=type_cn),
-                    'time': time
+                    'sub': self.sub.get(sub_name=type_cn),
+                    'date': time
                 })
         return ls, more_btn, more_other
 
@@ -262,8 +262,8 @@ class udn_crawling:
             'content': contents,
             'author': author,
             'brand': self.brand,
-            'sub': dn['type_cn'],
-            'date': dn['time'],
+            'sub': dn['sub'],
+            'date': dn['date'],
             'url': dn['url']
         }
 

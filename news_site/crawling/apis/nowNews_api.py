@@ -119,14 +119,22 @@ class nowNews_crawling:
             ls = []
             res = requests.get(url)
             soup = bs(res.text, 'html.parser')
-            contents = soup.select('h3.entry-title > a')
+            contents = soup.select('div.td-module-meta-info')
+            # contents = soup.select('h3.entry-title > a')
             for di in contents:
-                tmp = di.attrs
-                ls.append({
-                    'url' : tmp['href'],
-                    'title' : tmp['title'],
-                    'sub' : sub
-                })
+                h3 = di.select('h3 a')
+                time = di.select('time')
+                if len(h3) == 0:
+                    continue
+                else:
+                    tmp = h3[0].attrs
+                    time = time[0].get_text()
+                    ls.append({
+                        'url' : tmp['href'],
+                        'title' : tmp['title'],
+                        'sub' : sub,
+                        'date': time
+                    })
             return ls
 
     def crawl_newsUrl(self, type_cn='all'):
@@ -149,42 +157,45 @@ class nowNews_crawling:
             news.extend(i.get())
         self.newsUrl = news
 
-    def request_newsContent(self, data, date):
+    def request_newsContent(self, data):
         dn = data
         ls = []
         test = requests.get(dn['url'])
         test_soup = bs(test.content, 'html.parser')
         contents = test_soup.select('span[itemprop="articleBody"] > p')
+        print(contents)
+        if len(contents) == 0:
+            contents = test_soup.select('spean[itemprop="articleBody"]  section > p')
+        # try:
+        #     newsDate = test_soup.select('time.entry-date')[0].attrs['datetime']
+        #     newsDate = re.search('[0-9]+-[0-9]+-[0-9]+', newsDate).group(0)
+        # except IndexError:
+        #     print(test_soup.prettify())
+        #     print(test_soup.select('time.entry-date'))
+        #     print(dn['url'])
+        #     print('Time')
+        #     newsDate = "1999-01-01"
+        #     pass
+        # if date == 'all' or newsDate in date:
+        contents = map(lambda x: x.get_text(), contents)
+        content = ' '.join(list(contents))
         try:
-            newsDate = test_soup.select('time.entry-date')[0].attrs['datetime']
-            newsDate = re.search('[0-9]+-[0-9]+-[0-9]+', newsDate).group(0)
+            author = test_soup.select('div.td-post-author-name')[0].get_text().strip()
+            author = author.replace(' ', '')
+            author = author.replace('-', '')
         except IndexError:
-            print(test_soup.prettify())
-            print(test_soup.select('time.entry-date'))
             print(dn['url'])
-            print('Time')
-            newsDate = "1999-01-01"
+            author = "None"
             pass
-        if date == 'all' or newsDate in date:
-            contents = map(lambda x: x.get_text(), contents)
-            content = ' '.join(list(contents))
-            try:
-                author = test_soup.select('div.td-post-author-name')[0].get_text().strip()
-                author = author.replace(' ', '')
-                author = author.replace('-', '')
-            except IndexError:
-                print(dn['url'])
-                author = "None"
-                pass
-            ls.append({
-                'title': dn['title'],
-                'content': content,
-                'author': author,
-                'brand': self.brand,
-                'sub': dn['sub'],
-                'date': newsDate,
-                'url': dn['url']
-            })
+        ls.append({
+            'title': dn['title'],
+            'content': content,
+            'author': author,
+            'brand': self.brand,
+            'sub': dn['sub'],
+            'date': dn['date'],
+            'url': dn['url']
+        })
         return ls
 
     def crawl_newsContent(self, date=[date.today().isoformat()]):
@@ -193,10 +204,13 @@ class nowNews_crawling:
         ls = []
         pool = Pool(processes=12)
         for dn in tqdm(self.newsUrl, total=len(self.newsUrl)):
-            ls.append(pool.apply_async(self.request_newsContent, (dn, date)))
+            if date == 'all' or dn['date'] in date:
+                ls.append(pool.apply_async(self.request_newsContent, (dn, date)))
 
         for i in tqdm(ls, total=len(ls)):
-            final_news.extend(i.get())
+            tmp = i.get()
+            if tmp != None:
+                final_news.extend(i.get())
         return final_news
 
     def getNews(self, date=[date.today().isoformat()]):

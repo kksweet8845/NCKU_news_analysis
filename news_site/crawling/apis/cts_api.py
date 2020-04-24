@@ -84,8 +84,8 @@ class cts_crawling:
                 href = j.attrs['href']
                 title = j.attrs['title']
                 ls.append({
-                    'time': time,
-                    'href': href,
+                    'date': time,
+                    'url': href,
                     'title': title,
                     'sub': self.sub.get(sub_name=type_cn)
                 })
@@ -129,8 +129,8 @@ class cts_crawling:
             'author': author,
             'brand': self.brand,
             'sub': i['sub'],
-            'date': i['time'],
-            'url': i['href']
+            'date': i['date'],
+            'url': i['url']
         }
 
 

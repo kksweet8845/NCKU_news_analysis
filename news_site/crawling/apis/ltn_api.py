@@ -144,17 +144,14 @@ class ltn_crawling:
             news.extend(i.get())
         self.news = news
 
-    def request_newsContent(self, data, date):
+    def request_newsContent(self, data):
         """ """
         ls = []
         d = data
         res = requests.get(d['url'])
+        if res.status_code != 200:
+            return None
         res_soup = bs(res.text, 'html.parser')
-        # newsDate = res_soup.select('span.time')[0].get_text()
-        # newsDate = re.search('[0-9]+-[0-9]+-[0-9]+', newsDate).group(0)
-        # if date != 'all':
-        #     if len(date) > 0 and newsDate not in date:
-        #         return
         result = res_soup.select('div.boxTitle > p:not(.appE1121, .before_ir, .after_ir, .ga_event)')
         result = map(lambda x: x.get_text(), result)
         result = ' '.join(list(result)[1:-1])
@@ -162,6 +159,7 @@ class ltn_crawling:
             author = re.search('〔記者([\S]+?)／', result).group(1)
         except AttributeError:
             author = '即時新聞'
+        date = d['date']
         return {
             'title': d['title'],
             'content' : result,
@@ -181,13 +179,12 @@ class ltn_crawling:
         for d in tqdm(news, total=len(news)):
             dtime = d['date']
             if date == 'all':
-                ls.append(pool.apply_async(self.request_newsContent, (d, dtime)))
+                ls.append(pool.apply_async(self.request_newsContent, (d, )))
                 continue
             for dd in date:
                 if dtime.year == dd.year and dtime.month == dd.month and dtime.day == dd.day:
-                    ls.append(pool.apply_async(self.request_newsContent, (d, dtime)))
+                    ls.append(pool.apply_async(self.request_newsContent, (d, )))
                     break
-
         for i in tqdm(ls, total=len(ls)):
             tmp = i.get()
             if isinstance(tmp, dict):

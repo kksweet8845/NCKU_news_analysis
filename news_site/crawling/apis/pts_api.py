@@ -100,7 +100,7 @@ class pts_crawling:
                 ls.append({
                         'url': i[0],
                         'title': i[1],
-                        'time': i[2],
+                        'date': i[2],
                         'sub': self.sub.get(sub_name=type_cn)
                     })
             else:
@@ -109,7 +109,7 @@ class pts_crawling:
                         ls.append({
                             'url': i[0],
                             'title': i[1],
-                            'time': i[2],
+                            'date': i[2],
                             'sub': self.sub.get(sub_name=type_cn)
                         })
                         break
@@ -141,7 +141,7 @@ class pts_crawling:
                     ls.append({
                             'url': 'https://news.pts.org.tw/article/'+dn['news_id'],
                             'title': dn['subject'],
-                            'time': dn['news_date'],
+                            'date': dn['news_date'],
                             'sub': self.sub.get(sub_name=type_cn)
                         })
                 else:
@@ -150,7 +150,7 @@ class pts_crawling:
                             ls.append({
                                 'url': 'https://news.pts.org.tw/article/'+dn['news_id'],
                                 'title': dn['subject'],
-                                'time': dn['news_date'],
+                                'date': dn['news_date'],
                                 'sub': self.sub.get(sub_name=type_cn)
                             })
                             break
@@ -211,7 +211,7 @@ class pts_crawling:
             'author': author if len(author) != 0 else "None",
             'brand': self.brand,
             'sub': dn['sub'],
-            'date': dn['time'],
+            'date': dn['date'],
             'url': dn['url']
         }
 
@@ -221,7 +221,7 @@ class pts_crawling:
         final_news = []
         ls = []
         for dn in tqdm(self.newsUrl, total=len(self.newsUrl)):
-            if date =='all' or dn['time'] in date:
+            if date =='all' or dn['date'] in date:
                 ls.append(pool.apply_async(self.request_newsContent, (dn, )))
 
         for i in tqdm(ls, total=len(ls)):
