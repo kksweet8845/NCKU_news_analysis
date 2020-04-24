@@ -3,6 +3,10 @@ config.ini
 .vscode
 node_modules
 config.js
+news_site/analysis/utils/ckiptagger
+news_site/analysis/**/**/src
+error
+dump
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

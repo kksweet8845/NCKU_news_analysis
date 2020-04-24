@@ -35,10 +35,12 @@
   "dependencies": {
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
+    "axios": "^0.19.2",
     "chartist": "^0.11.4",
     "chartist-plugin-fill-donut": "^0.1.4",
     "classnames": "^2.2.6",
     "cross-env": "^7.0.2",
+    "d3": "^5.15.0",
     "file-loader": "^5.1.0",
     "image-webpack-loader": "^6.0.0",
     "node-sass": "^4.13.1",
@@ -47,6 +49,7 @@
     "react-chartist": "^0.14.3",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",
+    "react-transition-group": "^4.3.0",
     "sass-loader": "^8.0.2"
   }
 }
