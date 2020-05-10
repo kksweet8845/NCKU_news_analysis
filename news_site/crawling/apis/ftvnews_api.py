@@ -98,16 +98,16 @@ class ftvnews_crawling:
         ls = []
         pool = ThreadPool(processes=8)
         result = []
-        for num in tqdm(range(2, int(15)), total=tp, desc="Assign"):
+        for num in tqdm(range(2, int(25)), total=tp, desc="Assign"):
             ls.append(pool.apply_async(self.aux_news, (info['cate'], num, date, info['sub'])))
 
         for i in tqdm(ls, total=len(ls), desc=info['type_cn']):
             result.extend(i.get())
 
         for i in news['ITEM']:
-            tmp = self.encap(i, info['type_cn'], date)
+            tmp = self.encap(i, info['sub'], date)
             if tmp != None:
-                result.append(self.encap(i, info['type_cn'], date))
+                result.append(tmp)
         return result
 
 
@@ -135,7 +135,7 @@ class ftvnews_crawling:
             try:
                 tmp = New(**dn)
                 tmp.save()
-            except:
-                print(tmp)
+            except Exception as err:
+                print(err)
                 return False
         return True

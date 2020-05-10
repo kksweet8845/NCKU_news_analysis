@@ -109,7 +109,7 @@ class cts_crawling:
 
     def request_newsContent(self, data):
         i = data
-        res = requests.get(i['href'])
+        res = requests.get(i['url'])
         res_soup = bs(res.content, 'html.parser')
         contents = res_soup.select('div.artical-content > p')
         if len(contents) == 0:

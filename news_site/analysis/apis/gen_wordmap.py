@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from ckiptagger import data_utils, WS
 import os, re
+from tqdm import tqdm
 
 
 util_path = settings.BASE_DIR + '/analysis/apis/utils/ckiptagger'
@@ -67,13 +68,15 @@ class WordMap:
     def gen_dict(self, df):
 
         ll = []
-        for article in df['content']:
+        trange = tqdm(enumerate(df['content']), total=len(df['content']))
+        for i, article in trange:
             sentences = article.split('。')
-            # ll = pd.concat([ll, pd.Series(sentences)])
             words_lss = self.WS(sentences)
             for dw in words_lss:
                 ll.extend(dw)
-
+            ll = np.unique(np.array(ll)).tolist()
+            if i % 500 == 0:
+                print(f"num of length : {len(ll)}")
         words = pd.Series(ll).apply(self.clean_words).dropna()
         words = np.unique(words.to_numpy())
         words = pd.Series(words)

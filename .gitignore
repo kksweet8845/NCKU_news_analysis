@@ -8,6 +8,7 @@ news_site/analysis/**/**/src
 error
 dump
 news_site/analysis/apis/utils/ckiptagger
+backup*.sql
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
