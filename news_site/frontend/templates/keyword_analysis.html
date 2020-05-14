@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width-device-width, initial-scale=1.0">
+        {% load static %}
+        <link rel="stylesheet"
+          href="{% static "chartist/chartist.min.css" %}">
+        <title> News Manager </title>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+        {% load static %}
+        <script src="{% static "keyword_analysis.min.js" %}"></script>
+        <script src="{% static "js/d3.min.js" %}"></script>
+        <script src="{% static "js/keyword.js" %}"></script>
+    </body>
+</html>
