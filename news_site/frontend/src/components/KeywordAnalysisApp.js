@@ -1,21 +1,12 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import { makeStyles } from '@material-ui/core'
 
-import Card from 'components/Card/Card'
-import CardHeader from 'components/Card/CardHeader'
-import CardBody from 'components/Card/CardBody'
-
-import GridContainer from 'components/Grid/GridContainer'
 import GridItem from 'components/Grid/GridItem'
-import SnackbarContent from "components/Snackbar/SnackbarContent"
 
 import Header from 'components/Header/Header'
-import HeaderLinks from 'components/Header/HeaderLinks'
 
 import { Container } from '@material-ui/core'
-import { Paper } from '@material-ui/core'
 
 import ChartistGraph from "react-chartist"
 
@@ -31,8 +22,12 @@ const useStyles = makeStyles({
     },
     textCenter: {
         textAlign: "center"
-    }
+    },
 })
+
+const background= {
+    backgroundColor: "black",
+}
 
 export default function ForeignPubApp(props) {
 
@@ -51,7 +46,7 @@ export default function ForeignPubApp(props) {
     }
 
     return (
-        <div>
+        <div style={background} >
             <Header
                 color="transparent"
                 brand="出版社頁面"

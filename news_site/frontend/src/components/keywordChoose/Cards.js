@@ -4,7 +4,8 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 
 const image = [
-  'lamp5.png', 'lamp6.png', 'lamp7.png', 'lamp8.png'
+  // 'lamp1.png', 'lamp2.png', 'lamp3.png', 'lamp4.png'
+  'light1.png', 'light2.png', 'light3.png', 'light4.png',
 ]
 
 const useStyles = makeStyles((theme) => ({
@@ -56,8 +57,9 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     top: 0,
     bottom: 0,
-    backgroundSize: 'cover',
+    backgroundSize: '80% 80%',
     backgroundPosition: 'center 40%',
+    backgroundRepeat: 'no-repeat',
   },
   imageBackdrop: {
     position: 'absolute',
