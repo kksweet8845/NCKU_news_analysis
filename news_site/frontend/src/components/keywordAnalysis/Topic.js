@@ -21,6 +21,6 @@ const styles = {
 export default function Topic(props) {
 
     return (
-        <h1 style={styles.topic}>{props.topic}</h1>
+        <h1 style={styles.topic} data-aos='zoom-in'>{props.topic}</h1>
     )
 }

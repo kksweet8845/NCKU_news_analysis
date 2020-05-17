@@ -51,9 +51,25 @@ export default function Picture(props) {
     const classes = useStyles()
     return (
         <section className={classes.background}>
-            <figure class={classes.bg_black}></figure>
-            <figure class={classes.bg_color}></figure>
-            <img src={props.imgSrc} class={classes.bg_image}/>
+            <figure 
+                class={classes.bg_black}
+                data-aos-delay='500'
+                data-aos='zoom-in-left'
+                data-aos-duration='2000'
+            ></figure>
+            <figure 
+                class={classes.bg_color}
+                data-aos='zoom-in-right'
+                data-aos-delay='1000'
+                data-aos-duration='1500'
+            ></figure>
+            <img 
+                src={props.imgSrc} 
+                class={classes.bg_image}
+                data-aos='fade-down'
+                data-aos-delay='2000'
+                data-aos-duration='2000'
+            />
         </section>
     )
 }
