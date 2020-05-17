@@ -19,6 +19,12 @@ export default function Topic(props) {
     const [topic, setTopic] = useState('請選擇關鍵字');
 
     return (
-        <h1 style={styles.topic}>{topic}</h1>
+        <h1 
+            style={styles.topic}
+            data-aos='flip-left'
+            data-aos-duration='1000'
+        >
+            {topic}
+        </h1>
     )
 }

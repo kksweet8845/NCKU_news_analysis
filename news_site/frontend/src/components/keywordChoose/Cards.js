@@ -99,7 +99,12 @@ export default function Cards(props) {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div 
+      className={classes.root}
+      data-aos='zoom-in'
+      data-aos-delay='500'
+      data-aos-duration='3000'
+    >
       {cards.map((image) => (
         <ButtonBase
           focusRipple
