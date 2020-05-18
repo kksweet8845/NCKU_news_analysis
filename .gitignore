@@ -9,6 +9,8 @@ error
 dump
 news_site/analysis/apis/utils/ckiptagger
 backup*.sql
+venv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

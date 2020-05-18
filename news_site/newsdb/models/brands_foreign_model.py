@@ -1,6 +1,8 @@
+# local Django
 from django.db import models
 
-class Brand(models.Model):
+
+class BrandForeign(models.Model):
     brand_name = models.CharField(
         max_length=20,
         blank=False,
@@ -16,4 +18,4 @@ class Brand(models.Model):
         return "brand_name: {}".format(self.brand_name)
 
     class Meta:
-        db_table = "brands"
+        db_table = "brands_foreign"
