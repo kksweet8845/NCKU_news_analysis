@@ -6,5 +6,6 @@ urlpatterns = [
     path('publisher', views.publisherPage),
     path('foreign', views.foreignPage),
     path('keyword_analysis', views.keywordAnalysisPage),
-    path('keyword_choose', views.keywordChoosePage)
+    path('keyword_choose', views.keywordChoosePage),
+    path('news_summary', views.newsSummaryPage)
 ]

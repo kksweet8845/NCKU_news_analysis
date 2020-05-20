@@ -18,3 +18,6 @@ def keywordAnalysisPage(request):
 
 def keywordChoosePage(request):
     return render(request, 'keyword_choose.html')
+
+def newsSummaryPage(request):
+    return render(request, 'news_summary.html')
