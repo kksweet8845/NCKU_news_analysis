@@ -1,52 +1,29 @@
 // react lib
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
+import Button from '@material-ui/core/Button';
 
 import { makeStyles } from '@material-ui/core'
 
 const useStyle = makeStyles( {
     title: {
         gridArea: 'title',
-        display: 'grid',
+        display: 'flex',
         flexWrap: 'wrap',
-        gridTemplateAreas:`
-            'background'`,
         alignSelf: 'center',
+        justifySelf: 'center',
         boxSizeing: 'border-box', 
-        width: '80%',
-        height: '80%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
-    image: {
-        gridArea: 'background',
-        display: 'flex',
-        justifySelf: 'flex-start',
-        alignSelf: 'flex-start',
-        height: 'auto',
-        width:  '75%',
-        zIndex: '0',
-    },
-    word: {
-        gridArea: 'background',
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifySelf: 'flex-end',
-        alignSelf: 'flex-end',
         alignContent: 'center',
-        width: '75%',
-        height: '60%',
-        zIndex: '1',
-        backgroundColor: 'rgba(140,203,190,.5)',
+        width: '70%',
+        height: '100%',
     },
     topic: {
         display: 'block',
         width: '100%',
-        marginTop: '10px',
-        marginBottom: '10px',
+        margin: '10px',
         boxSizeing: 'border-box', 
-        textAlign: 'center',
-        fontSize:  "64px",
+        textAlign: 'left',
+        fontSize:  "100px",
         fontWeight: 'bold',
         letterSpacing: '10px',
         color: "black",
@@ -54,12 +31,22 @@ const useStyle = makeStyles( {
     content: {
         display: 'block',
         width: '100%',
-        marginTop: '10px',
+        margin: '10px',
+        boxSizeing: 'border-box', 
+        fontSize:  "20px",
+        fontWeight: '200',
+        lineHeight: '28px',
+        textAlign:'left',
+        color: "black",
+    },
+    button: {
+        display: 'block',
+        width: '100%',
         boxSizeing: 'border-box', 
         fontSize:  "24px",
-        fontWeight: 'bold',
-        textAlign:'center',
-        color: "#888888",
+        fontWeight: '200',
+        textAlign:'left',
+        color: "black",
     }
 } )
 
@@ -70,13 +57,10 @@ export default function Title(props) {
 
     return (
         <section className={classes.title}>
-            <img className={classes.image} src='/static/img/photo/person-holding-a-newspaper.jpg'/>
-            <article className={classes.word}>
-                <h1 className={classes.topic}>{props.topic}</h1>
-                <p className={classes.content}>
-                    看看這個星期大家都在關注什麼議題
-                </p>
-            </article>
+            <h1 className={classes.topic}>{props.topic}</h1>
+            <p className={classes.content}>
+                為您整理出本週報導數最高的主題，搭配數據與當週新聞之最，帶您快速了這個星期到底夯什麼
+            </p>
         </section>
     )
 }
