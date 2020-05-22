@@ -1,51 +1,77 @@
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
-import { makeStyles } from '@material-ui/core'
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
+import { makeStyles } from '@material-ui/core';
 
-import NavigationBar from './common/NavigationBar'
-import Photo from './newsSummary/Photo'
-import SubtitleButton from './newsSummary/SubtitleButton'
+import NavigationBar from './common/NavigationBar';
+import Photo from './newsSummary/Photo';
 import Title from './newsSummary/Title';
+import SubTitle from './newsSummary/SubTitle';
+import News from './newsSummary/News'
 
 const useStyles = makeStyles({
     background: {
-        display: "grid",
-        height: "100%",
-        width: "100%",
+        display: "block",
+        height: "auto",
+        width: "100vw",
         backgroundColor: "black",
-        gridTemplateAreas:`
-            "intro"
-            "timeline"`,
-        gridTemplateRows: '100vh auto',
     },
     intro: {
         display: 'grid',
-        gridArea: 'intro',
-        height: '100%',
-        width: '100%',
+        height: '100vh',
+        width: '100vw',
         backgroundColor: 'white',
         gridTemplateAreas: `
             'photo title'`,
         gridTemplateColumns: '1fr 1fr',
-        gridTemplateRows: '100vh 1fr'
+    },
+    semantic: {
+        display: 'grid',
+        height: 'auto',
+        width: '100vw',
+        backgroundColor: 'white',
+        gridTemplateAreas: `
+            'subtitle .    '
+            'news     news '`,
+        gridTemplateRows: '200px auto',
+        gridTemplateColumns: ' 4fr 4fr ',
+    },
+    review: {
+        display: 'grid',
+        height: 'auto',
+        width: '100vw',
+        backgroundColor: 'white',
+        gridTemplateAreas: `
+            'subtitle .    '
+            'news     news '`,
+        gridTemplateRows: '10vh auto',
+        gridTemplateColumns: '4fr 4fr',
+    },
+    news: {
+        gridArea: 'news',
+        display:　'block',
     }
 })
 
 export default function KeywordChoose(props) {
     
-    const topic = '新聞回顧';
+    const topic = {
+            main: '新聞回顧',
+            semantic: '本週之最',
+        };
     const classes = useStyles();
 
     return (
-        <div className={classes.background}>
+        <main className={classes.background}>
             <NavigationBar brand="新聞回顧"/>
-            <div className={classes.intro}>
+            <section className={classes.intro}>
                 <Photo/>
-                <Title topic={topic}/>
-                {/* <SubtitleButton content='本週之最' type='most'/>
-                <SubtitleButton content='新聞回憶錄' type='review'/> */}
-            </div>
-        </div>
+                <Title topic={topic.main}/>
+            </section>
+            <section className={classes.semantic}>
+                <SubTitle topic={topic.semantic}/>
+                <News location='right'/>
+            </section>
+        </main>
     )
 }
 
