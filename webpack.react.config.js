@@ -63,7 +63,7 @@ const srcRoot = path.join(config.projectRoot, 'news_site/frontend/src')
 const srcDis = path.join(config.projectRoot, 'news_site/frontend/static')
 const srcJsConfig = Object.assign({}, webpackJsConfigTemplate, {
     entry: {
-        'index': path.join(srcRoot, 'indexPage.js'),
+        'index': path.join(srcRoot, 'index.js'),
         'keyword': path.join(srcRoot, 'keywordPage.js'),
         'publisher': path.join(srcRoot, 'publisherPage.js'),
         'foreign': path.join(srcRoot, 'foreignPubPage.js')
