@@ -20,6 +20,7 @@ const useStyle = makeStyles( {
             'content content'`,
         gridTemplateColumns: '100px 1fr',
         gridTemplateRows: '80px auto',
+        transition: 'height 2s',
     },
     frameNum: {
         gridArea: 'num',
@@ -43,7 +44,8 @@ const useStyle = makeStyles( {
     },
     frameExtend: {
         height: '500px',
-        transition: 'opacity 300ms ease-in',
+        // transitionProperty: 'height',
+        // transitionDuration: '2s',
     }
 } )
 
@@ -63,22 +65,14 @@ export default function ReviewFrame(props) {
         }
     }
 
-    const {isExtend, setExtend} = useState(false);
-
-    function extendContent(e) {
-        if(!isExtend) {
-            setExtend(true)
-        }
-        else {
-            setExtend(false)
-        }
-    }
+    const [isExtend, setExtend] = useState(false);
 
     return (
         <article
             className={`${classes.frame} ${(isExtend)?classes.frameExtend: ''}`}
             style={colorClasses.frame}
-            data-aos='fade-right'
+            // data-aos='fade-right'
+            // data-aos-easing='linear'
             onClick={() => setExtend((isExtend)? false:true)}
         >
             <h4 className={`${classes.frameNum}  ${classes.frameHover}`} style={colorClasses.num} >{props.num}</h4>
