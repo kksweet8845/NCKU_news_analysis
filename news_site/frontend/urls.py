@@ -4,5 +4,6 @@ urlpatterns = [
     path('', views.index),
     path('keyword', views.keywordPage),
     path('publisher', views.publisherPage),
-    path('foreign', views.foreignPage)
+    path('foreign', views.foreignPage),
+    path('media', views.mediaPage)
 ]

@@ -12,3 +12,6 @@ def publisherPage(request):
 
 def foreignPage(request):
     return render(request, 'foreign.html')
+
+def mediaPage(request):
+    return render(request, 'media.html')

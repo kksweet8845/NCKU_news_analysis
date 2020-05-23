@@ -144,3 +144,8 @@ dmypy.json
 
 # pytype static type analyzer
 .pytype/
+
+*.min.js
+
+news_site/frontend/static/*.gif
+news_site/frontend/static/*.svg

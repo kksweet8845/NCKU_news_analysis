@@ -54,6 +54,10 @@ const webpackJsConfigTemplate = {
                     'css-loader',
                     'sass-loader',
                 ]
+            },
+            {
+                test: /\.(eot|woff|woff2|ttf)$/,
+                loader: 'url-loader?limit=30000&name=[name]-[hash].[ext]'
             }
         ]
     }
@@ -66,7 +70,8 @@ const srcJsConfig = Object.assign({}, webpackJsConfigTemplate, {
         'index': path.join(srcRoot, 'indexPage.js'),
         'keyword': path.join(srcRoot, 'keywordPage.js'),
         'publisher': path.join(srcRoot, 'publisherPage.js'),
-        'foreign': path.join(srcRoot, 'foreignPubPage.js')
+        'foreign': path.join(srcRoot, 'foreignPubPage.js'),
+        'media': path.join(srcRoot, 'media.js'),
     },
     output: {
         path: srcDis,
