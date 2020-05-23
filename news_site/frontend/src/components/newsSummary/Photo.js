@@ -54,15 +54,23 @@ export default function Photo(props) {
     const classes = useStyles()
     return (
         <section className={classes.background}>
-            <figure 
+            <figure
                 class={classes.bg_1}
+                data-aos='fade-right'
+                data-aos-duration='800'
             ></figure>
-            <figure 
+            <figure
                 class={classes.bg_2}
+                data-aos='fade-right'
+                data-aos-delay='600'
+                data-aos-duration='800'
             ></figure>
-            <img 
+            <img
                 src={imageUrl}
                 class={classes.bg_image}
+                data-aos='fade-left'
+                data-aos-delay='1200'
+                data-aos-duration='1000'
             />
         </section>
     )

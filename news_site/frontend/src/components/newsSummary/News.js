@@ -1,20 +1,18 @@
 // react lib
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import Button from '@material-ui/core/Button';
 
 import { makeStyles } from '@material-ui/core'
 
 const useStyle = makeStyles( {
     background: {
-        gridArea: 'news',
         display: 'grid',
         width: '100%',
         height: 'auto',
         gridTemplateAreas: `
             't t a a'
-            'b c a a'
-            'd e f g'`,
+            'd e a a'
+            'b c f g'`,
         gridTemplateColumns: '22vw 22vw 22vw 22vw',
         gridTemplateRows: '22vw 22vw 22vw',
         justifyContent: 'center',
@@ -23,24 +21,106 @@ const useStyle = makeStyles( {
         marginLeft: 'auto',
         marginRight: 'auto',
     },
+    small_topic: {
+        gridArea: 'topic',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: '42px',
+        fontWeight: '600',
+    },
+    small_title: {
+        gridArea: 'title',
+        display: 'flex',
+        width: '100%',
+        boxSizing: 'border-box',
+        paddingLeft: '20px',
+        paddingRight: '20px',
+        jsutifyContent: 'center',
+        alignItems: 'center',
+        fontSize: '24px',
+        fontWeight: '400',
+    },
+    small_frame: {
+        display: 'grid',
+        gridTemplateAreas:`
+            'topic'
+            'title'`,
+        gridTemplateRows: '5fr 5fr',
+        backgroundSize: '80%',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+    },
     frame: {
         display: 'grid',
     },
     frame_a: {
         gridArea: 'a',
+        display: 'grid',
+        gridTemplateAreas:`
+            '.'
+            'topic'
+            'title'`,
+        gridTemplateRows: '70% 60px auto',
+        alignItems: 'flex-end',
         backgroundColor: '#f6e5f5',
         backgroundImage: 'url("/static/img/photo/smiling-woman-wearing-black-sweater.jpg")',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        backggroundPosition: 'center',
+    },
+    a_topic: {
+        gridArea: 'topic',
+        display: 'flex',
+        justifyContent: 'left',
+        alignItems: 'center',
+        width: '80%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        height: 'auto',
+        fontSize: '60px',
+        fontWeight: '600',
+        color: 'rgba(245, 123, 81, 1)',
+    },
+    a_title: {
+        gridArea: 'title',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: '90%',
+        height: '100px',
+        padding: '10px 5%',
+        boxSizing: 'border-box',
+        borderRadius: '5px',
+        lineHeight: '1.2',
+        backgroundColor: 'rgba(245, 123, 81, .7)',
+        fontSize: '28px',
+        fontWeight: '400',
+        color: 'white',
     },
     frame_b: {
         gridArea: 'b',
-        backgroundColor: '#fbf4f9',
+    },
+    b_topic: {
+        backgroundColor: 'rgba(255, 186, 90, .8)',
+        color: '#af460f',
+    },
+    b_title: {
+        backgroundColor: 'rgba(255, 186, 90, .8)',
+        color: 'white',
     },
     frame_c: {
         gridArea: 'c',
-        backgroundColor: '#f6e7e6',
+    },
+    c_topic: {
+        backgroundColor: 'rgba(50, 130, 184, .6)',
+        color: '#0f4c75',
+    },
+    c_title: {
+        backgroundColor: 'rgba(50, 130, 184, .6)',
+        color: 'white',
     },
     frame_d: {
         gridArea: 'd',
@@ -51,16 +131,66 @@ const useStyle = makeStyles( {
         backgroundPosition: 'center',
     },
     frame_e: {
+        display: 'grid',
+        gridTemplateAreas:`
+            'title'
+            'topic'`,
+        gridTemplateRows: '6fr 4fr',
         gridArea: 'e',
-        backgroundColor: '#e1f2fb',
+        backgroundColor: 'rgba(105, 131, 170, .7)',
+    },
+    e_topic: {
+        gridArea: 'topic',
+        display: 'flex',
+        justifyContent: 'right',
+        alignItems: 'center',
+        width: '80%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        height: 'auto',
+        fontSize: '52px',
+        fontWeight: '600',
+        color: '#204051',
+    },
+    e_title: {
+        gridArea: 'title',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: '90%',
+        height: '100px',
+        padding: '10px 5%',
+        boxSizing: 'border-box',
+        borderRadius: '5px',
+        lineHeight: '1.2',
+        fontSize: '24px',
+        fontWeight: '400',
+        color: 'white',
     },
     frame_f: {
         gridArea: 'f',
-        backgroundColor: '#f1f9f9',
+    },
+    f_topic: {
+        backgroundColor: '#a278b5',
+        color: '#381460',
+    },
+    f_title: {
+        backgroundColor: '#a278b5',
+        color: 'white',
     },
     frame_g: {
         gridArea: 'g',
-        backgroundColor: '#f6e5f5',
+    },
+    g_topic: {
+        backgroundColor: 'rgba(50, 130, 184, .6)',
+        color: '#0f4c75',
+    },
+    g_title: {
+        backgroundColor: 'rgba(50, 130, 184, .6)',
+        color: 'white',
     },
     topic: {
         gridArea: 't',
@@ -68,7 +198,7 @@ const useStyle = makeStyles( {
         height: '100%',
         width: '100%',
         backgroundColor: 'white',
-        fontSize: '60px',
+        fontSize: '80px',
         fontWeight: 'bold',
         justifyContent: 'center',
         alignItems: 'center',
@@ -83,14 +213,67 @@ export default function News(props) {
 
     return (
         <section className={`${classes.background} ${bgLocation}`}>
-            <h2 className={classes.topic}>本週之最</h2>
-            <section className={`${classes.frame} ${classes.frame_a}`}></section>
-            <section className={`${classes.frame} ${classes.frame_b}`}></section>
-            <section className={`${classes.frame} ${classes.frame_c}`}></section>
-            <section className={`${classes.frame} ${classes.frame_d}`}></section>
-            <section className={`${classes.frame} ${classes.frame_e}`}></section>
-            <section className={`${classes.frame} ${classes.frame_f}`}></section>
-            <section className={`${classes.frame} ${classes.frame_g}`}></section>
+            <h2
+                className={classes.topic}
+                data-aos='flip-left'
+                data-aos-duration='1000'
+            >
+                本週之最
+            </h2>
+            <section
+                className={`${classes.frame} ${classes.frame_a}`}
+                data-aos='zoom-in'
+                data-aos-delay='1000'
+                data-aos-duration='800'
+            >
+                <h4 className={classes.a_topic}>正向</h4>
+                <p className={classes.a_title}>屏榮高中陳守心錄取醫學系 盼未來結合興趣回饋部落</p>
+            </section>
+            <section
+                className={`${classes.small_frame} ${classes.frame_b}`}
+                data-aos='flip-up'
+                data-aos-duration='800'
+            >
+                <h4 className={`${classes.small_topic} ${classes.b_topic}`}>驚奇</h4>
+                <p className={`${classes.small_title} ${classes.b_title}`}>北市助攻都會農友 讓農業變有趣又吸睛</p>
+            </section>
+            <section
+                className={`${classes.small_frame} ${classes.frame_c}`}
+                data-aos='flip-up'
+                data-aos-duration='800'
+            >
+                <h4 className={`${classes.small_topic} ${classes.c_topic}`}>哀傷</h4>
+                <p className={`${classes.small_title} ${classes.c_title}`}>新冠肺炎燒三個月 來台觀光收益損近千億元</p>
+            </section>
+            <section
+                className={`${classes.frame} ${classes.frame_d}`}
+                data-aos='zoom-in'
+                data-aos-duration='1000'
+            ></section>
+            <section
+                className={`${classes.frame} ${classes.frame_e}`}
+                data-aos='zoom-in'
+                data-aos-duration='1200'
+            >
+                <h4 className={classes.e_topic}>負面</h4>
+                <p className={classes.e_title}>48公斤「世界最胖山貓」大叔照爆紅 因心臟病死亡</p>
+            </section>
+            <section
+                className={`${classes.small_frame} ${classes.frame_f}`}
+                data-aos='flip-up'
+                data-aos-duration='800'
+            >
+                <h4 className={`${classes.small_topic} ${classes.f_topic}`}>開心</h4>
+                <p className={`${classes.small_title} ${classes.f_title}`}>新冠肺炎燒三個月 來台觀光收益損近千億元</p>
+            </section>
+            <section
+                className={`${classes.small_frame} ${classes.frame_g}`}
+                data-aos='flip-up'
+                data-aos-duration='800'
+            >
+                <h4 className={`${classes.small_topic} ${classes.g_topic}`}>憤怒</h4>
+                <p className={`${classes.small_title} ${classes.g_title}`}>新冠肺炎燒三個月 來台觀光收益損近千億元</p>
+            </section>
         </section>
     )
 }
