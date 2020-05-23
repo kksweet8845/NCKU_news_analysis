@@ -68,7 +68,7 @@ export default function KeywordChoose(props) {
                 <Title topic={topic.main}/>
             </section>
             <section className={classes.semantic}>
-                <SubTitle topic={topic.semantic}/>
+                {/* <SubTitle topic={topic.semantic}/> */}
                 <News location='right'/>
             </section>
         </main>
