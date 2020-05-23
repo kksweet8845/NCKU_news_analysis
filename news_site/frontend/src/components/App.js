@@ -5,6 +5,7 @@ import NewsList from './App/newsList'
 import Clould from './App/clould'
 import FrontImg from './App/frontImg'
 import {Container} from '@material-ui/core'
+import NavigationBar from './common/NavigationBar'
 
 import './css/App.css';
 
@@ -13,6 +14,7 @@ class App extends Component {
     render() {
         return (
             <div>
+                <NavigationBar />
                 <FrontImg />
                 <ChooseMenu />
                 <NewsList />
@@ -20,19 +22,115 @@ class App extends Component {
                     ready={true}
                     data={[{
                         text: '確診',
-                        num: 2.5,
-                    },{
-                        text: '66',
-                        num: 2,
+                        size: 13,
                     },{
                         text: '罷韓',
-                        num: 0.5,
+                        size: 20,
                     },{
                         text: '罷免',
-                        num: 1.5,
+                        size: 28,
                     },{
                         text: '時中',
-                        num: 3,
+                        size: 19,
+                    },{
+                        text: '罷韓',
+                        size: 20,
+                    },{
+                        text: '罷免',
+                        size: 28,
+                    },{
+                        text: '時中',
+                        size: 19,
+                    },{
+                        text: '罷韓',
+                        size: 20,
+                    },{
+                        text: '罷免',
+                        size: 28,
+                    },{
+                        text: '時中',
+                        size: 19,
+                    },{
+                        text: '罷韓',
+                        size: 20,
+                    },{
+                        text: '罷免',
+                        size: 28,
+                    },{
+                        text: '時中',
+                        size: 19,
+                    },{
+                        text: '罷韓',
+                        size: 20,
+                    },{
+                        text: '罷免',
+                        size: 28,
+                    },{
+                        text: '時中',
+                        size: 19,
+                    },{
+                        text: '罷韓',
+                        size: 20,
+                    },{
+                        text: '罷免',
+                        size: 28,
+                    },{
+                        text: '時中',
+                        size: 19,
+                    },{
+                        text: '罷韓',
+                        size: 20,
+                    },{
+                        text: '罷免',
+                        size: 28,
+                    },{
+                        text: '時中',
+                        size: 19,
+                    },{
+                        text: '罷韓',
+                        size: 20,
+                    },{
+                        text: '罷免',
+                        size: 28,
+                    },{
+                        text: '時中',
+                        size: 19,
+                    },{
+                        text: '罷韓',
+                        size: 20,
+                    },{
+                        text: '罷免',
+                        size: 28,
+                    },{
+                        text: '時中',
+                        size: 19,
+                    },{
+                        text: '罷韓',
+                        size: 20,
+                    },{
+                        text: '罷免',
+                        size: 28,
+                    },{
+                        text: '時中',
+                        size: 19,
+                    },{
+                        text: '罷韓',
+                        size: 20,
+                    },{
+                        text: '罷免',
+                        size: 28,
+                    },{
+                        text: '時中',
+                        size: 19,
+                    },{
+                        text: '罷韓',
+                        size: 20,
+                    },{
+                        text: '罷免',
+                        size: 28,
+                    },{
+                        text: '時中',
+                        size: 19,
                     }]}
                     id={'clould'}
                 />

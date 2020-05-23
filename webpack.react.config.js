@@ -66,7 +66,10 @@ const srcJsConfig = Object.assign({}, webpackJsConfigTemplate, {
         'index': path.join(srcRoot, 'index.js'),
         'keyword': path.join(srcRoot, 'keywordPage.js'),
         'publisher': path.join(srcRoot, 'publisherPage.js'),
-        'foreign': path.join(srcRoot, 'foreignPubPage.js')
+        'foreign': path.join(srcRoot, 'foreignPubPage.js'),
+        'keyword_analysis': path.join(srcRoot, 'keywordAnalysis.js'),
+        'keyword_choose': path.join(srcRoot, 'keywordChoose.js'),
+        'news_summary': path.join(srcRoot, 'newsSummary.js'),
     },
     output: {
         path: srcDis,

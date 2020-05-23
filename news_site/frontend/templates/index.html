@@ -4,11 +4,13 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width-device-width, initial-scale=1.0">
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+        {% load static %}
+        <link rel="stylesheet" href="{% static "css/pieChart.css" %}">
         <title> News Manager </title>
     </head>
     <body>
         <div id="app"></div>
-        {% load static %}
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script src="{% static "index.min.js" %}"></script>
     </body>
