@@ -99,7 +99,12 @@ export default function Cards(props) {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div
+      className={classes.root}
+      data-aos='zoom-in'
+      data-aos-delay='500'
+      data-aos-duration='3000'
+    >
       {cards.map((image) => (
         <ButtonBase
           focusRipple
@@ -117,7 +122,7 @@ export default function Cards(props) {
             }}
           />
           <span className={classes.imageBackdrop} />
-          <span className={classes.imageButton}>
+          <a className={classes.imageButton} href="http://localhost:8000/frontend/keyword_analysis">
             <Typography
               component="span"
               variant="subtitle1"
@@ -127,7 +132,7 @@ export default function Cards(props) {
               {image.title}
               <span className={classes.imageMarked} />
             </Typography>
-          </span>
+          </a>
         </ButtonBase>
       ))}
     </div>

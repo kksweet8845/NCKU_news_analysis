@@ -10,6 +10,7 @@
           href="{% static "css/initialize.css" %}">
         <title> News Manager </title>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     </head>
     <body>
         <div id="app"></div>
@@ -18,6 +19,10 @@
         {% load static %}
         <script src="{% static "keyword_choose.min.js" %}"></script>
         <script src="{% static "js/d3.min.js" %}"></script>
-        <!-- <script src="{% static "js/keyword.js" %}"></script> -->
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        
+        <script>
+          AOS.init();
+        </script>
     </body>
 </html>
