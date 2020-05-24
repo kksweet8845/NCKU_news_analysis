@@ -2,6 +2,8 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+import SentimentChart from './SentimentChart';
+
 import { makeStyles } from '@material-ui/core'
 
 const useStyle = makeStyles( {
@@ -50,8 +52,10 @@ const useStyle = makeStyles( {
         backgroundSize: '80%',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
+        cursor: 'pointer',
     },
     frame: {
+        cursor: 'pointer',
         display: 'grid',
     },
     frame_a: {
@@ -205,14 +209,56 @@ const useStyle = makeStyles( {
     }
 } )
 
+const data = {
+    a: {
+        topic: '正向',
+        title: '屏榮高中陳守心錄取醫學系 盼未來結合興趣回饋部落',
+        data: [400, 430, 448, 470, 540, 1200, 1380],
+    },
+    b: {
+        topic: '驚奇',
+        title: '北市助攻都會農友 讓農業變有趣又吸睛',
+        data: [400, 430, 448, 470, 540, 200, 1380],
+    },
+    c: {
+        topic: '哀傷',
+        title: '新冠肺炎燒三個月 來台觀光收益損近千億元',
+        data: [400, 430, 448, 1470, 540, 1200, 380],
+    },
+    e: {
+        topic: '負面',
+        title: '48公斤「世界最胖山貓」大叔照爆紅 因心臟病死亡',
+        data: [400, 430, 448, 470, 540, 1200, 1380],
+    },
+    f: {
+        topic: '快樂',
+        title: '屏榮高中陳守心錄取醫學系 盼未來結合興趣回饋部落',
+        data: [1400, 430, 448, 470, 540, 200, 380],
+    },
+    g: {
+        topic: '憤怒',
+        title: '屏榮高中陳守心錄取醫學系 盼未來結合興趣回饋部落',
+        data: [400, 430, 1048, 470, 540, 100, 130],
+    },
+}
 
 export default function News(props) {
 
     const classes = useStyle()
     const bgLocation = (props.location === 'left')? classes.bgLeft: classes.bgRight;
 
+    const [chartB, setChartB] = useState(false)
+    const [chart, setChart] = useState({
+        gridArea: 'a',
+        show: false,
+        data: data.a.data
+    })
+
     return (
-        <section className={`${classes.background} ${bgLocation}`}>
+        <section
+            className={`${classes.background} ${bgLocation}`}
+            onMouseEnter={()=>{setChart({gridArea: 'b', show: false, data: data.g.data})}}
+        >
             <h2
                 className={classes.topic}
                 data-aos='flip-left'
@@ -225,25 +271,28 @@ export default function News(props) {
                 data-aos='zoom-in'
                 data-aos-delay='1000'
                 data-aos-duration='800'
+                // onMouseEnter={()=>{setChart({gridArea: 'a', show: true, data: data.a.data})}}
             >
-                <h4 className={classes.a_topic}>正向</h4>
-                <p className={classes.a_title}>屏榮高中陳守心錄取醫學系 盼未來結合興趣回饋部落</p>
+                <h4 className={classes.a_topic}>{data.a.topic}</h4>
+                <p className={classes.a_title}>{data.a.title}</p>
             </section>
             <section
                 className={`${classes.small_frame} ${classes.frame_b}`}
                 data-aos='flip-up'
                 data-aos-duration='800'
+                onMouseEnter={()=>{setChart({gridArea: 'b', show: true, data: data.b.data})}}
             >
-                <h4 className={`${classes.small_topic} ${classes.b_topic}`}>驚奇</h4>
-                <p className={`${classes.small_title} ${classes.b_title}`}>北市助攻都會農友 讓農業變有趣又吸睛</p>
+                <h4 className={`${classes.small_topic} ${classes.b_topic}`}>{data.b.topic}</h4>
+                <p className={`${classes.small_title} ${classes.b_title}`}>{data.b.title}</p>
             </section>
             <section
                 className={`${classes.small_frame} ${classes.frame_c}`}
                 data-aos='flip-up'
                 data-aos-duration='800'
+                onMouseEnter={()=>{setChart({gridArea: 'c', show: true, data: data.c.data})}}
             >
-                <h4 className={`${classes.small_topic} ${classes.c_topic}`}>哀傷</h4>
-                <p className={`${classes.small_title} ${classes.c_title}`}>新冠肺炎燒三個月 來台觀光收益損近千億元</p>
+                <h4 className={`${classes.small_topic} ${classes.c_topic}`}>{data.c.topic}</h4>
+                <p className={`${classes.small_title} ${classes.c_title}`}>{data.c.title}</p>
             </section>
             <section
                 className={`${classes.frame} ${classes.frame_d}`}
@@ -254,26 +303,34 @@ export default function News(props) {
                 className={`${classes.frame} ${classes.frame_e}`}
                 data-aos='zoom-in'
                 data-aos-duration='1200'
+                onMouseEnter={()=>{setChart({gridArea: 'e', show: true, data: data.e.data})}}
             >
-                <h4 className={classes.e_topic}>負面</h4>
-                <p className={classes.e_title}>48公斤「世界最胖山貓」大叔照爆紅 因心臟病死亡</p>
+                <h4 className={classes.e_topic}>{data.e.topic}</h4>
+                <p className={classes.e_title}>{data.e.title}</p>
             </section>
             <section
                 className={`${classes.small_frame} ${classes.frame_f}`}
                 data-aos='flip-up'
                 data-aos-duration='800'
+                onMouseEnter={()=>{setChart({gridArea: 'f', show: true, data: data.f.data})}}
             >
-                <h4 className={`${classes.small_topic} ${classes.f_topic}`}>開心</h4>
-                <p className={`${classes.small_title} ${classes.f_title}`}>新冠肺炎燒三個月 來台觀光收益損近千億元</p>
+                <h4 className={`${classes.small_topic} ${classes.f_topic}`}>{data.f.topic}</h4>
+                <p className={`${classes.small_title} ${classes.f_title}`}>{data.f.title}</p>
             </section>
             <section
                 className={`${classes.small_frame} ${classes.frame_g}`}
                 data-aos='flip-up'
                 data-aos-duration='800'
+                onMouseEnter={()=>{setChart({gridArea: 'g', show: true, data: data.g.data})}}
             >
-                <h4 className={`${classes.small_topic} ${classes.g_topic}`}>憤怒</h4>
-                <p className={`${classes.small_title} ${classes.g_title}`}>新冠肺炎燒三個月 來台觀光收益損近千億元</p>
+                <h4 className={`${classes.small_topic} ${classes.g_topic}`}>{data.g.topic}</h4>
+                <p className={`${classes.small_title} ${classes.g_title}`}>{data.g.title}</p>
             </section>
+            <SentimentChart
+                gridArea={chart.gridArea}
+                show={chart.show}
+                data={chart.data}
+            />
         </section>
     )
 }

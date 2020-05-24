@@ -8,7 +8,7 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        boxSizeing: 'border-box', 
+        boxSizeing: 'border-box',
         width: '100%',
         height: '100%',
         fontSize:  "64px",

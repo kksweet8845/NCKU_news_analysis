@@ -6,6 +6,7 @@ import Topic from './keywordAnalysis/Topic';
 import Picture from './keywordAnalysis/Picture';
 import Title from './keywordAnalysis/Title';
 import Timeline from './keywordAnalysis/Timeline';
+import Clould from './App/clould'
 
 import NavigationBar from './common/NavigationBar'
 
@@ -84,6 +85,88 @@ const data = [{
             '中國大陸湖北省旅遊疫情升至第三級警告(warning)，民眾避免前往'
         ]
     }]
+const wordCloudData = [{
+    text: '罷韓',
+    size: 67,
+},{
+    text: '罷免',
+    size: 54,
+},{
+    text: '時中',
+    size: 81,
+},{
+    text: '罷韓',
+    size: 61,
+},{
+    text: '罷免',
+    size: 92,
+},{
+    text: '時中',
+    size: 61,
+},{
+    text: '罷韓',
+    size: 80,
+},{
+    text: '罷免',
+    size: 61,
+},{
+    text: '時中',
+    size: 90,
+},{
+    text: '罷韓',
+    size: 60,
+},{
+    text: '罷免',
+    size: 81,
+},{
+    text: '時中',
+    size: 65,
+},{
+    text: '罷韓',
+    size: 48,
+},{
+    text: '罷免',
+    size: 55,
+},{
+    text: '時中',
+    size: 66,
+},{
+    text: '罷韓',
+    size: 56,
+},{
+    text: '罷免',
+    size: 71,
+},{
+    text: '時中',
+    size: 65,
+},{
+    text: '罷韓',
+    size: 89,
+},{
+    text: '罷免',
+    size: 67,
+},{
+    text: '時中',
+    size: 75,
+},{
+    text: '罷韓',
+    size: 61,
+},{
+    text: '罷免',
+    size: 55,
+},{
+    text: '時中',
+    size: 70,
+},{
+    text: '罷韓',
+    size: 60,
+},{
+    text: '罷免',
+    size: 50,
+},{
+    text: '時中',
+    size: 40,
+}]
 
 export default function ForeignPubApp(props) {
 
@@ -99,6 +182,11 @@ export default function ForeignPubApp(props) {
             <NavigationBar brand="關鍵字分析"/>
             <section className={classes.intro}>
                 <Topic topic={topic}/>
+                <Clould
+                    ready={true}
+                    data={wordCloudData}
+                    id={'clould'}
+                />
                 <Picture imgSrc={imgSrc}/>
             </section>
             <section className={classes.timeline}>
