@@ -2,6 +2,8 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+import SentimentChart from './SentimentChart';
+
 import { makeStyles } from '@material-ui/core'
 
 const useStyle = makeStyles( {
@@ -50,8 +52,10 @@ const useStyle = makeStyles( {
         backgroundSize: '80%',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
+        cursor: 'pointer',
     },
     frame: {
+        cursor: 'pointer',
         display: 'grid',
     },
     frame_a: {
@@ -211,8 +215,21 @@ export default function News(props) {
     const classes = useStyle()
     const bgLocation = (props.location === 'left')? classes.bgLeft: classes.bgRight;
 
+    const [chartB, setChartB] = useState(false)
+    const [chart, setChart] = useState({
+        gridArea: 'a',
+        show: false
+    })
+
+    // const showChartB = ()=> {
+    //     setChartB((showChartB)? false:true)
+    // }
+
     return (
-        <section className={`${classes.background} ${bgLocation}`}>
+        <section
+            className={`${classes.background} ${bgLocation}`}
+            onMouseEnter={()=>{setChart({gridArea: 'b', show: false})}}
+        >
             <h2
                 className={classes.topic}
                 data-aos='flip-left'
@@ -233,6 +250,7 @@ export default function News(props) {
                 className={`${classes.small_frame} ${classes.frame_b}`}
                 data-aos='flip-up'
                 data-aos-duration='800'
+                onMouseEnter={()=>{setChart({gridArea: 'b', show: true})}}
             >
                 <h4 className={`${classes.small_topic} ${classes.b_topic}`}>驚奇</h4>
                 <p className={`${classes.small_title} ${classes.b_title}`}>北市助攻都會農友 讓農業變有趣又吸睛</p>
@@ -241,6 +259,7 @@ export default function News(props) {
                 className={`${classes.small_frame} ${classes.frame_c}`}
                 data-aos='flip-up'
                 data-aos-duration='800'
+                onMouseEnter={()=>{setChart({gridArea: 'c', show: true})}}
             >
                 <h4 className={`${classes.small_topic} ${classes.c_topic}`}>哀傷</h4>
                 <p className={`${classes.small_title} ${classes.c_title}`}>新冠肺炎燒三個月 來台觀光收益損近千億元</p>
@@ -262,6 +281,7 @@ export default function News(props) {
                 className={`${classes.small_frame} ${classes.frame_f}`}
                 data-aos='flip-up'
                 data-aos-duration='800'
+                onMouseEnter={()=>{setChart({gridArea: 'f', show: true})}}
             >
                 <h4 className={`${classes.small_topic} ${classes.f_topic}`}>開心</h4>
                 <p className={`${classes.small_title} ${classes.f_title}`}>新冠肺炎燒三個月 來台觀光收益損近千億元</p>
@@ -270,10 +290,15 @@ export default function News(props) {
                 className={`${classes.small_frame} ${classes.frame_g}`}
                 data-aos='flip-up'
                 data-aos-duration='800'
+                onMouseEnter={()=>{setChart({gridArea: 'g', show: true})}}
             >
                 <h4 className={`${classes.small_topic} ${classes.g_topic}`}>憤怒</h4>
                 <p className={`${classes.small_title} ${classes.g_title}`}>新冠肺炎燒三個月 來台觀光收益損近千億元</p>
             </section>
+            <SentimentChart
+                gridArea={chart.gridArea}
+                show={chart.show}
+            />
         </section>
     )
 }

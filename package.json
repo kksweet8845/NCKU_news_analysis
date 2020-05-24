@@ -35,6 +35,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
+    "apexcharts": "^3.19.2",
     "axios": "^0.19.2",
     "chartist": "^0.11.4",
     "chartist-plugin-fill-donut": "^0.1.4",
@@ -47,6 +48,7 @@
     "prop-types": "^15.7.2",
     "radium": "^0.26.0",
     "react": "^16.13.0",
+    "react-apexcharts": "^1.3.7",
     "react-chartist": "^0.14.3",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",
