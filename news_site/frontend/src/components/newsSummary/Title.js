@@ -12,7 +12,7 @@ const useStyle = makeStyles( {
         flexWrap: 'wrap',
         alignSelf: 'center',
         justifySelf: 'center',
-        boxSizeing: 'border-box', 
+        boxSizeing: 'border-box',
         alignContent: 'center',
         width: '70%',
         height: '100%',
@@ -21,7 +21,7 @@ const useStyle = makeStyles( {
         display: 'block',
         width: '100%',
         margin: '10px',
-        boxSizeing: 'border-box', 
+        boxSizeing: 'border-box',
         textAlign: 'left',
         fontSize:  "100px",
         fontWeight: 'bold',
@@ -32,7 +32,7 @@ const useStyle = makeStyles( {
         display: 'block',
         width: '100%',
         margin: '10px',
-        boxSizeing: 'border-box', 
+        boxSizeing: 'border-box',
         fontSize:  "20px",
         fontWeight: '200',
         lineHeight: '28px',
@@ -42,7 +42,7 @@ const useStyle = makeStyles( {
     button: {
         display: 'block',
         width: '100%',
-        boxSizeing: 'border-box', 
+        boxSizeing: 'border-box',
         fontSize:  "24px",
         fontWeight: '200',
         textAlign:'left',
@@ -57,8 +57,17 @@ export default function Title(props) {
 
     return (
         <section className={classes.title}>
-            <h1 className={classes.topic}>{props.topic}</h1>
-            <p className={classes.content}>
+            <h1
+                className={classes.topic}
+                data-aos='fade-down'
+                data-aos-duration="1000">
+                {props.topic}
+            </h1>
+            <p
+                className={classes.content}
+                data-aos="fade-down"
+                data-aos-duration="1000"
+                data-aos-delay="2000">
                 為您整理出本週報導數最高的主題，搭配數據與當週新聞之最，帶您快速了這個星期到底夯什麼
             </p>
         </section>

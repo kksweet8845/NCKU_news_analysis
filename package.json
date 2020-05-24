@@ -47,6 +47,7 @@
     "image-webpack-loader": "^6.0.0",
     "node-sass": "^4.13.1",
     "prop-types": "^15.7.2",
+    "radium": "^0.26.0",
     "react": "^16.13.0",
     "react-chartist": "^0.14.3",
     "react-dom": "^16.13.0",

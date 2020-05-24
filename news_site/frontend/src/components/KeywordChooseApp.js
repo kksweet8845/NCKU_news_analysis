@@ -5,7 +5,7 @@ import Topic from './keywordChoose/Topic';
 import Cards from './keywordChoose/Cards';
 
 export default function KeywordChoose(props) {
-    const cardContents = ['test', 'test01', 'test01', 'test01', 'test', 'test01', 'test01', 'test01', 'test', 'test01', 'test01', 'test01'] 
+    const cardContents = ['新冠肺炎', '美國', '疫苗', '義大利', '測試', '貓咪', '韓國瑜', '小豬', '疫情', '學測', '罷免', '總統']
     const style = {
         'main': {
             height: "100%",
@@ -18,11 +18,11 @@ export default function KeywordChoose(props) {
         }
 
     }
- 
+
     return (
         <div className={'main'} style={style.main}>
             <Topic/>
-            <Cards cards={cardContents}/> 
+            <Cards cards={cardContents}/>
       </div>
     )
 }

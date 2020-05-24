@@ -6,6 +6,7 @@ import Topic from './keywordAnalysis/Topic';
 import Picture from './keywordAnalysis/Picture';
 import Title from './keywordAnalysis/Title';
 import Timeline from './keywordAnalysis/Timeline';
+import Clould from './App/clould'
 
 import NavigationBar from './common/NavigationBar'
 
@@ -37,15 +38,15 @@ const useStyles = makeStyles({
         gridArea: "timeline",
         height: "fix-content",
         width: "100%",
-        backgroundColor: "white",  
-        marginBottom: '5vh',  
+        backgroundColor: "white",
+        marginBottom: '5vh',
     }
-}) 
+})
 
 const data = [{
         sentiment: 'pos',
         date: '2020-02-21',
-        keyword: '口罩', 
+        keyword: '口罩',
         links: [
             '疾管署召開「因應中國不明原因肺炎疫情專家諮詢會議」',
             '政府派專家赴陸訪查'
@@ -99,13 +100,99 @@ export default function ForeignPubApp(props) {
             <NavigationBar brand="關鍵字"/>
             <section className={classes.intro}>
                 <Topic topic={topic}/>
+                <Clould
+                    ready={true}
+                    data={[{
+                        text: '罷韓',
+                        size: 67,
+                    },{
+                        text: '罷免',
+                        size: 54,
+                    },{
+                        text: '時中',
+                        size: 81,
+                    },{
+                        text: '罷韓',
+                        size: 61,
+                    },{
+                        text: '罷免',
+                        size: 92,
+                    },{
+                        text: '時中',
+                        size: 61,
+                    },{
+                        text: '罷韓',
+                        size: 80,
+                    },{
+                        text: '罷免',
+                        size: 61,
+                    },{
+                        text: '時中',
+                        size: 90,
+                    },{
+                        text: '罷韓',
+                        size: 60,
+                    },{
+                        text: '罷免',
+                        size: 81,
+                    },{
+                        text: '時中',
+                        size: 65,
+                    },{
+                        text: '罷韓',
+                        size: 48,
+                    },{
+                        text: '罷免',
+                        size: 55,
+                    },{
+                        text: '時中',
+                        size: 66,
+                    },{
+                        text: '罷韓',
+                        size: 56,
+                    },{
+                        text: '罷免',
+                        size: 71,
+                    },{
+                        text: '時中',
+                        size: 65,
+                    },{
+                        text: '罷韓',
+                        size: 89,
+                    },{
+                        text: '罷免',
+                        size: 67,
+                    },{
+                        text: '時中',
+                        size: 75,
+                    },{
+                        text: '罷韓',
+                        size: 61,
+                    },{
+                        text: '罷免',
+                        size: 55,
+                    },{
+                        text: '時中',
+                        size: 70,
+                    },{
+                        text: '罷韓',
+                        size: 60,
+                    },{
+                        text: '罷免',
+                        size: 50,
+                    },{
+                        text: '時中',
+                        size: 40,
+                    }]}
+                    id={'clould'}
+                />
                 <Picture imgSrc={imgSrc}/>
             </section>
             <section className={classes.timeline}>
                 <Title/>
                 {timelineDOM}
-            </section> 
-        </div> 
+            </section>
+        </div>
     )
 }
 

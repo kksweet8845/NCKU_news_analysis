@@ -2,9 +2,20 @@ import React, { useEffect } from 'react'
 import * as d3 from 'd3'
 import cloud from 'd3-cloud'
 import { CircularProgress } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
+
+const useStyles = makeStyles({
+    margin: {
+        margin: 'auto',
+    }
+})
+
+const normalize = (size) => {
+    return 40 * 1/(1+Math.exp(-size) );
+}
 
 const circleRender = (data, nodeId, treshold) => {
-    let width = window.innerWidth*0.5, height = 500, sizeDivisor = 0.4, nodePadding = 2.5;
+    let width = window.innerWidth*0.6, height = 600, sizeDivisor = 0.4, nodePadding = 2.5;
     let fill = d3.scaleOrdinal(d3.schemeCategory10);
     cloud().size([width, height])
             .words(data)
@@ -16,7 +27,7 @@ const circleRender = (data, nodeId, treshold) => {
                 return 0;
             })
             .fontSize(function (d) {
-                return d.size;
+                return normalize(d.size);
             })
             .on('end', draw)
             .start();
@@ -26,13 +37,13 @@ const circleRender = (data, nodeId, treshold) => {
                 .attr('width', width)
                 .attr('height', height)
                 .append('g')
-                .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
+                .attr('transform', 'translate(' + width * 1 / 2 + ',' + height * 1 / 2 + ')')
                 .selectAll('text')
                 .data(words)
                 .enter()
                     .append('text')
                     .style('font-size', function (d) {
-                        return d.size + 'px';
+                        return normalize(d.size) + 'px';
                     })
                     .style('font-family', 'Microsoft JhengHei')
                     .style('cursor', 'pointer')
@@ -54,6 +65,9 @@ const circleRender = (data, nodeId, treshold) => {
 
 
 export default function (props) {
+
+    const classes = useStyles()
+
     useEffect(() => {
         if(props.data){
             let preData = []
@@ -77,7 +91,7 @@ export default function (props) {
         return (
             <div>
                 <h1> Wait a min! </h1>
-                <CircularProgress />
+                <CircularProgress className={classes.margin}/>
             </div>
         )
     }
