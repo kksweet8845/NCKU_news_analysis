@@ -22,7 +22,7 @@ export default function SentimentChart(props) {
         gridArea: props.gridArea,
     }
     const [series, setSeries] = useState([{
-        data: [400, 430, 448, 470, 540, 1200, 1380]
+        data: props.data
     }])
 
     const [options, setOptions] = useState({
@@ -41,16 +41,6 @@ export default function SentimentChart(props) {
         xaxis: {
             categories: ['快樂', '正向', '憤怒', '哀傷', '恐懼', '負面', '驚奇',],
         },
-        theme: {
-            mode: 'light',
-            palette: 'palette1',
-            // monochrome: {
-            //     enabled: false,
-            //     color: '#255aee',
-            //     shadeTo: 'light',
-            //     shadeIntensity: 0.65
-            // },
-        }
     })
 
     return (
@@ -60,7 +50,9 @@ export default function SentimentChart(props) {
         >
             <ReactApexChart
                 options={options}
-                series={series}
+                series={[{
+                    data: props.data
+                }]}
                 type="bar"
                 height='100%'
             />
