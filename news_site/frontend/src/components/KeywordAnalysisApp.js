@@ -96,7 +96,7 @@ export default function ForeignPubApp(props) {
 
     return (
         <div className={classes.background} >
-            <NavigationBar brand="關鍵字"/>
+            <NavigationBar brand="關鍵字分析"/>
             <section className={classes.intro}>
                 <Topic topic={topic}/>
                 <Picture imgSrc={imgSrc}/>
