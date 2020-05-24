@@ -39,7 +39,7 @@ export default function SentimentChart(props) {
             enabled: false
         },
         xaxis: {
-            categories: ['快樂', '正向', '憤怒', '哀傷', '恐懼', '負面', '驚奇',],
+            categories: ['正向', '驚奇', '哀傷', '恐懼', '負面', '快樂', '憤怒'],
         },
     })
 
