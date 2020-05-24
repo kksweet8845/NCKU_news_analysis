@@ -146,5 +146,6 @@ dmypy.json
 .pytype/
 
 news_site/frontend/static/*.min.js
+news_site/frontend/static/*.min.js~*
 news_site/frontend/static/*.gif
 news_site/frontend/static/*.svg
