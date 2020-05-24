@@ -127,7 +127,6 @@ export default function ReviewFrame(props) {
 
     const [isExtend, setExtend] = useState(false);
     const extendContent = ()=> {
-        console.log(isExtend)
         setExtend( (isExtend)? false: true )
     }
 

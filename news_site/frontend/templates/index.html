@@ -3,18 +3,20 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width-device-width, initial-scale=1.0">
-        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
         {% load static %}
         <link rel="stylesheet" href="{% static "css/pieChart.css" %}">
+        <link rel="stylesheet" href="{% static "css/initialize.css" %}">
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
         <title> News Manager </title>
     </head>
     <body>
         <div id="app"></div>
-        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script src="{% static "index.min.js" %}"></script>
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+        <script>
+          AOS.init();
+        </script>
     </body>
-    <script>
-        AOS.init();
-    </script>
 </html>
