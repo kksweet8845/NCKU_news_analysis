@@ -5,35 +5,29 @@ import Chartist from 'chartist'
 import { makeStyles } from '@material-ui/core/styles';
 import { CircularProgress } from '@material-ui/core'
 import color from '@material-ui/core/colors/amber';
-import legend from 'chartist-plugin-legend'
 
-import './md5'
-import '../css/pieChart.css'
+function sigmoid(t) {
+    return 1/(1+Math.pow(Math.E, -t));
+}
 
 const renderPie = (grades, nodeId)=>{
     let chart = new Chartist.Pie(`.${nodeId}`, {
             series: [
                 {
                     value: grades[0],
-                    className: 'positive-stroke',
                 },
                 {
                     value: grades[1],
-                    className: 'neutral-stroke',
                 },
                 {
                     value: grades[2],
-                    className: 'negative-stroke',
                 }
             ],
             showLabel: false,
-            labels: [1, 2, 3],
-            plugins: [
-                legend(),
-            ]
+            labels: ['正面', '中立', '負面'],
         }, {
             donut: true,
-            showLabel: false
+            showLabel: true,
         },
     );
     chart.on('draw', function(data) {
