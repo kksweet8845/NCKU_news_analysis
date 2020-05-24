@@ -6,11 +6,29 @@ import { makeStyles } from '@material-ui/core/styles';
 import { CircularProgress } from '@material-ui/core'
 import color from '@material-ui/core/colors/amber';
 
-function sigmoid(t) {
-    return 1/(1+Math.pow(Math.E, -t));
+function normalize(array) {
+    let max=0, min=999999
+    let output = []
+    for(let num of array)
+    {
+        if(num > max)
+            max = num
+        else if(num < min)
+            min = num
+    }
+
+    for(let num of array)
+    {
+        output.push((num - min) / (max - min) + 0.3)
+    }
+
+    return output
 }
 
 const renderPie = (grades, nodeId)=>{
+    console.log(grades)
+    grades = normalize(grades)
+    console.log(grades)
     let chart = new Chartist.Pie(`.${nodeId}`, {
             series: [
                 {

@@ -15,7 +15,7 @@ const normalize = (size) => {
 }
 
 const circleRender = (data, nodeId, treshold) => {
-    let width = window.innerWidth*0.6, height = 600, sizeDivisor = 0.4, nodePadding = 2.5;
+    let width = window.innerWidth*0.5, height = 300, sizeDivisor = 0.4, nodePadding = 2.5;
     let fill = d3.scaleOrdinal(d3.schemeCategory10);
     cloud().size([width, height])
             .words(data)
@@ -37,7 +37,7 @@ const circleRender = (data, nodeId, treshold) => {
                 .attr('width', width)
                 .attr('height', height)
                 .append('g')
-                .attr('transform', 'translate(' + width * 1 / 2 + ',' + height * 1 / 2 + ')')
+                .attr('transform', 'translate(' + width * 1.2 / 2 + ',' + height * 1 / 2 + ')')
                 .selectAll('text')
                 .data(words)
                 .enter()
