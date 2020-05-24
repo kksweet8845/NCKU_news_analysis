@@ -39,13 +39,63 @@ const useStyle = makeStyles( {
         fontSize: '28px',
         fontWeight: 'bold',
     },
+    frameContent: {
+        gridArea: 'content',
+        display:  'flex',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        width: '100%',
+        height: 'auto',
+    },
+    contentSummary: {
+        display: 'block',
+        fontSize: '20px',
+        lineHeight: '1.2',
+        fontWeight: '400',
+        width: '90%',
+        color: 'black',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginBottom: '5px'
+    },
+    contentReadmore: {
+        display: 'flex',
+        width: '90%',
+        fontSize: '20px',
+        fontWeight: '600',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginBottom: '10px',
+        justifyContent: 'flex-end',
+        padding: '10px',
+    },
+    contentLink: {
+        display: 'block',
+        width: '90%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: '5px',
+        marginBottom: '10px'
+    },
+    linkTitle: {
+        display: 'flex',
+        width: '200px',
+        padding: '10px 5px',
+        fontSize: '24px',
+        fontWeight: '600',
+    },
+    linkHref: {
+        display: 'block',
+        color: 'block',
+        fontSize: '20px',
+        fontWeight: '400',
+        lineHeight: '1.2',
+    },
     frameHover: {
         cursor: 'pointer',
     },
-    frameExtend: {
-        height: '500px',
-        // transitionProperty: 'height',
-        // transitionDuration: '2s',
+    hideContent: {
+        display: 'none'
     }
 } )
 
@@ -57,26 +107,41 @@ export default function ReviewFrame(props) {
             border: `4px solid ${props.color}`,
             width: `${props.width}`,
         },
-        num: {
+        fontColor: {
             color: `${props.color}`,
         },
-        keyword: {
-            color: `${props.color}`
-        }
     }
 
     const [isExtend, setExtend] = useState(false);
+    const extendContent = ()=> {
+        console.log(isExtend)
+        setExtend( (isExtend)? false: true )
+    }
+
+    const linkDOM = props.links.map((link)=> {
+        return <a className={classes.linkHref}>{link}</a>
+    })
 
     return (
         <article
-            className={`${classes.frame} ${(isExtend)?classes.frameExtend: ''}`}
+            className={`${classes.frame}`}
             style={colorClasses.frame}
-            // data-aos='fade-right'
-            // data-aos-easing='linear'
-            onClick={() => setExtend((isExtend)? false:true)}
+            data-aos='fade-right'
+            data-aos-easing='linear'
+            onClick={extendContent}
         >
-            <h4 className={`${classes.frameNum}  ${classes.frameHover}`} style={colorClasses.num} >{props.num}</h4>
-            <p className={`${classes.frameKeyword}  ${classes.frameHover}`} style={colorClasses.keyword}>{props.keyword}</p>
+            <h4 className={`${classes.frameNum}  ${classes.frameHover}`} style={colorClasses.fontColor} >{props.num}</h4>
+            <p className={`${classes.frameKeyword}  ${classes.frameHover}`} style={colorClasses.fontColor}>{props.keyword}</p>
+            <section
+                className={`${classes.frameContent} ${(isExtend)?'':classes.hideContent}`}
+            >
+                <p className={`${classes.contentSummary}`}>{props.summary}</p>
+                <article className={classes.contentLink}>
+                    <h4 className={`${classes.linkTitle}`} style={colorClasses.fontColor}>新聞連結</h4>
+                    {linkDOM}
+                </article>
+                <p className={`${classes.contentReadmore}`} style={colorClasses.fontColor}>看更多</p>
+            </section>
         </article>
     )
 }
