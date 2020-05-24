@@ -17,27 +17,19 @@ import { Grid } from '@material-ui/core'
 
 import classNames from 'classnames'
 import ChartistGraph from "react-chartist"
-// import Carousel from 'react-material-ui-carousel'
-// import { Carousel } from 'antd'
-// import $ from 'jquery'
+
 import './css/mediaApp.css'
-// import { Carousel } from 'react-responsive-carousel'
-// import "react-responsive-carousel/lib/styles/carousel.min.css"
+
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
-
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
+
+import NavigationBar from './common/NavigationBar'
 
 
 const paperStyle = {
@@ -76,8 +68,9 @@ const useStyles = makeStyles({
     root: {
         flexGrow: 1,
     },
-    test_paper: {
-        height: "98vh",
+    carousel_grid: {
+        height: "88vh",
+        paddingTop: "10vh",
         width: "30%",
         textAlign: "center",
         backgroundColor: "white",
@@ -128,7 +121,8 @@ const useStyles = makeStyles({
     },
     main_grid: {
         flexGrow: 1,
-        height: "98vh",
+        height: "92vh",
+        paddingTop: "10vh",
         textAlign: "center",
         backgroundColor: "white",
         marginTop: "3vh",
@@ -140,7 +134,8 @@ const useStyles = makeStyles({
     },
     head_grid: {
         flexGrow: 1,
-        height: "98vh",
+        height: "88vh",
+        paddingTop: "10vh",
         textAlign: "center",
         backgroundColor: "white",
         marginBottom: "3vh",
@@ -236,32 +231,7 @@ export default function MediaApp(props) {
 
     return (
         <div>
-            {/* <Container maxWidth="lg">
-                <Grid container className={classes.root} spacing={1}>
-                    <Grid item xs={12}>
-                        <Grid container justify="center" spacing={1}>
-                            {images.map((value, index) => (
-                                <Grid key={index} item>
-                                    <Paper className={classes.test_paper}>
-                                        <img src = {value} className={classes.media} />
-                                        <h1 > ouooo:{index} </h1>
-                                    </Paper>
-                                </Grid>
-                            ))}
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Container>
-            <Container maxWidth="lg">
-                <Carousel>
-                    {images.map((value, index) => (
-                        <Paper className={classes.textCenter} onClick={()=>handleClick(index)}>
-                            <img src = {value} className={classes.media} />
-                            <h1 className="legend" > legends:{index} </h1>
-                        </Paper>
-                    ))}
-                </Carousel>
-            </Container> */}
+            <NavigationBar brand="媒體分析"/>
             <Container maxWidth="xl" >
                 <div className={classes.head_grid}>
                     <Grid container spacing={1}>
@@ -284,50 +254,13 @@ export default function MediaApp(props) {
             <Container maxWidth="xl" >
                 <Slider {...slide_setting}> 
                     {images.map((value, index) => (
-                        <Paper className={classNames(classes.test_paper, chooseColor(index))} onClick={()=>handleClick(index)}>
+                        <Paper className={classNames(classes.carousel_grid, chooseColor(index))} onClick={()=>handleClick(index)}>
                             <img src = {value} className={classes.img} />
                             <h1 className={classes.title_t}> media:{index} </h1>
                         </Paper>
                     ))}
                 </Slider>
             </Container>
-
-            {/* <Container maxWidth="xl" id="contents">
-                <Paper style={paperStyle} >
-                    <h1> 中國時報 </h1>
-                    <p>  報導篇數: 3000篇 </p>
-                    <p> ouoo3o </p>
-                    <ChartistGraph
-                        className={"ct-chart"}
-                        data={sentimentChartData}
-                        options={sentimentChartOptions}
-                        type={"Pie"}
-                    />
-                    <Container maxWidth="lg"  className='.new-list'>
-                        <h2>重點新聞</h2>
-                        <List component="nav" className={classes.list_item} aria-label="mailbox folders">
-                            <ListItem >
-                                <ListItemText primary="Inbox" />
-                            </ListItem>
-                            <Divider />
-                            <ListItem  divider>
-                                <ListItemText primary="Drafts" />
-                            </ListItem>
-                            <ListItem >
-                                <ListItemText primary="Trash" />
-                            </ListItem>
-                            <Divider light />
-                            <ListItem >
-                                <ListItemText primary="Spam" />
-                            </ListItem>
-                            <Divider />
-                            <ListItem >
-                                <ListItemText primary="安安" />
-                            </ListItem>
-                        </List>
-                    </Container>
-                </Paper> 
-            </Container> */}
 
             <Container maxWidth="xl">
                 <div className={classes.main_grid}>
@@ -373,10 +306,6 @@ export default function MediaApp(props) {
                                 <Divider light />
                                 <ListItem >
                                     <ListItemText primary="農民退休儲金條例通過 蘇揆：農民退休新制月領37K" />
-                                </ListItem>
-                                <Divider />
-                                <ListItem >
-                                    <ListItemText primary="外資狂倒貨6千億！一票「護國股」猛爆沒在怕" />
                                 </ListItem>
                             </List>
                         </Grid>
