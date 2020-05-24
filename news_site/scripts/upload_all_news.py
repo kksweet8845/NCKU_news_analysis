@@ -45,4 +45,7 @@ def todayNews_crawling(request):
         file.write(json.dumps(errors))
 
 def run():
+    # Crawling the news
     todayNews_crawling(None)
+    # tagger
+

@@ -163,7 +163,6 @@ class nowNews_crawling:
         test = requests.get(dn['url'])
         test_soup = bs(test.content, 'html.parser')
         contents = test_soup.select('span[itemprop="articleBody"] > p')
-        print(contents)
         if len(contents) == 0:
             contents = test_soup.select('spean[itemprop="articleBody"]  section > p')
         # try:
@@ -205,7 +204,7 @@ class nowNews_crawling:
         pool = Pool(processes=12)
         for dn in tqdm(self.newsUrl, total=len(self.newsUrl)):
             if date == 'all' or dn['date'] in date:
-                ls.append(pool.apply_async(self.request_newsContent, (dn, date)))
+                ls.append(pool.apply_async(self.request_newsContent, (dn,)))
 
         for i in tqdm(ls, total=len(ls)):
             tmp = i.get()

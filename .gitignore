@@ -8,6 +8,7 @@ news_site/analysis/**/**/src
 error
 dump
 news_site/analysis/apis/utils/ckiptagger
+backup*.sql
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -143,3 +144,7 @@ dmypy.json
 
 # pytype static type analyzer
 .pytype/
+
+news_site/frontend/static/*.min.js
+news_site/frontend/static/*.gif
+news_site/frontend/static/*.svg

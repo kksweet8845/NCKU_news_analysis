@@ -108,8 +108,8 @@ class udn_crawling:
                     ls.append({
                         'title': dr['title'],
                         'url': self.domain + dr['titleLink'],
-                        'time': time,
-                        'type_cn' : self.sub.get(sub_name=type_cn)
+                        'date': time,
+                        'sub' : self.sub.get(sub_name=type_cn)
                     })
         except KeyError :
             return None
@@ -137,8 +137,8 @@ class udn_crawling:
                     ls.append({
                         'title': dr['title'],
                         'url': self.domain + dr['titleLink'],
-                        'time': time,
-                        'type_cn': self.sub.get(sub_name=type_cn)
+                        'date': time,
+                        'sub': self.sub.get(sub_name=type_cn)
                         })
         except KeyError :
             return None

@@ -8,12 +8,15 @@ import BreadLink from './BreadLink'
 const linkContents = [
     {
         name: '關鍵字分析',
+        link: 'keyword_choose'
     },
     {
         name: '媒體分析',
+        link: 'media'
     },
     {
-        name: '新聞回顧'
+        name: '新聞回顧',
+        link: 'news_summary'
     }
 ]
 
@@ -30,7 +33,7 @@ export default function NavigationBar(props) {
                 height: 300,
                 color: "white"
             }}
-            leftLinks={links} 
+            leftLinks={links}
         />
     )
 }

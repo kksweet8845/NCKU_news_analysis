@@ -67,22 +67,18 @@ def wordmap(request):
     scale = 20
     wp = WordMap()
     word_dict = []
-    for i in tqdm(range(maxid // scale)):
-        data = wp.fetch_news([Q(id__gt=i*scale) & Q(id__lt=(i+1)*scale -1),])
-        word_dict.append(wp.gen_dict(data))
+    # for i in tqdm(range(maxid // scale)):
+    #     data = wp.fetch_news([Q(id__gt=i*scale) & Q(id__lt=(i+1)*scale -1),])
+    #     word_dict.append(wp.gen_dict(data))
 
-    head = word_dict[0]
-    for i in word_dict[1:]:
-        head = pd.concat([head, i])
+    pre_df = wp.fetch_news([Q(id__gt=0),])
+    words = wp.gen_dict(pre_df)
 
-    head = np.unique(head.to_numpy())
-    head = pd.Series(head)
+    with open('dictionary.txt', 'w') as file:
+        for dw in words:
+            file.writeline(dw)
 
-    for i in head:
-        tmp = {'word': i}
-        Word(**tmp).save()
-
-    return HttpResponse(head.to_json(orient='records'))
+    return HttpResponse(True)
 
 
 def dumpArticle(request):
