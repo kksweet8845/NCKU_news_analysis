@@ -8,26 +8,61 @@ import color from '@material-ui/core/colors/amber';
 
 import '../css/pieChart.css'
 
-const renderPie = (grades, nodeId)=>{
+const useStyles = makeStyles({
+    layout: {
+        width: '100%',
+        height: '100%',
+    }
+})
+
+function normalize(array) {
+    let max=0, min=999999
+    let output = []
+    for(let num of array)
+    {
+        if(num > max)
+            max = num
+        else if(num < min)
+            min = num
+    }
+
+    for(let num of array)
+    {
+        output.push((num - min) / (max - min) + 0.3)
+    }
+
+    return output
+}
+
+const renderPie = (grades, nodeId, chartType)=>{
+    let labels
+    grades = normalize(grades)
+    switch(chartType){
+        case 0:
+            labels = ['正面', '中立', '負面']
+            break
+        case 1:
+            labels = ['三立', '中時']
+            grades = [
+                {
+                    value: grades[0],
+                    className: 'green-stroke',
+                },
+                {
+                    value: grades[1],
+                    className: 'blue-stroke',
+                }
+            ]
+            break
+    }
+
     let chart = new Chartist.Pie(`.${nodeId}`, {
-        series: [
-            {
-                value: grades[0],
-                className: 'positive-stroke',
-            },
-            {
-                value: grades[1],
-                className: 'neutral-stroke',
-            },
-            {
-                value: grades[2],
-                className: 'negative-stroke',
-            }
-        ],
-        labels: [1, 2, 3],
+            series: grades,
+            showLabel: false,
+            labels,
         }, {
             donut: true,
-            showLabel: false
+            showLabel: true,
         },
     );
     chart.on('draw', function(data) {
@@ -64,22 +99,25 @@ const renderPie = (grades, nodeId)=>{
         }
     });
     // For the sake of the example we update the chart every time it's created with a delay of 8 seconds
-    chart.on('created', function() {
-        if(window.__anim21278907124) {
-        clearTimeout(window.__anim21278907124);
-        window.__anim21278907124 = null;
-    }
-        window.__anim21278907124 = setTimeout(chart.update.bind(chart), 5000);
-    });
+    // chart.on('created', function() {
+    //     if(window.__anim21278907124) {
+    //     clearTimeout(window.__anim21278907124);
+    //     window.__anim21278907124 = null;
+    // }
+    //     window.__anim21278907124 = setTimeout(chart.update.bind(chart), 5000);
+    // });
 }
 
 export default function (props) {
+
+    props.nodeId = '_' + parseInt(Math.random()*100000).toString()
+    let classes = useStyles();
     useEffect(()=>{
-        renderPie(props.grades, props.nodeId)
+        renderPie(props.grades, props.nodeId, props.chartType)
     })
 
     return (
-        <div className={props.nodeId}>
+        <div className={`${props.nodeId} ${classes.layout}`}>
         </div>
     )
 }

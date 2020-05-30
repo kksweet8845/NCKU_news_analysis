@@ -1,7 +1,10 @@
 // react lib
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import ReactCSSTransitionGroup from 'react-transition-group';
+import ReactCSSTransitionGroup from 'react-transition-group'
+import Grid from '@material-ui/core/Grid'
+import PieChart from '../common/pieChart'
+import BarChart from '../common/barChart'
 
 import { makeStyles } from '@material-ui/core'
 
@@ -96,7 +99,17 @@ const useStyle = makeStyles( {
     },
     hideContent: {
         display: 'none'
-    }
+    },
+    chartContent: {
+        marginTop: '20px',
+        width: '80%',
+    },
+    aligner: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+    },
 } )
 
 export default function ReviewFrame(props) {
@@ -135,6 +148,32 @@ export default function ReviewFrame(props) {
                 className={`${classes.frameContent} ${(isExtend)?'':classes.hideContent}`}
             >
                 <p className={`${classes.contentSummary}`}>{props.summary}</p>
+                <section className= {`${classes.chartContent}`}>
+                    <Grid container justify="center" spacing={1}>
+                        <Grid item xs={6}>
+                            <BarChart
+                                categories = {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}
+                                data = {[44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43]}
+                            />
+                        </Grid>
+                        <Grid className={`${classes.aligner}`} item xs={6} align="center" >
+                            <Grid item xs={12}>
+                                <PieChart
+                                    grades = {[4.51, 1, 2.18]}
+                                    nodeId = {'position'}
+                                    chartType = {0}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <PieChart
+                                    grades = {[3.51, 2]}
+                                    nodeId = {'sentiment'}
+                                    chartType = {1}
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </section>
                 <article className={classes.contentLink}>
                     <h4 className={`${classes.linkTitle}`} style={colorClasses.fontColor}>新聞連結</h4>
                     {linkDOM}
