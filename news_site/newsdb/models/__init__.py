@@ -7,6 +7,7 @@ from .brands_foreign_model import BrandForeign
 from .news_foreign_model  import NewsForeign
 from .wordsMap_model import Word
 from .hotWord_model import HotWord
+from .aspect_model import Aspect
 
 __all__ = [
     'news_model',

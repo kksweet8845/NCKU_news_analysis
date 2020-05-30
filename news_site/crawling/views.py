@@ -15,10 +15,6 @@ from crawling.apis import ltn_crawling, nowNews_crawling, pts_crawling, udn_craw
 from newsdb.models import Subject, Brand, Brand_sub
 from multiprocessing import Pool
 from newsdb.serializers import NewSerializer
-<<<<<<< HEAD
-from datetime import datetime, date
-# Create your views here.
-=======
 
 def get_foreign_news_today(request):
     apis = [
@@ -72,7 +68,6 @@ def get_dimestic_news_today(request):
             continue
 
     return HttpResponse(True)
->>>>>>> 7784a389a4f31a93306b9a1205cc0caf8116895d
 
 def test_ltn_crawling(request):
     c = ltn_crawling()

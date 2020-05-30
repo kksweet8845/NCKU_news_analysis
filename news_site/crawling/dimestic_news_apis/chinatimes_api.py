@@ -62,7 +62,7 @@ class ChinatimesCrawler:
             return "".join( content.split() )[:2000]
         except:
             return None
-    
+
     def get_url_by_date(self, sub, date):
         flag = True
         url_category = []
@@ -87,10 +87,10 @@ class ChinatimesCrawler:
                 if flag == False:
                     break
             except Exception as e:
-                print(e) 
+                print(e)
                 print('error in get news url')
                 break
-        
+
         return url_category
 
 
@@ -99,7 +99,7 @@ class ChinatimesCrawler:
         date_today = datetime.now(timezone).date()
 
         return self.get_news_by_date( [str(date_today)] )
-    
+
     def get_news_by_date(self, date_list):
         news_list = []
         for date in date_list:
@@ -116,15 +116,16 @@ class ChinatimesCrawler:
             try:
                 temp_news = New.objects.filter(url=news['url'])
                 if len(temp_news) == 0:
-                    tmp = New(
-                        title=news['title'],
-                        content= news['content'],
-                        author= news['author'],
-                        brand_id=news['brand_id'],
-                        sub_id= news['sub_id'],
-                        date=news['date'],
-                        url=news['url'],
-                    )
+                    # tmp = New(
+                    #     title=news['title'],
+                    #     content= news['content'],
+                    #     author= news['author'],
+                    #     brand_id=news['brand_id'],
+                    #     sub_id= news['sub_id'],
+                    #     date=news['date'],
+                    #     url=news['url'],
+                    # )
+                    tmp = New(**news)
                     tmp.save()
             except Exception as e:
                 print( e )

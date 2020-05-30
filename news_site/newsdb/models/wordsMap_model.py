@@ -8,7 +8,7 @@ class Word(models.Model):
     )
 
     def __str__(self):
-        return "\nid: {}\nword: {}".format(self.id, self.word)
+        return "\nword: {}".format(self.word)
 
     class Meta:
         db_table = "wordsMap"

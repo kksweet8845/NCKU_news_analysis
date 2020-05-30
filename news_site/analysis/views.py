@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .apis import Hotword, WordMap
+from .apis import get_word_freq
 from django.http import HttpResponse
 from django.db.models import Q
 import json
@@ -89,3 +90,10 @@ def dumpArticle(request):
     df.to_csv('analysis/src/dump.csv', index=False)
 
     return HttpResponse(True)
+
+
+def wordFreq(request):
+
+    keywords, relative_news = get_word_freq([Q(date__lt='2020-05-21'), Q(date__gt='2020-05-13'), Q(brand_id=10) | Q(brand_id=18)])
+
+    return HttpResponse(json.dumps(relative_news))

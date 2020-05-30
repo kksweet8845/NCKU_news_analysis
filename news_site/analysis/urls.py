@@ -6,5 +6,6 @@ urlpatterns = [
     path('wordmap', views.wordmap),
     path('keyword', views.keyword),
     path('pubKeyword', views.pubKeyword),
-    path('dumpNews', views.dumpArticle)
+    path('dumpNews', views.dumpArticle),
+    path('wordFreq', views.wordFreq)
 ]

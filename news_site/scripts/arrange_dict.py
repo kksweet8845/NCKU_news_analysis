@@ -1,7 +1,9 @@
 import pandas as pd
 import pickle
 from tqdm import tqdm
-
+from newsdb.models import Word
+from tqdm import tqdm
+import django
 
 def run():
     # file = open('dictionary_final.txt', 'r')
@@ -22,6 +24,16 @@ def run():
     ls = None
     with open("dict.pkl", 'rb') as file:
         ls = pickle.load(file)
+
+    for word in tqdm(ls[118041:], total=len(ls[118041:])):
+        try:
+            if len(word) < 20:
+                w = Word(**{'word': word})
+                w.save()
+            else:
+                print(word)
+        except django.db.utils.DataError:
+            print(word)
 
 
 

@@ -3,13 +3,15 @@ config.ini
 .vscode
 node_modules
 config.js
-news_site/analysis/utils/ckiptagger
+news_site/analysis/apis/utils/ckiptagger
+news_site/analysis/apis/utils/aspect_data
 news_site/analysis/**/**/src
 error
 dump
 news_site/analysis/apis/utils/ckiptagger
 backup*.sql
 venv
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -86,7 +88,6 @@ instance/
 
 # Sphinx documentation
 docs/_build/
-
 # PyBuilder
 target/
 
