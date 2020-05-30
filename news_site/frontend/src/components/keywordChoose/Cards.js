@@ -4,7 +4,6 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 
 const image = [
-  // 'lamp1.png', 'lamp2.png', 'lamp3.png', 'lamp4.png'
   'light1.png', 'light2.png', 'light3.png', 'light4.png',
 ]
 
