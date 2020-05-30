@@ -24,6 +24,7 @@ import Divider from '@material-ui/core/Divider';
 import NavigationBar from './common/NavigationBar'
 
 import Picture from './mediaCom/Picture';
+import Focus_item from './mediaCom/focus_item';
 
 const paddings = {
     senti_h3: {
@@ -349,7 +350,7 @@ export default function MediaApp(props) {
                             />
                         </Grid>
                         <Grid item sm={6}>
-                            <Picture imgSrc={"https://i.imgur.com/nse6KrE.jpeg"}/>
+                            <Picture imgSrc={"https://imgur.com/VoH43KC.png"}/>
                         </Grid>
                     </Grid>
                 </div>
@@ -369,7 +370,7 @@ export default function MediaApp(props) {
 
             <Container maxWidth="xl">
                 <div className={classes.main_grid}>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={4}>
                         <Grid item sm={12}>
                             <h1> {media_map[nowidx].name} </h1>
                             <h3> 報導篇數: {tmp_obj[nowidx].news_number} 篇 </h3>
@@ -398,23 +399,42 @@ export default function MediaApp(props) {
                         <Grid item sm={6}>
                             <h2>重點新聞</h2>
                             <List component="nav" className={classes.list_item} aria-label="mailbox folders">
-                                <ListItem >
+                                <ListItem button>
                                     <ListItemText primary={tmp_obj[nowidx].focus_news[0]} />
                                 </ListItem>
                                 <Divider />
-                                <ListItem  divider>
+                                <ListItem button divider>
                                     <ListItemText primary={tmp_obj[nowidx].focus_news[1]} />
                                 </ListItem>
-                                <ListItem >
+                                <ListItem button>
                                     <ListItemText primary={tmp_obj[nowidx].focus_news[2]} />
                                 </ListItem>
                                 <Divider light />
-                                <ListItem >
+                                <ListItem button>
                                     <ListItemText primary={tmp_obj[nowidx].focus_news[3]} />
                                 </ListItem>
                             </List>
                         </Grid>
                         <Grid item sm={3}/>
+
+                        {/* <Grid item sm={1}/> */}
+                        <Grid item sm={12}>
+                            {[0,12,2, 64, 55].map((value, index) => {
+                                return <Focus_item 
+                                        color= "#27496d"//{colorReview[index%4]}
+                                        num= {index + 1}
+                                        keyword= {"hello w" + value}//{obj.keyword}
+                                        summary= {value}//{obj.summary}
+                                        links= {[
+                                            '新冠肺炎燒三個月 來台觀光收益損近千億元',
+                                            '蘆洲驚見核能燃料棒輻射量爆表？原能會到場鬆了一口氣',
+                                            '陳時中：樂活長照都顧到 防疫才算成功',
+                                        ]}//{obj.links}
+                                        width= "80%"//{widthReview[index%6]}
+                                        />
+                            })}
+                        </Grid>
+                        {/* <Grid item sm={1}/> */}
                     </Grid>
                 </div>
             </Container>
