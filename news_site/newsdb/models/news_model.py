@@ -15,7 +15,9 @@ class New(models.Model):
         default=''
     )
     author  = models.CharField(
-        max_length=50
+        max_length=15,
+        blank=True,
+        null=True,
     )
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     sub = models.ForeignKey(Subject, on_delete=models.CASCADE)

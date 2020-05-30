@@ -9,6 +9,10 @@ from datetime import datetime, date
 from news_site import settings
 import pickle
 import json
+import pandas as pd
+from analysis.apis import AspectModule
+from newsdb.models import New
+from django.db.models import Q
 
 
 def get_news_today(request):
@@ -42,8 +46,12 @@ def get_news_today(request):
 
 def todayNews_crawling(request):
     ls = [
+<<<<<<< HEAD
         #('cts', cts_crawling()),
         ('ltn',ltn_crawling()),
+=======
+        # ('ltn',ltn_crawling()),
+>>>>>>> dc11a78440d0c2f49435400a3a1294bf0dd0ddad
         ('nowNews', nowNews_crawling()),
         ('udn', udn_crawling()),
         ('ftvnews', ftvnews_crawling()),
@@ -51,16 +59,16 @@ def todayNews_crawling(request):
         
     ]
     errors = []
-    prev_data = None
-    try:
-        f = open("/tmp/news.obj", "rb")
-        prev_data = pickle.load(f)
-    except FileNotFoundError as err:
-        pass
+    df = pd.DataFrame(columns=['id', 'title', 'content', 'author', 'brand_id', 'sub_id', 'date', 'update_time', 'url'])
     for name, i in ls:
         print("="*150)
         new_data = []
+<<<<<<< HEAD
         data = i.getNews(date=["2020-05-30"])
+=======
+        # data = i.getNews(date=['2020-05-20', '2020-05-21','2020-05-22'])
+        data = i.getNews(date=[date.today().isoformat()])
+>>>>>>> dc11a78440d0c2f49435400a3a1294bf0dd0ddad
         for j in data:
             n = NewSerializer(data=j)
             try:
@@ -70,10 +78,37 @@ def todayNews_crawling(request):
             except ValueError:
                 errors.append({'error': n.errors, 'data': n.data})
                 pass
+        print(len(new_data))
         result = i.insertNews(new_data)
+        if result != None:
+            result = pd.DataFrame([ dr.__dict__ for dr in result],
+                              columns=['id', 'title', 'content', 'author', 'brand_id', 'sub_id', 'date', 'update_time', 'url'])
+            df.append(result)
         print(f"{name} finished")
     with open(f'{settings.BASE_DIR}/../error/{date.today().isoformat()}_error.json',"w+") as file:
         file.write(json.dumps(errors))
+    return df
+
+
+def analysis_aspect(df):
+    util_path = settings.BASE_DIR + '/analysis/apis/utils/aspect_data/chineseGLUE/inews/'
+
+
+    # save the current file into csv
+    df \
+        .drop('author',axis=1,inplace=True) \
+        .drop('date',axis=1,inplace=True) \
+        .drop('update_time', axis=1, inplace=True) \
+        .drop('brand_id', axis=1,inplace=True) \
+        .drop('sub_id', axis=1, inplace=True) \
+        .drop('url', axis=1, inplace=True)
+    df = df[['title', 'content', 'id']]
+    df.to_csv(util_path + 'eval_tc.csv')
+
+    aspectModule = AspectModule('eval')
+    result, acc = aspectModule.eval('bert-base-chinese-e-3.ckpt')
+    print(result, acc)
+
 
 def run():
     # Crawling the news

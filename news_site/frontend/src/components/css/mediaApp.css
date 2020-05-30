@@ -1,0 +1,17 @@
+.ct-label {
+    font-size: 18px;
+}
+
+.ct-chart .ct-bar {
+    stroke-width: 40px
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: violet !important;
+}
+
+.ctbar-chart{
+    position: relative;
+    margin-top:  20vh;;
+}

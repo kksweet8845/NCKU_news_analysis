@@ -1,0 +1,11 @@
+.positive-stroke {
+    stroke: blue !important;
+}
+
+.neutral-stroke {
+    stroke: grey !important;
+}
+
+.negative-stroke {
+    stroke: red !important;
+}

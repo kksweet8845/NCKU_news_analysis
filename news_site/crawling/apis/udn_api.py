@@ -282,9 +282,6 @@ class udn_crawling:
                 final_news.append(i.get())
         return final_news
 
-
-
-
     def getNews(self, date=[date.today().isoformat()]):
         """ """
 
@@ -297,10 +294,15 @@ class udn_crawling:
         return self.getNews(date=[date.today().isoformat()])
 
     def insertNews(self, news):
+        ls = []
+        cur_news = New.objects.filter(brand_id=self.brand_ID)
         for dn in news:
             try:
-                tmp = New(**dn)
-                tmp.save()
+                tmp_news = cur_news.filter(url=dn['url'])
+                if len(tmp_news) == 0:
+                    tmp = New(**dn)
+                    tmp.save()
+                    ls.append(tmp)
             except:
-                print(tmp)
-        return True
+                print(tmp_news)
+        return ls if len(ls) != 0 else None

@@ -154,7 +154,15 @@ class cts_crawling:
         return self.getNews(date=[date.today().isoformat()])
 
     def insertNews(self, news):
+        ls = []
+        cur_news = New.objects.filter(brand_id=self.brand_ID)
         for dn in news:
-            tmp = New(**dn)
-            tmp.save()
-        return True
+            try:
+                tmp_news = cur_news.filter(url=dn['url'])
+                if len(tmp_news) == 0:
+                    tmp = New(**dn)
+                    tmp.save()
+                    ls.append(tmp)
+            except:
+                print(tmp_news)
+        return ls if len(ls) != 0 else None
