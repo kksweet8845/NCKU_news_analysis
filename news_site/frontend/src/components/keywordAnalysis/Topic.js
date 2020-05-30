@@ -11,7 +11,7 @@ const styles = {
         boxSizeing: 'border-box',
         width: '100%',
         height: '100%',
-        fontSize:  "64px",
+        fontSize:  "100px",
         fontWeight: 'bold',
         letterSpacing: '10px',
         color: "black",
