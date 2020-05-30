@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import NavigationBar from './common/NavigationBar'
 
 import Topic from './App/Topic';
-import linkButton from './App/LinkButton';
 import { makeStyles } from '@material-ui/core'
 
 import './css/App.css';
