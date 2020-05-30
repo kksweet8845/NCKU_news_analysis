@@ -6,6 +6,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import { CircularProgress } from '@material-ui/core'
 import color from '@material-ui/core/colors/amber';
 
+import '../css/pieChart.css'
+
+const useStyles = makeStyles({
+    layout: {
+        width: '100%',
+        height: '100%',
+    }
+})
+
 function normalize(array) {
     let max=0, min=999999
     let output = []
@@ -25,24 +34,32 @@ function normalize(array) {
     return output
 }
 
-const renderPie = (grades, nodeId)=>{
-    console.log(grades)
+const renderPie = (grades, nodeId, chartType)=>{
+    let labels
     grades = normalize(grades)
-    console.log(grades)
-    let chart = new Chartist.Pie(`.${nodeId}`, {
-            series: [
+    switch(chartType){
+        case 0:
+            labels = ['正面', '中立', '負面']
+            break
+        case 1:
+            labels = ['三立', '中時']
+            grades = [
                 {
                     value: grades[0],
+                    className: 'green-stroke',
                 },
                 {
                     value: grades[1],
-                },
-                {
-                    value: grades[2],
+                    className: 'blue-stroke',
                 }
-            ],
+            ]
+            break
+    }
+
+    let chart = new Chartist.Pie(`.${nodeId}`, {
+            series: grades,
             showLabel: false,
-            labels: ['正面', '中立', '負面'],
+            labels,
         }, {
             donut: true,
             showLabel: true,
@@ -94,14 +111,13 @@ const renderPie = (grades, nodeId)=>{
 export default function (props) {
 
     props.nodeId = '_' + parseInt(Math.random()*100000).toString()
-
+    let classes = useStyles();
     useEffect(()=>{
-        console.log(props.nodeId)
-        renderPie(props.grades, props.nodeId)
+        renderPie(props.grades, props.nodeId, props.chartType)
     })
 
     return (
-        <div className={props.nodeId}>
+        <div className={`${props.nodeId} ${classes.layout}`}>
         </div>
     )
 }
