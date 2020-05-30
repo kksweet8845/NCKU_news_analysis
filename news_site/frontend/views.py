@@ -12,3 +12,15 @@ def publisherPage(request):
 
 def foreignPage(request):
     return render(request, 'foreign.html')
+
+def mediaPage(request):
+    return render(request, 'media.html')
+
+def keywordAnalysisPage(request):
+    return render(request, 'keyword_analysis.html')
+
+def keywordChoosePage(request):
+    return render(request, 'keyword_choose.html')
+
+def newsSummaryPage(request):
+    return render(request, 'news_summary.html')

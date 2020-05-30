@@ -54,6 +54,10 @@ const webpackJsConfigTemplate = {
                     'css-loader',
                     'sass-loader',
                 ]
+            },
+            {
+                test: /\.(eot|woff|woff2|ttf)$/,
+                loader: 'url-loader?limit=30000&name=[name]-[hash].[ext]'
             }
         ]
     }
@@ -63,10 +67,14 @@ const srcRoot = path.join(config.projectRoot, 'news_site/frontend/src')
 const srcDis = path.join(config.projectRoot, 'news_site/frontend/static')
 const srcJsConfig = Object.assign({}, webpackJsConfigTemplate, {
     entry: {
-        'index': path.join(srcRoot, 'indexPage.js'),
+        'index': path.join(srcRoot, 'index.js'),
         'keyword': path.join(srcRoot, 'keywordPage.js'),
         'publisher': path.join(srcRoot, 'publisherPage.js'),
-        'foreign': path.join(srcRoot, 'foreignPubPage.js')
+        'foreign': path.join(srcRoot, 'foreignPubPage.js'),
+        'media': path.join(srcRoot, 'media.js'),
+        'keyword_analysis': path.join(srcRoot, 'keywordAnalysis.js'),
+        'keyword_choose': path.join(srcRoot, 'keywordChoose.js'),
+        'news_summary': path.join(srcRoot, 'newsSummary.js'),
     },
     output: {
         path: srcDis,

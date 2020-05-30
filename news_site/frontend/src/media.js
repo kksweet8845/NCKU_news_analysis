@@ -1,0 +1,1 @@
+import MediaApp from './components/MediaApp'
