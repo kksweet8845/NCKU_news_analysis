@@ -4,3 +4,11 @@ from .pts_api import pts_crawling
 from .udn_api import udn_crawling
 from .cts_api import cts_crawling
 from .ftvnews_api import ftvnews_crawling
+from .CNA_api import CNACrawler
+from .EBC_api import EBCCrawler
+from .newtalk_api import NewtalkCrawler
+from .SETN_api import SETNCrawler
+from .TVBS_api import TVBSCrawler
+from .upmedia_api import UpmediaCrawler
+from .storm_api import StormCrawler
+from .chinatimes_api import ChinatimesCrawler

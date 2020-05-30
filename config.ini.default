@@ -4,7 +4,7 @@
 [DATABASE]
 engine = django.db.backends.mysql
 name = newsdb
-user = <YourName>
-password = <YourPassword>
+user = root
+password = 
 host = localhost
 port = 3306

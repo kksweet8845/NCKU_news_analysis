@@ -7,3 +7,6 @@ djangorestframework==3.11.0
 request==2019.4.13
 requests==2.21.0
 tqdm==4.41.0
+tensorflow_hub==0.8.0
+jieba==0.42.1
+xlrd==1.2.0
