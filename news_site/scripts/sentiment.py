@@ -35,7 +35,7 @@ class SentimentAnalysis:
         head, sep, tail = content.partition(a)
         head, sep, tail = head.partition(b)
         return head
-        
+
     def seperate_news(self, query_set):
         news_list = []
         seperated_word_list = []

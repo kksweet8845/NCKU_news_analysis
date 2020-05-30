@@ -43,13 +43,12 @@ class NewsClustering:
             for j in range(len(similarity)):
                 if dbscan[j] == i:
                     temp.append(j)
-            if temp:        
+            if temp:
                 cluster_list.append(temp)
         return cluster_list
 
     def getTopNewsIndex(self, cluster_list):
         return cluster_list
-        
 
     def getEmbed(self, query_set):
         model = self.getModel()

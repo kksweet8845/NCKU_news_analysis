@@ -84,7 +84,6 @@ def analysis_aspect(df):
             tmp = Aspect(**{'aspect': dp, 'new':all_news.get(id=di)})
             tmp.save()
 
-
     print(result)
 
 

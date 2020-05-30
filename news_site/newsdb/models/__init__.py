@@ -7,9 +7,7 @@ from .brands_foreign_model import BrandForeign
 from .news_foreign_model  import NewsForeign
 from .wordsMap_model import Word
 from .hotWord_model import HotWord
-from .cluster_day_model import cluster_day
-from .cluster_week_model import cluster_week
-from .cluster_week_brand_model import cluster_week_brand
+from .cluster_day_model import Cluster_day
 from .sentiment_model import sentiment
 from .aspect_model import Aspect
 from .standpoint_model import standpoint
