@@ -5,13 +5,17 @@
         <meta name="viewport" content="width-device-width, initial-scale=1.0">
         <title> News Manager </title>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     </head>
-    <body style="background-color:#dddddd">
+    <body style="background-color:#ffffff">
         <div id="app"></div>
         <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
         {% load static %}
         <script src="{% static "media.min.js" %}"></script>
-        <script src="{% static "js/d3.min.js" %}"></script>
-        <!-- <script src="{% static "js/keyword.js" %}"></script> -->
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <!-- <script src="{% static "js/d3.min.js" %}"></script> -->
+
+        <script>AOS.init();</script>
     </body>
 </html>
