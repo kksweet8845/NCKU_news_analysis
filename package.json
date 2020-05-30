@@ -39,6 +39,7 @@
     "axios": "^0.19.2",
     "chartist": "^0.11.4",
     "chartist-plugin-fill-donut": "^0.1.4",
+    "chartist-plugin-legend": "^0.6.2",
     "classnames": "^2.2.6",
     "cross-env": "^7.0.2",
     "d3": "^5.16.0",

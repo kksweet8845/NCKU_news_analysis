@@ -84,7 +84,7 @@ export default function (props) {
     if(props.ready){
         return (
             <div>
-                <div id={props.id}></div>
+                <div data-aos='fade-right' id={props.id}></div>
             </div>
         )
     }else{
