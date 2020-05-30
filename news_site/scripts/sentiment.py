@@ -63,8 +63,8 @@ class SentimentAnalysis:
         sentiment_score = list(sentiment_dict['強度'])
         i = 0
         for news in tqdm(seperated_word_list):
-            positive = 0
-            negative = 0
+            #positive = 0
+            #negative = 0
             anger = 0
             disgust = 0
             fear = 0

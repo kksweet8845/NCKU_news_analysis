@@ -46,12 +46,8 @@ def get_news_today(request):
 
 def todayNews_crawling(request):
     ls = [
-<<<<<<< HEAD
         #('cts', cts_crawling()),
         ('ltn',ltn_crawling()),
-=======
-        # ('ltn',ltn_crawling()),
->>>>>>> dc11a78440d0c2f49435400a3a1294bf0dd0ddad
         ('nowNews', nowNews_crawling()),
         ('udn', udn_crawling()),
         ('ftvnews', ftvnews_crawling()),
@@ -63,12 +59,7 @@ def todayNews_crawling(request):
     for name, i in ls:
         print("="*150)
         new_data = []
-<<<<<<< HEAD
         data = i.getNews(date=["2020-05-30"])
-=======
-        # data = i.getNews(date=['2020-05-20', '2020-05-21','2020-05-22'])
-        data = i.getNews(date=[date.today().isoformat()])
->>>>>>> dc11a78440d0c2f49435400a3a1294bf0dd0ddad
         for j in data:
             n = NewSerializer(data=j)
             try:

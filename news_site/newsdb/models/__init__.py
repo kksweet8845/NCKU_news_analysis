@@ -7,15 +7,14 @@ from .brands_foreign_model import BrandForeign
 from .news_foreign_model  import NewsForeign
 from .wordsMap_model import Word
 from .hotWord_model import HotWord
-<<<<<<< HEAD
 from .cluster_day_model import cluster_day
 from .cluster_week_model import cluster_week
 from .cluster_week_brand_model import cluster_week_brand
 from .sentiment_model import sentiment
-=======
 from .aspect_model import Aspect
+from .standpoint_model import standpoint
+from .tagger_model import tagger
 
->>>>>>> dc11a78440d0c2f49435400a3a1294bf0dd0ddad
 __all__ = [
     'news_model',
     'brands_model',

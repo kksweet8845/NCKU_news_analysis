@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 # foregin media
-from crawling.foreign_news_apis import *
+#from crawling.foreign_news_apis import *
 
 # dimestic media
 from crawling.dimestic_news_apis import *
@@ -15,7 +15,7 @@ from crawling.apis import ltn_crawling, nowNews_crawling, pts_crawling, udn_craw
 from newsdb.models import Subject, Brand, Brand_sub
 from multiprocessing import Pool
 from newsdb.serializers import NewSerializer
-
+'''
 def get_foreign_news_today(request):
     apis = [
         AljazeeraCrawler,
@@ -68,7 +68,7 @@ def get_dimestic_news_today(request):
             continue
 
     return HttpResponse(True)
-
+'''
 def test_ltn_crawling(request):
     c = ltn_crawling()
     data = c.getNews(date=['2020-04-24'])
