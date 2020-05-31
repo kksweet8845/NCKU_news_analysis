@@ -425,10 +425,12 @@ class KeywordThreeDay:
     def genData(self, keywords, relative_news):
         ls = []
         keywords_ls = []
+        all_brand = Brand.objects.all()
         for keyword in keywords:
             tmp = {
                 'keyword' : keyword,
                 'summary' : 'test',
+                'reportNum' : [0]*18
             }
             keyword_tmp = {
                 'keyword' : keyword,
@@ -439,12 +441,14 @@ class KeywordThreeDay:
             for date in relative_news[keyword].keys():
                 if date != 'relative_keywords':
                     for id in relative_news[keyword][date].keys():
+                        brand_index = New.objects.get(id=id).brand_id - 1
                         links.append({
                             'title' : relative_news[keyword][date][id]['title'],
                             'url' : relative_news[keyword][date][id]['url']
                         })
                         newsNum += 1
                         keyword_tmp['relative_news'].append(str(id))
+                        tmp['reportNum'][brand_index] += 1
             tmp['newsNum'] = newsNum
             tmp['links'] = links
             ls.append(tmp)

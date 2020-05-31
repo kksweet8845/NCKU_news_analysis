@@ -201,12 +201,12 @@ def get_cluster(request):
         news_query2 = New.objects.filter(Q(brand_id=i+1) & Q(date__gt=(date.today()-timedelta(days=3)).isoformat()))
         news_no2 = []
         for query in news_query2:
-            news_no2.append(query.news_id)
-        standpoint_query = Standpoint.objects.filter(Q(new_id__in=news_no2))
+            news_no2.append(query.id)
+        standpoint_query = Standpoint.objects.filter(Q(news__in=news_no2))
         china = 0
         setn = 0
-        for i in standpoint_query:
-            if i.standpoint == 1:
+        for k in standpoint_query:
+            if k.standpoint == 1:
                 china += 1
             else:
                 setn += 1
@@ -283,6 +283,21 @@ def newsReview(request):
 
     return HttpResponse(json.dumps(mem))
 
+
+def mediaReport(request):
+
+    all_brands = Brand.objects.all()
+
+    mediaName = []
+    mediaNum = []
+    for dbrand in all_brands:
+        mediaName.append(dbrand.brand_name)
+        mediaNum.append(New.objects.filter(brand_id=dbrand.id).count())
+
+    return HttpResponse(json.dumps({
+        'labels' : mediaName,
+        'series' : mediaNum
+    }))
 
 def top20Keywords(request):
     global keywords

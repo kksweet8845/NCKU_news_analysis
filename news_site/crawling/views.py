@@ -90,7 +90,7 @@ def test_ltn_crawling(request):
 
 def test_nowNews_crawling(request):
     c = nowNews_crawling()
-    data = c.getNews(date=['2020-04-24'])
+    data = c.getNews(date=[date.today().isoformat()])
     errors = []
     for j in data:
             n = NewSerializer(data=j)

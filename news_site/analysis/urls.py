@@ -17,6 +17,7 @@ urlpatterns = [
     path('sentimentWeek', views.sentimentWeek),
     path('newsReview', views.newsReview),
     path('top20Keywords', views.top20Keywords),
+    path('mediaReport', views.mediaReport),
     path('keywordAnalysis/<str:word>', views.keywordAnalysis),
     path('relativeKeyword/<str:word>', views.relativeKeyword),
     path('mediaAnalysis', views.mediaAnalysis),
