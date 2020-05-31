@@ -14,6 +14,32 @@ class ltn_crawling:
     brand_name = "自由時報"
     brand_url = "https://news.ltn.com.tw/"
     brand_ID = 11
+    ltn_url = {
+        1   :{
+            'index_href': 'https://news.ltn.com.tw/list/breakingnews/society',
+            'ajax_href': 'https://news.ltn.com.tw/ajax/breakingnews/society'
+        },
+        2   :{
+            'index_href': 'https://news.ltn.com.tw/list/breakingnews/politics',
+            'ajax_href': 'https://news.ltn.com.tw/ajax/breakingnews/politics'
+        },
+        3   :{
+            'index_href': 'https://news.ltn.com.tw/list/breakingnews/world',
+            'ajax_href': 'https://news.ltn.com.tw/ajax/breakingnews/world'
+        },
+        4   :{
+            'index_href': 'https://ec.ltn.com.tw',
+            'ajax_href': 'https://ec.ltn.com.tw'
+        },
+        5   :{
+            'index_href': 'https://sports.ltn.com.tw',
+            'ajax_href': 'https://sports.ltn.com.tw'
+        },
+        7   :{
+            'index_href': 'https://news.ltn.com.tw/list/breakingnews/life',
+            'ajax_href': 'https://news.ltn.com.tw/ajax/breakingnews/life'
+        }
+    }
     def __init__(self):
         self.brand = Brand.objects.get(id=self.brand_ID)
 
@@ -134,11 +160,11 @@ class ltn_crawling:
         pool = Pool(processes=8)
         ls = []
         news = []
-        for du in urls:
-            index_url = du.index_href
-            ajax_url = du.ajax_href
-            ls.append(pool.apply_async(self.request_news_url, (index_url, du.sub)))
-            ls.append(pool.apply_async(self.request_ajax_url, (ajax_url, du.sub)))
+        for sub_id in self.ltn_url.keys():
+            index_url = self.ltn_url[sub_id]['index_href']
+            ajax_url = self.ltn_url[sub_id]['ajax_href']
+            ls.append(pool.apply_async(self.request_news_url, (index_url, Subject.objects.get(id=sub_id))))
+            ls.append(pool.apply_async(self.request_ajax_url, (ajax_url, Subject.objects.get(id=sub_id))))
 
         for i in tqdm(ls, total=len(ls)):
             news.extend(i.get())
