@@ -162,22 +162,21 @@ export default function ReviewFrame(props) {
                     <Grid container justify="center" spacing={1}>
                         <Grid item xs={6}>
                             <BarChart
-                                categories = {["TVBS", "Yahoo", "大紀元", "三立", "上報", "中天", "中央社", "中時電子報", "今日新聞", "公視 ", "自由時報", "民視新聞", "風傳媒", "東森EToday", "新頭殼", "聯合新聞網", "蘋果電子報", "華視"]}
-                                data = {[44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43]}
-                                height={200}
+                                categories = {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}
+                                data = {props.reportNum}
                             />
                         </Grid>
                         <Grid className={`${classes.aligner}`} item xs={6} align="center" >
                             <Grid item xs={12}>
                                 <PieChart
-                                    grades = {[4.51, 1, 2.18]}
+                                    grades = {props.sentiment}
                                     nodeId = {'position'}
                                     chartType = {0}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <PieChart
-                                    grades = {[3.51, 2]}
+                                    grades = {props.standpoint}
                                     nodeId = {'sentiment'}
                                     chartType = {1}
                                 />

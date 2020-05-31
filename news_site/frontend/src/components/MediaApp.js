@@ -428,7 +428,7 @@ export default function MediaApp(props) {
                     {media_index.map((value, index) => (
                         <Paper className={classNames(classes.carousel_grid, chooseColor(index))} onClick={()=>handleClick(value)}>
                             <img src = {media_map[value].img} className={classes.img} />
-                            <h1 className={classes.carousel_title}> {media_map[value].name}{value} </h1>
+                            <h1 className={classes.carousel_title}> {media_map[value].name} </h1>
                             {/* <p>{media_map[value].content}</p> */}
                         </Paper>
                     ))}

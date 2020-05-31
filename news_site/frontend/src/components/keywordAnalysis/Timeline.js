@@ -84,6 +84,7 @@ const useStyles = makeStyles({
         fontSize: '16px',
         fontWeight: 'bold',
         padding: '10px',
+        color: 'black',
     }
 })
 
@@ -92,17 +93,24 @@ export default function Timeline(props) {
     const classes = useStyles()
     const date = props.data.date
     const keyword = props.data.keyword
+    const stopPropogation = (e) => {
+        e.stopPropagation();
+    }
 
     const sentiment = (props.data.posLinks.length >= props.data.negLinks.length)? 'pos' : 'neg'
 
     const sentimentKeyword = (sentiment === "pos")? classes.keywordPos:classes.keywordNeg
 
     const posLinkDOM = props.data.posLinks.map((link)=> {
-        return <p className={classes.link}>{link}</p>
+        return <a className={classes.link} href={link.url} onClick={stopPropogation}>
+                    {link.title}
+                </a>
     })
 
     const negLinkDOM = props.data.negLinks.map((link)=> {
-        return <p className={classes.link}>{link}</p>
+        return <a className={classes.link} href={link.url} onClick={stopPropogation}>
+                    {link.title}
+                </a>
     })
 
     return (

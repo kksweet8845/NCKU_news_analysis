@@ -9,5 +9,10 @@ urlpatterns = [
     path('dumpNews', views.dumpArticle),
     path('wordFreq', views.wordFreq),
     path('sentiment', views.get_sentiment),
-    path('standpoint', views.get_standpoint)
+    path('standpoint', views.get_standpoint),
+    path('top20Keywords', views.testChoose),
+    path('relativeKeyword/<str:word>', views.testRelativeKeyword),
+    path('keywordAnalysis/<str:word>', views.testKeywordAnalysis),
+    path('sentimentWeek', views.testSevenSemantic),
+    path('newsAnalysis', views.testReview)
 ]
