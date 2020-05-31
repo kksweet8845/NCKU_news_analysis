@@ -29,7 +29,7 @@ def todayNews_crawling(request):
         print("="*150)
         new_data = []
         # data = i.getNews(date=['2020-05-18', '2020-05-19'])
-        data = i.getNews(date=[date.today().isoformat()])
+        data = i.getNews(date=['2020-05-30'])
         for j in data:
             n = NewSerializer(data=j)
             try:
@@ -73,7 +73,7 @@ def analysis_aspect(df):
         return row
     # df = df.apply(cleanP, axis=1)
     # df.to_csv(util_path + 'eval_tc.csv')
-
+    
     aspectModule = AspectModule(df, 'eval', 8)
     result = aspectModule.eval('bert-base-chinese-e-3.ckpt')
 
@@ -86,14 +86,13 @@ def analysis_aspect(df):
 
 
     print(result)
-
+    
 
 def run():
     # Crawling the news
     # todayNews_crawling(None)
     # tagger
-    news = New.objects.filter(*[Q(date__gte='2020-05-01'), Q(date__lte='2020-05-24')])
-
+    news = New.objects.filter(*[Q(date__gte='2020-05-30')])
     df = pd.DataFrame(list(news.values()),
                       columns=[
                       'id',

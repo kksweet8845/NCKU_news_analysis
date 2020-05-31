@@ -11,7 +11,7 @@ dump
 news_site/analysis/apis/utils/ckiptagger
 backup*.sql
 venv
-
+sentiment_model
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

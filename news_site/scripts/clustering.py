@@ -37,7 +37,7 @@ class NewsClustering:
 
     def getNewsCluster(self, similarity):
         cluster_list = []
-        dbscan = DBSCAN(eps=0.4*np.log(len(similarity))-1.15, min_samples=2).fit_predict(1-similarity)
+        dbscan = DBSCAN(eps=max(0.5, 0.4*np.log(len(similarity))-1.5), min_samples=2).fit_predict(1-similarity)
         for i in range(len(similarity)):
             temp = []
             for j in range(len(similarity)):
@@ -70,17 +70,18 @@ class NewsClustering:
 
 def run():
     news_clustering = NewsClustering()
-    news_query = New.objects.filter(Q(date__gte=date.today().isoformat()))
-    text = tf.Variable(np.empty((0,512)), dtype=np.float32)
-    for i in tqdm(range(int(len(news_query)/100) + 1)):
-        temp = news_clustering.getEmbed(news_query[(i*100):((i+1)*100)])
-        text = tf.concat((text, temp), axis=0)
-    top_news = news_clustering.getTopNews(text)
-    top_news.sort(key=len, reverse=True)
+    for i in [4,7,14,15,1,5,13,8]:
+        news_query = New.objects.filter(Q(date__gt=(date.today()-timedelta(days=3)).isoformat()) & Q(brand=i))
+        text = tf.Variable(np.empty((0,512)), dtype=np.float32)
+        for i in tqdm(range(int(len(news_query)/100) + 1)):
+            temp = news_clustering.getEmbed(news_query[(i*100):((i+1)*100)])
+            text = tf.concat((text, temp), axis=0)
+        top_news = news_clustering.getTopNews(text)
+        top_news.sort(key=len, reverse=True)
 
-    cluster_no = 1
-    for news_list in tqdm(top_news):
-        for news in news_list:
-            a = cluster_day(news=news_query[news], date=news_query[news].date, cluster=cluster_no)
-            a.save()
-        cluster_no += 1
+        cluster_no = 1
+        for news_list in tqdm(top_news):
+            for news in news_list:
+                a = cluster_day(news=news_query[news], date=news_query[news].date, cluster=cluster_no)
+                a.save()
+            cluster_no += 1
