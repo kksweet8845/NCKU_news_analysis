@@ -9,5 +9,6 @@ urlpatterns = [
     path('dumpNews', views.dumpArticle),
     path('wordFreq', views.wordFreq),
     path('sentiment', views.get_sentiment),
-    path('standpoint', views.get_standpoint)
+    path('standpoint', views.get_standpoint),
+    path('cluster', views.get_cluster)
 ]
