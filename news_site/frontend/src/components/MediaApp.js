@@ -22,6 +22,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 
 import NavigationBar from './common/NavigationBar'
+import PieChart from './common/pieChart'
+import BarChart from './common/barChart'
 
 import Picture from './mediaCom/Picture';
 
@@ -59,8 +61,8 @@ const useStyles = makeStyles({
     },
     carousel_title: {
         color: "black",
-        // position: "absolute", 
-        // display: "inline-block",           
+        // position: "absolute",
+        // display: "inline-block",
         // bottom: 0,
         textAlign: "center",
         // marginLeft: "auto",
@@ -101,7 +103,7 @@ const useStyles = makeStyles({
     },
     head_grid: {
         flexGrow: 1,
-        height: "93vh",
+        height: "100vh",
         paddingTop: "7vh",
         textAlign: "center",
         backgroundColor: "white",
@@ -112,8 +114,18 @@ const useStyles = makeStyles({
     },
     head_title: {
         fontSize: "5rem",
+    },
+    pieChart: {
+        height: "40vh",
+    },
+    news_block: {
+        marginTop: "10vh",
+    },
+    barchart_layout: {
+        height: "60vh",
+        width: "100%",
+        marginTop: "10vh",
     }
-
 })
 
 export default function MediaApp(props) {
@@ -294,21 +306,6 @@ export default function MediaApp(props) {
         },
     }
 
-    var sentimentChartData = {
-        labels: ['正面', '中立', '負面'],
-        series: tmp_obj[nowidx].sentiment,
-    }
-    var sentimentChartOptions = {
-        height: '20rem',
-        width: '20rem',
-        donut: true,
-        donutWidth: 60,
-        donutSolid: true,
-        startAngle: 150,
-        total: tmp_obj[nowidx].sentiment.reduce((a, b) => a + b, 0),
-        showLabel: true,
-    }
-
     var standpointChartData = {
         // labels: ['中時', '三立'],
         series: tmp_obj[nowidx].standpoint,
@@ -341,12 +338,12 @@ export default function MediaApp(props) {
                     <Grid container spacing={1} className={classes.grid_container}>
                         <Grid item sm={6}>
                             <h1 className={classes.head_title}>媒體分析</h1>
-                            <ChartistGraph
-                                className={"ctbar-chart"}
-                                data={barChartData}
-                                options={barChartOptions}
-                                type={"Bar"}
-                            />
+                            <div className={classes.barchart_layout}>
+                                <BarChart
+                                    categories = {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}
+                                    data = {[44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43]}
+                                />
+                            </div>
                         </Grid>
                         <Grid item sm={6}>
                             <Picture imgSrc={"https://i.imgur.com/nse6KrE.jpeg"}/>
@@ -354,9 +351,9 @@ export default function MediaApp(props) {
                     </Grid>
                 </div>
             </Container>
-            
+
             <Container maxWidth="xl" >
-                <Slider {...slide_setting}> 
+                <Slider {...slide_setting}>
                     {media_index.map((value, index) => (
                         <Paper className={classNames(classes.carousel_grid, chooseColor(index))} onClick={()=>handleClick(value)}>
                             <img src = {media_map[value].img} className={classes.img} />
@@ -369,32 +366,31 @@ export default function MediaApp(props) {
 
             <Container maxWidth="xl">
                 <div className={classes.main_grid}>
-                    <Grid container spacing={3}>
+                    <Grid container justify="center" spacing={3}>
                         <Grid item sm={12}>
                             <h1> {media_map[nowidx].name} </h1>
                             <h3> 報導篇數: {tmp_obj[nowidx].news_number} 篇 </h3>
                         </Grid>
-                        <Grid item sm={6} className={classes.textRight}>
+                    </Grid>
+                    <Grid container justify="center" spacing={3} className={classes.pieChart}>
+                        <Grid item sm={3} className={[classes.textRight]}>
                             <h3 style={paddings.senti_h3}> 情緒分數 </h3>
-                            <ChartistGraph
-                                className={"ct-chart"}
-                                data={sentimentChartData}
-                                options={sentimentChartOptions}
-                                type={"Pie"}
-                                style={paddings.senti_graph}
+                            <PieChart
+                                grades = {[4.51, 1, 2.18]}
+                                nodeId = {'position'}
+                                chartType = {0}
                             />
                         </Grid>
-                        <Grid item sm={6} className={classes.textLeft}>
+                        <Grid item sm={3} className={classes.textLeft}>
                             <h3 style={paddings.stand_h3}> 立場分數 </h3>
-                            <ChartistGraph
-                                className={"ct-chart"}
-                                data={standpointChartData}
-                                options={standpointChartOptions}
-                                type={"Pie"}
-                                style={paddings.stand_graph}
+                            <PieChart
+                                grades = {[3.51, 2]}
+                                nodeId = {'sentiment'}
+                                chartType = {1}
                             />
                         </Grid>
-                        <Grid item sm={3}/>
+                    </Grid>
+                    <Grid className={classes.news_block} container justify="center" spacing={3}>
                         <Grid item sm={6}>
                             <h2>重點新聞</h2>
                             <List component="nav" className={classes.list_item} aria-label="mailbox folders">
@@ -414,7 +410,6 @@ export default function MediaApp(props) {
                                 </ListItem>
                             </List>
                         </Grid>
-                        <Grid item sm={3}/>
                     </Grid>
                 </div>
             </Container>

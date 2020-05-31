@@ -157,14 +157,20 @@ export default function ReviewFrame(props) {
                             />
                         </Grid>
                         <Grid className={`${classes.aligner}`} item xs={6} align="center" >
-                            <PieChart
-                                grades = {[4.51, 1, 2.18]}
-                                nodeId = {'position'}
-                            />
-                            <PieChart
-                                grades = {[3.51, 2, 6.18]}
-                                nodeId = {'sentiment'}
-                            />
+                            <Grid item xs={12}>
+                                <PieChart
+                                    grades = {[4.51, 1, 2.18]}
+                                    nodeId = {'position'}
+                                    chartType = {0}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <PieChart
+                                    grades = {[3.51, 2]}
+                                    nodeId = {'sentiment'}
+                                    chartType = {1}
+                                />
+                            </Grid>
                         </Grid>
                     </Grid>
                 </section>

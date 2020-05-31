@@ -5,18 +5,18 @@ jieba.dt.cache_file = 'jieba.cache.new'
 import jieba.posseg as pseg
 from tqdm import tqdm
 from django.db.models import Q
-from newsdb.models import New, sentiment, tagger
+from newsdb.models import New, Sentiment, Tagger
 from datetime import date
 import ast
 
 class SentimentAnalysis:
     def __init__(self):
         pass
-    
+
     def seperate(self, sentence):
         words = pseg.cut(sentence)
         return words
-    
+
     def is_chinese(self, uchar):
         if uchar >= u'\u4e00' and uchar <= u'\u9fa5':
             return True
@@ -36,7 +36,7 @@ class SentimentAnalysis:
         head, sep, tail = content.partition(a)
         head, sep, tail = head.partition(b)
         return head
-        
+
     def seperate_news(self, query_set):
         news_list = []
         seperated_word_list = []
@@ -44,7 +44,7 @@ class SentimentAnalysis:
             content = query.content
             content = self.remove_covid_message(content)
             news_list.append(content)
-        
+
         chinese_list = []
         for line in news_list:
             chinese_list.append(self.format_str(line))
@@ -59,7 +59,7 @@ class SentimentAnalysis:
             a.save()
             i += 1
         return seperated_word_list
-    
+
     def get_score(self, query_set):
         sentiment_dict = pd.read_excel("/home/boldcentaur/Desktop/coding/NCKU_news_analysis/news_site/sentiment_dictionary.xlsx")
         word_list = list(sentiment_dict['詞語'])
@@ -88,7 +88,7 @@ class SentimentAnalysis:
                     if sentiment_classifier[index] in ['PC']:
                         surprise += sentiment_score[index]
                     if sentiment_classifier[index] in ['NAG']:
-                        anger += sentiment_score[index]   
+                        anger += sentiment_score[index]
                     if sentiment_classifier[index] in ['NB', 'NJ', 'NH', 'PF']:
                         sad += sentiment_score[index]
                     if sentiment_classifier[index] in ['NI', 'NC', 'NG']:
@@ -98,18 +98,18 @@ class SentimentAnalysis:
 
             #positive_list.append(positive/len(news))
             #negative_list.append(negative/len(news))
-            
-            a = sentiment(news=query_set[i].news, date=query_set[i].date, happy=happy,
+
+            a = Sentiment(news=query_set[i].news, date=query_set[i].date, happy=happy,
                           good=good, surprise=surprise,
                           anger=anger, sad=sad,
                           fear=fear, disgust=disgust, length=len(news))
             a.save()
             i += 1
-            
+
         return True
 
 def run():
     news_query = tagger.objects.filter(Q(date__gt="2020-05-29"))
     sentiment_analysis = SentimentAnalysis()
-    
+
     sentiment_analysis.get_score(news_query)

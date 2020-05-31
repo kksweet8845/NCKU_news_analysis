@@ -7,12 +7,12 @@ from .brands_foreign_model import BrandForeign
 from .news_foreign_model  import NewsForeign
 from .wordsMap_model import Word
 from .hotWord_model import HotWord
-from .cluster_day_model import cluster_day
-from .cluster_three_days_model import cluster_three_day
-from .sentiment_model import sentiment
+from .cluster_day_model import Cluster_day
+from .cluster_three_days_model import Cluster_three_day
+from .sentiment_model import Sentiment
 from .aspect_model import Aspect
-from .standpoint_model import standpoint
-from .tagger_model import tagger
+from .standpoint_model import Standpoint
+from .tagger_model import Tagger
 
 __all__ = [
     'news_model',

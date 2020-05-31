@@ -1,9 +1,9 @@
-.positive-stroke {
-    stroke: blue !important;
+.blue-stroke {
+    stroke: #f4c63d !important;
 }
 
-.neutral-stroke {
-    stroke: grey !important;
+.green-stroke {
+    stroke: #f05b4f !important;
 }
 
 .negative-stroke {

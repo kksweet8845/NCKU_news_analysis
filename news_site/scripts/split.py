@@ -5,17 +5,18 @@ jieba.dt.cache_file = 'jieba.cache.new'
 import jieba.posseg as pseg
 from tqdm import tqdm
 from django.db.models import Q
-from newsdb.models import New, sentiment, tagger
+from newsdb.models import New, Sentiment, Tagger
 from datetime import date
+import json
 
 class Split:
     def __init__(self):
         pass
-    
+
     def seperate(self, sentence):
         words = pseg.cut(sentence)
         return words
-    
+
     def is_chinese(self, uchar):
         if uchar >= u'\u4e00' and uchar <= u'\u9fa5':
             return True
@@ -35,7 +36,7 @@ class Split:
         head, sep, tail = content.partition(a)
         head, sep, tail = head.partition(b)
         return head
-        
+
     def seperate_news(self, query_set):
         news_list = []
         seperated_word_list = []
@@ -43,7 +44,7 @@ class Split:
             content = query.content
             content = self.remove_covid_message(content)
             news_list.append(content)
-        
+
         chinese_list = []
         for line in news_list:
             chinese_list.append(self.format_str(line))
@@ -52,14 +53,14 @@ class Split:
             temp_list = []
             words = self.seperate(news)
             for word, flag in words:
-                temp_list.append((word))
+                temp_list.append((word, flag))
             seperated_word_list.append(temp_list)
-            a = tagger(news=query_set[i], split=temp_list, date=query_set[i].date)
+            a = Tagger(news=query_set[i], split=json.dumps(temp_list), date=query_set[i].date)
             a.save()
             i += 1
         return seperated_word_list
 
 def run():
     news_query = New.objects.filter(Q(date__gt="2020-05-29"))
-    sentiment_analysis = SentimentAnalysis()
+    sentiment_analysis = Split()
     data = sentiment_analysis.seperate_news(news_query)

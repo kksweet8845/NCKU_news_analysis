@@ -1,7 +1,7 @@
 from django.db import models
 from .news_model import New
 
-class cluster_three_day(models.Model):
+class Cluster_three_day(models.Model):
     news = models.ForeignKey(New, on_delete=models.CASCADE)
     date    = models.DateField(
         auto_now=False,
