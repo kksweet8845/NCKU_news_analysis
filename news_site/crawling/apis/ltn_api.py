@@ -229,7 +229,6 @@ class ltn_crawling:
                     tmp.save()
                     ls.append(tmp)
             except:
-                print(tmp)
                 return None
         return ls if len(ls) != 0 else None
 

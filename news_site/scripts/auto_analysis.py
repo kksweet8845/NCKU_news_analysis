@@ -12,9 +12,7 @@ import pandas as pd
 from analysis.apis import AspectModule, Split, SentimentAnalysis, standpoint_analysis
 from newsdb.models import New
 from django.db.models import Q
-
-
-def get_news_today(request):
+def get_news_today():
     apis = [
         SETNCrawler,
         CNACrawler,
@@ -80,7 +78,7 @@ def analysis_aspect(df):
     print(result)
 
 
-def todayNews_crawling(request):
+def todayNews_crawling():
     ls = [
         ('cts', cts_crawling()),
         ('ltn',ltn_crawling()),

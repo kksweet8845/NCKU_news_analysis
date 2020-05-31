@@ -12,13 +12,6 @@ urlpatterns = [
     path('memory', views.newsMemory),
     path('sentiment', views.get_sentiment),
     path('standpoint', views.get_standpoint),
-<<<<<<< HEAD
-    path('top20Keywords', views.testChoose),
-    path('relativeKeyword/<str:word>', views.testRelativeKeyword),
-    path('keywordAnalysis/<str:word>', views.testKeywordAnalysis),
-    path('sentimentWeek', views.testSevenSemantic),
-    path('newsAnalysis', views.testReview)
-=======
     path('cluster', views.get_cluster),
     # official path
     path('sentimentWeek', views.sentimentWeek),
@@ -28,5 +21,4 @@ urlpatterns = [
     path('keywordAnalysis/<str:word>', views.keywordAnalysis),
     path('relativeKeyword/<str:word>', views.relativeKeyword),
     path('mediaAnalysis', views.mediaAnalysis),
->>>>>>> bcf883ef0788d70ac9d77a9a463b0c8557fbfaf5
 ]

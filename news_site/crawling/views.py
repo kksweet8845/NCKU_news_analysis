@@ -73,6 +73,7 @@ def get_dimestic_news_today(request):
 '''
 def test_ltn_crawling(request):
     c = ltn_crawling()
+    print(date.today().isoformat())
     data = c.getNews(date=[date.today().isoformat()])
     # data = c.getNewsToday()
     errors = []

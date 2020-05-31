@@ -69,7 +69,7 @@ def todayNews_crawling(request):
                 errors.append({'error': n.errors, 'data': n.data})
                 pass
         print(len(new_data))
-        result = i.insertNews(new_data)
+        # result = i.insertNews(new_data)
         if result != None:
             result = pd.DataFrame([ dr.__dict__ for dr in result],
                               columns=['id', 'title', 'content', 'author', 'brand_id', 'sub_id', 'date', 'update_time', 'url'])
