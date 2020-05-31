@@ -38,10 +38,10 @@ export default function (props) {
 
     const renderPie = (grades, nodeId, chartType)=>{
         let labels
-        grades = normalize(grades)
         switch(chartType){
             case 0:
                 labels = ['正面', '中立', '負面']
+                grades = normalize(grades)
                 break
             case 1:
                 labels = ['三立', '中時']
@@ -69,7 +69,6 @@ export default function (props) {
         );
         chart.on('draw', function(data) {
             if(data.type === 'slice') {
-                console.log('anim' + data.index + data.element._node.parentNode.parentNode.parentNode.id)
                 // Get the total path length in order to use for dash array animation
                 let pathLength = data.element._node.getTotalLength();
                 // Set a dasharray that matches the path length as prerequisite to animate dashoffset

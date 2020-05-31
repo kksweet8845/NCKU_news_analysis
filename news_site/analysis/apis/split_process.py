@@ -9,18 +9,18 @@ from newsdb.models import New, Sentiment, Tagger
 from datetime import date
 import json
 from news_site import settings
-from ckiptagger import WS, POS
+from ckiptagger import data_utils, WS, POS
 
 util_path = settings.BASE_DIR + '/analysis/apis/utils/ckiptagger'
 
 class Split:
     def __init__(self):
-        self.ws = WS(util_path + '/data')
+        # self.ws = WS(util_path + '/data')
         pass
 
     def seperate(self, sentence):
-        # words = pseg.cut(sentence)
-        words = self.ws([sentence])[0]
+        words = pseg.cut(sentence)
+        # words = self.ws([sentence])[0]
         return words
 
     def is_chinese(self, uchar):

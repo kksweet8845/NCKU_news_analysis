@@ -199,8 +199,11 @@ export default function ForeignPubApp(props) {
                 return res.json()
             })
             .then((data)=> {
+                data = data.sort((a, b)=>{
+                    return a.size - b.size
+                })
                 setIsFetchWordcloud(true)
-                setWordCloudData(data);
+                setWordCloudData(data.slice(0,20));
             })
         }
 
@@ -227,7 +230,7 @@ export default function ForeignPubApp(props) {
         <div className={classes.background} >
             <NavigationBar brand="關鍵字分析"/>
             <section className={classes.intro}>
-                <Topic topic={topic}/>
+                <Topic topic={decodeURIComponent(topic)}/>
                 <Clould
                     ready={true}
                     data={wordCloudData}

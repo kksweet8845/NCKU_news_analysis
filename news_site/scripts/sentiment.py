@@ -113,5 +113,4 @@ class SentimentAnalysis:
 def run():
     news_query = Tagger.objects.filter(Q(date__gt="2020-05-29"))
     sentiment_analysis = SentimentAnalysis()
-
     sentiment_analysis.get_score(news_query)

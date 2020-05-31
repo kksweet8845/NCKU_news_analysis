@@ -181,21 +181,22 @@ export default function KeywordChoose(props) {
             .then((data)=> {
                 setSentiment(data);
                 setIsFetchSentiment(true)
-            })
-        }
 
-        if(isFetchReview == false) {
-            fetch('/analysis/newsAnalysis', {
-                method: "get",
-            })
-            .then((res) => {
-                return res.json()
-            })
-            .then((data)=> {
-                setReviewContent(data);
-                setIsFetchReview(true)
+                if(isFetchReview == false) {
+                    fetch('/analysis/newsReview', {
+                        method: "get",
+                    })
+                    .then((res) => {
+                        return res.json()
+                    })
+                    .then((data)=> {
+                        setReviewContent(data);
+                        setIsFetchReview(true)
+                    })
+                }
             })
         }
+        
     });
 
     return (

@@ -19,10 +19,10 @@ def zero(num):
 
 def run():
     news_clustering = NewsClustering()
-    base = datetime(2020,5,15)
-    date_list = [ base - timedelta(days=x) for x in range(30)]
-    date_list = [ f'{dd.year}-{zero(dd.month)}-{zero(dd.day)}' for dd in date_list]
-
+    # base = datetime(2020,5,)
+    # date_list = [ base - timedelta(days=x) for x in range(7)]
+    # date_list = [ f'{dd.year}-{zero(dd.month)}-{zero(dd.day)}' for dd in date_list]
+    date_list = ['2020-05-31']
     for dd in date_list:
         news_query = New.objects.filter(Q(date=dd))
         if len(news_query) == 0:

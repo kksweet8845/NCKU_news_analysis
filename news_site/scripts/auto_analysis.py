@@ -10,7 +10,7 @@ import pickle
 import json, re
 import pandas as pd
 from analysis.apis import AspectModule, Split, SentimentAnalysis, standpoint_analysis
-from newsdb.models import New
+from newsdb.models import New, Tagger
 from django.db.models import Q
 def get_news_today():
     apis = [
@@ -154,13 +154,13 @@ def run():
     # Crawling the news
     # todayNews_crawling(None)
     # tagger
-    crawling()
+    # crawling()
 
-    autoTagger()
+    # autoTagger()
 
-    autoSentiment
+    # autoSentiment()
 
-    autoAspect()
+    # autoAspect()
 
     autoStandpoint()
 

@@ -268,6 +268,8 @@ def sentimentWeek(request):
                         'score': [str(dq.good), str(dq.surprise), str(dq.sad), str(dq.fear),
                                   str(dq.disgust), str(dq.happy), str(dq.anger)]
                       }
+
+    print(tmp)
     return HttpResponse(json.dumps(tmp))
 
 
@@ -304,8 +306,8 @@ def top20Keywords(request):
     global keywords_analysis
     global relative_wordCloud
     global relative_news
+    keywordToday = KeywordToday()
     if keywords == None:
-        keywordToday = KeywordToday()
         # keywordToday.getWordFreq()
         keywords, relative_news = keywordToday.getGroupKeywords()
         # df = keywordToday.getNewHotword()
@@ -318,8 +320,9 @@ def keywordAnalysis(request, word):
     global relative_wordCloud
     global keywords
     global relative_news
+    print(word)
+    keywordToday = KeywordToday()
     if keywords_analysis == None:
-        keywordToday = KeywordToday()
         # keywordToday.getWordFreq()
         keywords, relative_news = keywordToday.getGroupKeywords()
         # df = keywordToday.getNewHotword()
@@ -332,8 +335,9 @@ def relativeKeyword(request, word):
     global keywords_analysis
     global keywords
     global relative_news
+    keywordToday = KeywordToday()
     if relative_wordCloud == None:
-        keywordToday = KeywordToday()
+        
         # keywordToday.getWordFreq()
         keywords, relative_news = keywordToday.getGroupKeywords()
         # df = keywordToday.getNewHotword()
