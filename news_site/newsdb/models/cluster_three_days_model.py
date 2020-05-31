@@ -9,6 +9,10 @@ class cluster_three_day(models.Model):
     )
     cluster = models.IntegerField()
 
+    date_today    = models.DateField(
+            auto_now=False,
+            auto_now_add=False
+        )
     def __str__(self):
         return ""
     class Meta:

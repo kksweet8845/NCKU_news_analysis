@@ -71,7 +71,7 @@ class NewsClustering:
 def run():
     news_clustering = NewsClustering()
 
-    for j in range(15):
+    for j in range(17):
         news_query = New.objects.filter(Q(date__gt=((date.today()-timedelta(days=3)).isoformat()) & Q(brand=j+1)))
         text = tf.Variable(np.empty((0,512)), dtype=np.float32)
         for i in tqdm(range(int(len(news_query)/100) + 1)):
@@ -83,6 +83,6 @@ def run():
         cluster_no = 1
         for news_list in tqdm(top_news):
             for news in news_list:
-                a = cluster_three_days(news=news_query[news], date=news_query[news].date, cluster=cluster_no)
+                a = cluster_three_days(news=news_query[news], date=news_query[news].date, cluster=cluster_no, date_today=date.today().isoformat)
                 a.save()
             cluster_no += 1
