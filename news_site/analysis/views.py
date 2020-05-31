@@ -18,6 +18,12 @@ from analysis.apis import KeywordToday, KeywordThreeDay
 # data = hd.get_hotword(20)
 # keyBrand = hd.gen_keyBrand()
 # brandKey = hd.gen_branKey()
+
+keywords = None
+keywords_analysis = None
+relative_wordCloud = None
+
+
 def zero(num):
     return f"0{num}" if num < 10 else f"{num}"
 
@@ -208,14 +214,30 @@ def sentimentWeek(request):
 
 
 def newsReview(request):
-    pass
+    keywordToday = KeywordThreeDay()
+    keywords, relative_news = keywordToday.getGroupKeywords()
+
+    mem, keyword_ls = keywordToday.genData(keywords, relative_news)
+
+    for i, dm in enumerate(mem):
+        rst = get_standpoint(keyword_ls[i]['relative_news'])
+        dm.update(rst)
+
+    return HttpResponse(json.dumps(mem))
 
 
 def top20Keywords(request):
-    pass
+    keywordToday = KeywordToday()
+    # keywordToday.getWordFreq()
+    keywords, relative_news = keywordToday.getGroupKeywords()
+    # df = keywordToday.getNewHotword()
+    keywords_analysis, relative_wordCloud = keywordToday.genData(keywords[0], relative_news)
+
+    return HttpResponse(json.dumps(keywords))
 
 
 def keywordAnalysis(request):
+
     pass
 
 def relativeKeyword(request):
