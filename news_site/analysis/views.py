@@ -8,9 +8,14 @@ from multiprocessing import Pool
 import pandas as pd
 from tqdm import tqdm
 import numpy as np
+<<<<<<< HEAD
+from newsdb.models import Word, standpoint, sentiment, cluster_day, Aspect, Brand, cluster_three_day
+from datetime import datetime, timedelta, date
+=======
 from newsdb.models import Word, Standpoint, Sentiment, Cluster_day, Aspect
 from datetime import datetime, timedelta
 from analysis.apis import KeywordToday, KeywordThreeDay
+>>>>>>> 613d53382e333f1823b839a0d2db5b9b92ba5137
 # Create your views here.
 
 # hd = Hotword()
@@ -182,7 +187,56 @@ def get_standpoint(relative_news):
     return return_dict
 
 def get_cluster(request):
+<<<<<<< HEAD
+    dt = {}
+    for i in range(17):
+        news_no = []
+        news_query = cluster_three_day.objects.filter(Q(cluster__lte=10) 
+                     & Q(date_today=date.today().isoformat()))
+        for query in news_query:
+            if query.news.brand == i+1:
+                news_no.append(query.news_id)
+        
+        news_query2 = standpoint.objects.filter(Q(news__in=news_no))
+        china = 0
+        setn = 0
+        for i in news_query2:
+            if i.standpoint == 1:
+                china += 1
+            else:
+                setn += 1
+        
+        news_query3 = Aspect.objects.filter(Q(new_id__in=news_no))
+        pos = 0
+        middle = 0
+        neg = 0
+        for j in news_query3:
+            if j.aspect == 0:
+                pos += 1
+            elif j.aspect == 1:
+                middle += 1
+            else:
+                neg += 1
+        focus_news = []
+        for x in range(10):
+            temp_list = []
+            for y in news_query:
+                if y.cluster == x+1:
+                    temp_list.append({'title': y.news_id.title, 'url': y.news_id.url})
+            focus_news.append(temp_list)
+
+        dt[i+1] = {
+            'names': news_query[0].brand,
+            'news_number': len(news_query),
+            'sentiment': [pos, middle, neg],
+            'standpoint': [china, setn],
+            'focus_news': focus_news
+            }
+    
+    return HttpResponse(json.dumps(dt))
+=======
     pass
+>>>>>>> 613d53382e333f1823b839a0d2db5b9b92ba5137
 
 
 def sentimentWeek(request):
