@@ -11,8 +11,12 @@ dump
 news_site/analysis/apis/utils/ckiptagger
 backup*.sql
 venv
+<<<<<<< HEAD
 **/migrations/
 
+=======
+sentiment_model
+>>>>>>> 13e2d81ea078bfdea8d3bcf6f836bf9efb4afc91
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

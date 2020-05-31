@@ -1,17 +1,25 @@
 from simpletransformers.classification import ClassificationModel
 from django.db.models import Q
-from newsdb.models import New, standpoint
+from newsdb.models import New, Standpoint
+from datetime import datetime
+from news_site import settings
+
 
 def standpoint_analysis(query_set):
+    model = ClassificationModel('bert', settings.BASE_DIR + '/sentiment_model/', args={}, use_cuda=False)
+    i = 0
     content_list = []
-    model = ClassificationModel('bert', 'standpoint_model/', args={})
     for query in query_set:
         content_list.append(query.content)
-    predictions, raw_outputs = model.predict(content_list)
+    predictions, raw_inputs = model.predict(content_list)
+    for prediction in predictions:
+        a = Standpoint(news=query_set[i], standpoint=int(prediction))
+        a.save()
+        i += 1
+    return prediction
 
-
-    
-news_query = New.objects.filter(Q(sub_id__lt=7))
-standpoint(news_query)
+def run():
+    news_query = New.objects.filter(Q(date__gte=datetime.today()))
+    prediction = standpoint_analysis(news_query)
 
 

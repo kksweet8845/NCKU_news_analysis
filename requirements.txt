@@ -67,3 +67,8 @@ Werkzeug==1.0.1
 wrapt==1.12.1
 zipp==3.1.0
 simpletransformers==0.30.0
+<<<<<<< HEAD
+=======
+ast==0.0.2
+
+>>>>>>> 13e2d81ea078bfdea8d3bcf6f836bf9efb4afc91

@@ -2,13 +2,13 @@ from django.shortcuts import render
 from .apis import Hotword, WordMap
 from .apis import get_word_freq
 from django.http import HttpResponse
-from django.db.models import Q
+from django.db.models import Q, Max
 import json
 from multiprocessing import Pool
 import pandas as pd
 from tqdm import tqdm
 import numpy as np
-from newsdb.models import Word
+from newsdb.models import Word, Standpoint, Sentiment, Cluster_day, Aspect
 from datetime import datetime, timedelta
 from analysis.apis import KeywordToday, KeywordThreeDay
 # Create your views here.
@@ -18,6 +18,10 @@ from analysis.apis import KeywordToday, KeywordThreeDay
 # data = hd.get_hotword(20)
 # keyBrand = hd.gen_keyBrand()
 # brandKey = hd.gen_branKey()
+def zero(num):
+    return f"0{num}" if num < 10 else f"{num}"
+
+
 
 def hotword_worker(where):
     """ """
@@ -107,5 +111,115 @@ def newsMemory(request):
     keywordToday = KeywordThreeDay()
     keywords, relative_news = keywordToday.getGroupKeywords()
 
+
     mem, keyword_ls = keywordToday.genData(keywords, relative_news)
-    return HttpResponse(json.dumps([relative_news, mem, keyword_ls]))
+
+
+    for i, dm in enumerate(mem):
+        rst = get_standpoint(keyword_ls[i]['relative_news'])
+        dm.update(rst)
+
+    return HttpResponse(json.dumps(mem))
+
+def get_sentiment(request):
+    news_query = Sentiment.objects.filter(Q(date__gte='2020-05-30'))
+    good_q = news_query.order_by('-good')[0]
+    surprise_q = news_query.order_by('-surprise')[0]
+    sad_q = news_query.order_by('-sad')[0]
+    fear_q = news_query.order_by('-fear')[0]
+    disgust_q = news_query.order_by('-disgust')[0]
+    happy_q = news_query.order_by('-happy')[0]
+    anger_q = news_query.order_by('-anger')[0]
+
+    alpha = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+    tmp = {}
+    for da in alpha:
+        for dq in [good_q, surprise_q, sad_q, fear_q, disgust_q, happy_q, anger_q]:
+            tmp[da] = {
+                        'title': dq.news.title,
+                        'url'  : dq.news.url,
+                        'score': [str(dq.good), str(dq.surprise), str(dq.sad), str(dq.fear),
+                                  str(dq.disgust), str(dq.happy), str(dq.anger)]
+                      }
+    return HttpResponse(json.dumps(tmp))
+
+def get_standpoint(relative_news):
+
+
+    news_query = Standpoint.objects.filter(Q(news__in=relative_news))
+    china = 0
+    setn = 0
+    for i in news_query:
+        if i.standpoint == 1:
+            china += 1
+        else:
+            setn += 1
+
+    news_query2 = Aspect.objects.filter(Q(new_id__in=relative_news))
+    pos = 0
+    middle = 0
+    neg = 0
+    for j in news_query2:
+        if j.aspect == 0:
+            pos += 1
+        elif j.aspect == 1:
+            middle += 1
+        else:
+            neg += 1
+
+    return_dict = {
+        'sentiment': [pos, middle, neg],
+        'standpoint': [china, setn],
+        'newsNum': len(relative_news)
+    }
+
+    return return_dict
+
+def get_cluster(request):
+    pass
+
+
+def sentimentWeek(request):
+
+    base = datetime.today()
+
+    seventWeekAgoDate = base - timedelta(days=7)
+
+    news_query = Sentiment.objects.filter(Q(date__gte=f'{seventWeekAgoDate.year}-{zero(seventWeekAgoDate.month)}-{zero(seventWeekAgoDate)}'))
+    good_q = news_query.order_by('-good')[0]
+    surprise_q = news_query.order_by('-surprise')[0]
+    sad_q = news_query.order_by('-sad')[0]
+    fear_q = news_query.order_by('-fear')[0]
+    disgust_q = news_query.order_by('-disgust')[0]
+    happy_q = news_query.order_by('-happy')[0]
+    anger_q = news_query.order_by('-anger')[0]
+
+    alpha = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+    tmp = {}
+    for da in alpha:
+        for dq in [good_q, surprise_q, sad_q, fear_q, disgust_q, happy_q, anger_q]:
+            tmp[da] = {
+                        'title': dq.news.title,
+                        'url'  : dq.news.url,
+                        'score': [str(dq.good), str(dq.surprise), str(dq.sad), str(dq.fear),
+                                  str(dq.disgust), str(dq.happy), str(dq.anger)]
+                      }
+    return HttpResponse(json.dumps(tmp))
+
+
+def newsReview(request):
+    pass
+
+
+def top20Keywords(request):
+    pass
+
+
+def keywordAnalysis(request):
+    pass
+
+def relativeKeyword(request):
+    pass
+
+def mediaAnalysis(requeset):
+    pass
