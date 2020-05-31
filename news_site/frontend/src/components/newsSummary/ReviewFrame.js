@@ -115,6 +115,7 @@ const useStyle = makeStyles( {
 export default function ReviewFrame(props) {
 
     const classes = useStyle()
+    const ref = React.createRef();
     const colorClasses = {
         frame: {
             border: `4px solid ${props.color}`,
@@ -161,8 +162,9 @@ export default function ReviewFrame(props) {
                     <Grid container justify="center" spacing={1}>
                         <Grid item xs={6}>
                             <BarChart
-                                categories = {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}
+                                categories = {["TVBS", "Yahoo", "大紀元", "三立", "上報", "中天", "中央社", "中時電子報", "今日新聞", "公視 ", "自由時報", "民視新聞", "風傳媒", "東森EToday", "新頭殼", "聯合新聞網", "蘋果電子報", "華視"]}
                                 data = {[44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43]}
+                                height={200}
                             />
                         </Grid>
                         <Grid className={`${classes.aligner}`} item xs={6} align="center" >

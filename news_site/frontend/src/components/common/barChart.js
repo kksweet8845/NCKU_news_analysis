@@ -13,7 +13,6 @@ export default function (props) {
         options: {
             chart: {
                 type: 'bar',
-                height: 350,
             },
             plotOptions: {
                 bar: {
@@ -51,6 +50,6 @@ export default function (props) {
     }
 
     return (
-        <ReactApexChart options={state.options} series={state.series} type="bar" height={"100%"} />
+        <ReactApexChart options={state.options} series={state.series} type="bar" height={`auto`} />
     )
 }
