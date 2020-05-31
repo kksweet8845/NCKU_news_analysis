@@ -151,7 +151,7 @@ def get_standpoint(request, relative_news):
     return HttpResponse(json.dumps(return_dict))
     
 def get_cluster(request):
-    #[4,7,14,15,1,5,13,8]
+    
     pass
 
 
