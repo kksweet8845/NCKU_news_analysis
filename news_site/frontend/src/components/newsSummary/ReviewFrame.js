@@ -89,7 +89,7 @@ const useStyle = makeStyles( {
     },
     linkHref: {
         display: 'block',
-        color: 'block',
+        color: 'black',
         fontSize: '20px',
         fontWeight: '400',
         lineHeight: '1.2',
@@ -129,9 +129,18 @@ export default function ReviewFrame(props) {
     const extendContent = ()=> {
         setExtend( (isExtend)? false: true )
     }
+    const stopPropagation = (e)=>{
+        e.stopPropagation();
+    }
 
     const linkDOM = props.links.map((link)=> {
-        return <a className={classes.linkHref}>{link}</a>
+        return <a
+                className={classes.linkHref}
+                href={`${link.url}`}
+                onClick={stopPropagation}
+            >
+                {link.title}
+            </a>
     })
 
     return (

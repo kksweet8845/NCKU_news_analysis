@@ -20,9 +20,16 @@ const linkContents = [
     }
 ]
 
+const backContent = [
+    {
+        name: '回到主頁',
+        link: '/frontend/'
+    }
+]
 
 export default function NavigationBar(props) {
     let links = <BreadLink contents={linkContents}/>;
+    let back_link = <BreadLink contents={backContent}/>;
 
     return (
         <Header
@@ -34,6 +41,7 @@ export default function NavigationBar(props) {
                 color: "white"
             }}
             leftLinks={links}
+            rightLinks={back_link}
         />
     )
 }

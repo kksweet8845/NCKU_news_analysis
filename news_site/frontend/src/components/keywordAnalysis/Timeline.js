@@ -14,13 +14,13 @@ const useStyles = makeStyles({
         width: "100%",
         height: "fit-content",
         backgroundColor: "white",
-        marginTop: '20px' 
+        marginTop: '20px'
     },
     date: {
         display: 'flex',
         gridArea: 'date',
         alignSelf: 'center',
-        justifySelf: 'center', 
+        justifySelf: 'center',
         fontSize: '20px',
         borderRadius: '5px',
         height: 'fit-content',
@@ -76,7 +76,7 @@ const useStyles = makeStyles({
     newsNeg: {
         border: '3px solid #b21f66',
         backgroundColor: 'white',
-        gridArea: 'neg',    
+        gridArea: 'neg',
     },
     link: {
         display: 'block',
@@ -92,13 +92,16 @@ export default function Timeline(props) {
     const classes = useStyles()
     const date = props.data.date
     const keyword = props.data.keyword
-    const sentiment = props.data.sentiment
+
+    const sentiment = (props.data.posLinks.length >= props.data.negLinks.length)? 'pos' : 'neg'
 
     const sentimentKeyword = (sentiment === "pos")? classes.keywordPos:classes.keywordNeg
-    const sentimentClass = (sentiment === "pos")? classes.newsPos:classes.newsNeg
-    const dataAos = (sentiment === "pos")? 'fade-right': 'fade-left'
 
-    const linkDOM = props.data.links.map((link)=> {
+    const posLinkDOM = props.data.posLinks.map((link)=> {
+        return <p className={classes.link}>{link}</p>
+    })
+
+    const negLinkDOM = props.data.negLinks.map((link)=> {
         return <p className={classes.link}>{link}</p>
     })
 
@@ -107,9 +110,18 @@ export default function Timeline(props) {
             <time className={classes.date}>{date}</time>
             <h3   className={`${classes.keyword} ${sentimentKeyword}`}>{keyword}</h3>
             <figure className={classes.line}></figure>
-            <section className={`${classes.news} ${sentimentClass}`} data-aos={dataAos}>
-                {linkDOM}
-            </section>
+            {
+                props.data.posLinks.length > 0 &&
+                <section className={`${classes.news} ${classes.newsPos}`} data-aos='fade-right'>
+                    {posLinkDOM}
+                </section>
+            }
+            {
+                props.data.negLinks.length > 0 &&
+                <section className={`${classes.news} ${classes.newsNeg}`} data-aos='fade-left'>
+                    {negLinkDOM}
+                </section>
+            }
         </section>
     )
 }
