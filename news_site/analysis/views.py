@@ -181,12 +181,13 @@ def get_standpoint(relative_news):
     }
 
     return return_dict
-
+    
 def get_cluster(request):
     dt = {}
 
     all_news = New.objects.all()
     all_brands = Brand.objects.all()
+    
     for i in range(17):
         news_no = []
         news_query = Cluster_three_day.objects.filter(Q(cluster__lte=10)
@@ -196,20 +197,25 @@ def get_cluster(request):
                 news_no.append(query.news_id)
         if len(news_no) == 0:
             continue
-        news_query2 = Standpoint.objects.filter(Q(news__in=news_no))
+
+        news_query2 = New.objects.filter(Q(brand_id=i+1) & Q(date__gt=(date.today()-timedelta(days=3)).isoformat()))
+        news_no2 = []
+        for query in news_query2:
+            news_no2.append(query.news_id)
+        standpoint_query = Standpoint.objects.filter(Q(new_id__in=news_no2))
         china = 0
         setn = 0
-        for i in news_query2:
+        for i in standpoint_query:
             if i.standpoint == 1:
                 china += 1
             else:
                 setn += 1
 
-        news_query3 = Aspect.objects.filter(Q(new_id__in=news_no))
+        aspect_query = Aspect.objects.filter(Q(new_id__in=news_no2))
         pos = 0
         middle = 0
         neg = 0
-        for j in news_query3:
+        for j in aspect_query:
             if j.aspect == 0:
                 pos += 1
             elif j.aspect == 1:
@@ -228,7 +234,7 @@ def get_cluster(request):
         brand = all_brands.get(id=all_news.get(id=y.news_id).brand_id)
         dt[i+1] = {
             'names': brand.brand_name,
-            'news_number': len(news_no),
+            'news_number': len(news_no2),
             'sentiment': [pos, middle, neg],
             'standpoint': [china, setn],
             'focus_news': focus_news
