@@ -9,7 +9,7 @@ from news_site import settings
 import pickle
 import json, re
 import pandas as pd
-from analysis.apis import AspectModule
+from analysis.apis import AspectModule, Split, SentimentAnalysis, standpoint_analysis
 from newsdb.models import New
 from django.db.models import Q
 
@@ -122,19 +122,21 @@ def crawling():
     get_news_today()
 
 def autoTagger():
+    news_query = New.objects.filter(Q(date=date.today().isoformat()))
+    sentiment_analysis = Split()
+    data = sentiment_analysis.seperate_news(news_query)
 
-    pass
+def autoSentiment():
+    news_query = Tagger.objects.filter(Q(date=date.today().isoformat()))
+    sentiment_analysis = SentimentAnalysis()
+    sentiment_analysis.get_score(news_query)
 
+def autoStandpoint():
+    news_query = New.objects.filter(Q(date=date.today().isoformat()))
+    prediction = standpoint_analysis(news_query)
 
-
-
-
-def run():
-    # Crawling the news
-    # todayNews_crawling(None)
-    # tagger
-    news = New.objects.filter(*[Q(date__gte='2020-05-01'), Q(date__lte='2020-05-24')])
-
+def autoAspect():
+    news = New.objects.filter(*[Q(date=date.today().isoformat())])
     df = pd.DataFrame(list(news.values()),
                       columns=[
                       'id',
@@ -147,8 +149,22 @@ def run():
                       'update_time',
                       'url']
     )
-    print(df.head())
     analysis_aspect(df)
+
+
+def run():
+    # Crawling the news
+    # todayNews_crawling(None)
+    # tagger
+    crawling()
+
+    autoTagger()
+
+    autoSentiment
+
+    autoAspect()
+
+    autoStandpoint()
 
 
 

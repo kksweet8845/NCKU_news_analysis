@@ -17,9 +17,3 @@ def standpoint_analysis(query_set):
         a.save()
         i += 1
     return prediction
-
-def run():
-    news_query = New.objects.filter(Q(date__gte='2020-05-29'))
-    prediction = standpoint_analysis(news_query)
-
-

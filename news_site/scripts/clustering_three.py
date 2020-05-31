@@ -32,6 +32,6 @@ def run():
         cluster_no = 1
         for news_list in tqdm(top_news):
             for news in news_list:
-                a = cluster_three_days(news=news_query[news], date=news_query[news].date, cluster=cluster_no, date_today=date.today().isoformat)
+                a = Cluster_three_day(news=news_query[news], date=news_query[news].date, cluster=cluster_no, date_today=date.today().isoformat)
                 a.save()
             cluster_no += 1

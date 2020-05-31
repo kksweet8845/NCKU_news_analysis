@@ -8,14 +8,9 @@ from multiprocessing import Pool
 import pandas as pd
 from tqdm import tqdm
 import numpy as np
-<<<<<<< HEAD
-from newsdb.models import Word, standpoint, sentiment, cluster_day, Aspect, Brand, cluster_three_day
-from datetime import datetime, timedelta, date
-=======
-from newsdb.models import Word, Standpoint, Sentiment, Cluster_day, Aspect
-from datetime import datetime, timedelta
+from newsdb.models import Word, Standpoint, Sentiment, Cluster_day, Aspect, Cluster_three_day, New, Brand
 from analysis.apis import KeywordToday, KeywordThreeDay
->>>>>>> 613d53382e333f1823b839a0d2db5b9b92ba5137
+from datetime import date, datetime, timedelta
 # Create your views here.
 
 # hd = Hotword()
@@ -27,6 +22,7 @@ from analysis.apis import KeywordToday, KeywordThreeDay
 keywords = None
 keywords_analysis = None
 relative_wordCloud = None
+relative_news = None
 
 
 def zero(num):
@@ -187,17 +183,20 @@ def get_standpoint(relative_news):
     return return_dict
 
 def get_cluster(request):
-<<<<<<< HEAD
     dt = {}
+
+    all_news = New.objects.all()
+    all_brands = Brand.objects.all()
     for i in range(17):
         news_no = []
-        news_query = cluster_three_day.objects.filter(Q(cluster__lte=10) 
+        news_query = Cluster_three_day.objects.filter(Q(cluster__lte=10)
                      & Q(date_today=date.today().isoformat()))
         for query in news_query:
-            if query.news.brand == i+1:
+            if query.news.brand_id == i+1:
                 news_no.append(query.news_id)
-        
-        news_query2 = standpoint.objects.filter(Q(news__in=news_no))
+        if len(news_no) == 0:
+            continue
+        news_query2 = Standpoint.objects.filter(Q(news__in=news_no))
         china = 0
         setn = 0
         for i in news_query2:
@@ -205,7 +204,7 @@ def get_cluster(request):
                 china += 1
             else:
                 setn += 1
-        
+
         news_query3 = Aspect.objects.filter(Q(new_id__in=news_no))
         pos = 0
         middle = 0
@@ -220,23 +219,22 @@ def get_cluster(request):
         focus_news = []
         for x in range(10):
             temp_list = []
-            for y in news_query:
+            for y in news_no:
+                y = Cluster_three_day.objects.get(news__id=y)
                 if y.cluster == x+1:
-                    temp_list.append({'title': y.news_id.title, 'url': y.news_id.url})
+                    temp_list.append({'title': all_news.get(id=y.news_id).title, 'url': all_news.get(id=y.news_id).url})
             focus_news.append(temp_list)
 
+        brand = all_brands.get(id=all_news.get(id=y.news_id).brand_id)
         dt[i+1] = {
-            'names': news_query[0].brand,
-            'news_number': len(news_query),
+            'names': brand.brand_name,
+            'news_number': len(news_no),
             'sentiment': [pos, middle, neg],
             'standpoint': [china, setn],
             'focus_news': focus_news
             }
-    
+
     return HttpResponse(json.dumps(dt))
-=======
-    pass
->>>>>>> 613d53382e333f1823b839a0d2db5b9b92ba5137
 
 
 def sentimentWeek(request):
@@ -245,7 +243,7 @@ def sentimentWeek(request):
 
     seventWeekAgoDate = base - timedelta(days=7)
 
-    news_query = Sentiment.objects.filter(Q(date__gte=f'{seventWeekAgoDate.year}-{zero(seventWeekAgoDate.month)}-{zero(seventWeekAgoDate)}'))
+    news_query = Sentiment.objects.filter(Q(date__gte=f'{seventWeekAgoDate.year}-{zero(seventWeekAgoDate.month)}-{zero(seventWeekAgoDate.day)}'))
     good_q = news_query.order_by('-good')[0]
     surprise_q = news_query.order_by('-surprise')[0]
     sad_q = news_query.order_by('-sad')[0]
@@ -281,21 +279,97 @@ def newsReview(request):
 
 
 def top20Keywords(request):
-    keywordToday = KeywordToday()
-    # keywordToday.getWordFreq()
-    keywords, relative_news = keywordToday.getGroupKeywords()
-    # df = keywordToday.getNewHotword()
-    keywords_analysis, relative_wordCloud = keywordToday.genData(keywords[0], relative_news)
+    global keywords
+    global keywords_analysis
+    global relative_wordCloud
+    global relative_news
+    if keywords == None:
+        keywordToday = KeywordToday()
+        # keywordToday.getWordFreq()
+        keywords, relative_news = keywordToday.getGroupKeywords()
+        # df = keywordToday.getNewHotword()
 
     return HttpResponse(json.dumps(keywords))
 
 
-def keywordAnalysis(request):
+def keywordAnalysis(request, word):
+    global keywords_analysis
+    global relative_wordCloud
+    global keywords
+    global relative_news
+    if keywords_analysis == None:
+        keywordToday = KeywordToday()
+        # keywordToday.getWordFreq()
+        keywords, relative_news = keywordToday.getGroupKeywords()
+        # df = keywordToday.getNewHotword()
+    keywords_analysis, relative_wordCloud = keywordToday.genData(word, relative_news)
 
-    pass
+    return HttpResponse(json.dumps(keywords_analysis))
 
-def relativeKeyword(request):
-    pass
+def relativeKeyword(request, word):
+    global relative_wordCloud
+    global keywords_analysis
+    global keywords
+    global relative_news
+    if relative_wordCloud == None:
+        keywordToday = KeywordToday()
+        # keywordToday.getWordFreq()
+        keywords, relative_news = keywordToday.getGroupKeywords()
+        # df = keywordToday.getNewHotword()
+    keywords_analysis, relative_wordCloud = keywordToday.genData(word, relative_news)
+
+    return HttpResponse(json.dumps(relative_wordCloud))
 
 def mediaAnalysis(requeset):
-    pass
+    dt = {}
+
+    all_news = New.objects.all()
+    all_brands = Brand.objects.all()
+    for i in range(17):
+        news_no = []
+        news_query = Cluster_three_day.objects.filter(Q(cluster__lte=10)
+                     & Q(date_today=date.today().isoformat()))
+        for query in news_query:
+            if query.news.brand_id == i+1:
+                news_no.append(query.news_id)
+        if len(news_no) == 0:
+            continue
+        news_query2 = Standpoint.objects.filter(Q(news__in=news_no))
+        china = 0
+        setn = 0
+        for i in news_query2:
+            if i.standpoint == 1:
+                china += 1
+            else:
+                setn += 1
+
+        news_query3 = Aspect.objects.filter(Q(new_id__in=news_no))
+        pos = 0
+        middle = 0
+        neg = 0
+        for j in news_query3:
+            if j.aspect == 0:
+                pos += 1
+            elif j.aspect == 1:
+                middle += 1
+            else:
+                neg += 1
+        focus_news = []
+        for x in range(10):
+            temp_list = []
+            for y in news_no:
+                y = Cluster_three_day.objects.get(news__id=y)
+                if y.cluster == x+1:
+                    temp_list.append({'title': all_news.get(id=y.news_id).title, 'url': all_news.get(id=y.news_id).url})
+            focus_news.append(temp_list)
+
+        brand = all_brands.get(id=all_news.get(id=y.news_id).brand_id)
+        dt[i+1] = {
+            'names': brand.brand_name,
+            'news_number': len(news_no),
+            'sentiment': [pos, middle, neg],
+            'standpoint': [china, setn],
+            'focus_news': focus_news
+            }
+
+    return HttpResponse(json.dumps(dt))

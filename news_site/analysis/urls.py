@@ -12,7 +12,7 @@ urlpatterns = [
     path('memory', views.newsMemory),
     path('sentiment', views.get_sentiment),
     path('standpoint', views.get_standpoint),
-    path('cluster', views.get_cluster)
+    path('cluster', views.get_cluster),
     # official path
     path('sentimentWeek', views.sentimentWeek),
     path('newsReview', views.newsReview),

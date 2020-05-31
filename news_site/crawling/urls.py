@@ -6,13 +6,14 @@ from .views import todayNews_crawling, test_chinatimes_crawling
 
 
 urlpatterns = [
-    path('api/chinatimes/', test_chinatimes_crawling, name='test ltn'),
+    path('api/chinatimes/', test_chinatimes_crawling, name='test chinatimes'),
     path('api/nowNews/', test_nowNews_crawling, name='test nowNews'),
     path('api/pts/', test_pts_crawling, name='test pts'),
     path('api/udn/', test_udn_crawling, name='test udn'),
     path('api/cts/', test_cts_crawling, name='test cts'),
     path('api/ftvnews/', test_ftvnews_crawling, name='test ftvnews'),
     path('api/newsToday/', todayNews_crawling, name='crawl todayNews'),
+    path('api/ltn/', test_ltn_crawling, name='test ltn')
     #path('api/get_foreign/', get_foreign_news_today, name='test foregin'),
     #path('api/get_dimestic/', get_dimestic_news_today, name='test dimestic'),
     

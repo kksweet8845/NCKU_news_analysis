@@ -10,6 +10,8 @@ from datetime import date
 import ast
 from news_site import settings
 
+
+
 class SentimentAnalysis:
     def __init__(self):
         self.util_path = settings.BASE_DIR
@@ -109,9 +111,3 @@ class SentimentAnalysis:
             i += 1
 
         return True
-
-def run():
-    news_query = Tagger.objects.filter(Q(date__gt="2020-05-29"))
-    sentiment_analysis = SentimentAnalysis()
-
-    sentiment_analysis.get_score(news_query)
