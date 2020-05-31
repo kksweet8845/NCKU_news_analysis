@@ -120,7 +120,7 @@ def get_sentiment(request):
                       }
     return HttpResponse(json.dumps(tmp))
 
-def get_standpoint(request, relative_news):
+def get_standpoint(request, relative_news=[9433]):
     news_query = standpoint.objects.filter(Q(news__in=relative_news))
     china = 0
     setn = 0
@@ -130,7 +130,7 @@ def get_standpoint(request, relative_news):
         else:
             setn += 1
     
-    news_query2 = Aspect.objects.filter(Q(news__in=relative_news))
+    news_query2 = Aspect.objects.filter(Q(new_id__in=relative_news))
     pos = 0
     middle = 0
     neg = 0
