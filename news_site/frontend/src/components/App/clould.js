@@ -33,6 +33,7 @@ const circleRender = (data, nodeId, treshold) => {
             .start();
 
     function draw(words) {
+        d3.select(`#${nodeId}`).select('svg').remove()
         d3.select(`#${nodeId}`).append('svg')
                 .attr('width', width)
                 .attr('height', height)

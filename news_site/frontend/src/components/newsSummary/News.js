@@ -243,7 +243,7 @@ const data = {
 }
 
 export default function News(props) {
-
+    const data = props.sentiment
     const classes = useStyle()
     const bgLocation = (props.location === 'left')? classes.bgLeft: classes.bgRight;
 

@@ -60,94 +60,23 @@ const useStyle = makeStyles( {
     }
 } )
 
-const reviewContent = [
-    {
-        keyword: '武漢肺炎',
-        summary: '新冠肺炎疫情從1月底開始爆發，迄今已延燒近四個月，據內政部移民署最新統計顯示，今年2、3、4月疫情嚴重的時候，來台旅客量逐月驟減，4月份來台旅客數僅2,559人，創下歷史新低量，而三個月來台旅客量較去年同期狂減260.9萬人次，觀光收益減損多達969.3億元。',
-        news_num: 60,
-        links: [
-            {
-                title: '新冠肺炎燒三個月 來台觀光收益損近千億元',
-                url:   'https://www.google.com',
-            },
-            {
-                title: '蘆洲驚見核能燃料棒輻射量爆表？原能會到場鬆了一口氣',
-                url:   'https://www.google.com',
-            },
-            {
-                title: '陳時中：樂活長照都顧到 防疫才算成功',
-                url: 'https://www.google.com'
-            }
-        ]
-    },{
-        keyword: '美國',
-        summary: '新冠肺炎疫情從1月底開始爆發，迄今已延燒近四個月，據內政部移民署最新統計顯示，今年2、3、4月疫情嚴重的時候，來台旅客量逐月驟減，4月份來台旅客數僅2,559人，創下歷史新低量，而三個月來台旅客量較去年同期狂減260.9萬人次，觀光收益減損多達969.3億元。',
-        news_num: 55,
-        links: [
-            {
-                title: '新冠肺炎燒三個月 來台觀光收益損近千億元',
-                url:   'https://www.google.com',
-            },
-            {
-                title: '蘆洲驚見核能燃料棒輻射量爆表？原能會到場鬆了一口氣',
-                url:   'https://www.google.com',
-            },
-            {
-                title: '陳時中：樂活長照都顧到 防疫才算成功',
-                url: 'https://www.google.com'
-            }
-        ]
-    },{
-        keyword: '義大利',
-        summary: '新冠肺炎疫情從1月底開始爆發，迄今已延燒近四個月，據內政部移民署最新統計顯示，今年2、3、4月疫情嚴重的時候，來台旅客量逐月驟減，4月份來台旅客數僅2,559人，創下歷史新低量，而三個月來台旅客量較去年同期狂減260.9萬人次，觀光收益減損多達969.3億元。',
-        news_num: 45,
-        links: [
-            {
-                title: '新冠肺炎燒三個月 來台觀光收益損近千億元',
-                url:   'https://www.google.com',
-            },
-            {
-                title: '蘆洲驚見核能燃料棒輻射量爆表？原能會到場鬆了一口氣',
-                url:   'https://www.google.com',
-            },
-            {
-                title: '陳時中：樂活長照都顧到 防疫才算成功',
-                url: 'https://www.google.com'
-            }
-        ]
-    },{
-        keyword: '中國',
-        summary: '新冠肺炎疫情從1月底開始爆發，迄今已延燒近四個月，據內政部移民署最新統計顯示，今年2、3、4月疫情嚴重的時候，來台旅客量逐月驟減，4月份來台旅客數僅2,559人，創下歷史新低量，而三個月來台旅客量較去年同期狂減260.9萬人次，觀光收益減損多達969.3億元。',
-        news_num: 44,
-        links: [],
-    },{
-        keyword: '蔡英文',
-        summary: '新冠肺炎疫情從1月底開始爆發，迄今已延燒近四個月，據內政部移民署最新統計顯示，今年2、3、4月疫情嚴重的時候，來台旅客量逐月驟減，4月份來台旅客數僅2,559人，創下歷史新低量，而三個月來台旅客量較去年同期狂減260.9萬人次，觀光收益減損多達969.3億元。',
-        news_num: 40,
-        links: [],
-    },{
-        keyword: '香港',
-        summary: '新冠肺炎疫情從1月底開始爆發，迄今已延燒近四個月，據內政部移民署最新統計顯示，今年2、3、4月疫情嚴重的時候，來台旅客量逐月驟減，4月份來台旅客數僅2,559人，創下歷史新低量，而三個月來台旅客量較去年同期狂減260.9萬人次，觀光收益減損多達969.3億元。',
-        news_num: 35,
-        links: [],
-    },
-]
-
-
 export default function Review(props) {
 
     const classes = useStyle()
     const colorReview = ['#39375b', '#745c97', '#4b8e8d', '#396362'];
     const widthReview = ['60%', '66%', '71%', '76%', '80%', '75%', '70%', '65%'];
 
-    const content = reviewContent.map((obj, index)=>{
+    const content = props.reviewContent.map((obj, index)=>{
         return  <ReviewFrame
                     color= {colorReview[index%4]}
                     num= {index + 1}
                     keyword= {obj.keyword}
                     summary= {obj.summary}
+                    reportNum= {obj.reportNum}
                     links={obj.links}
-                    width= {`${50 + (obj.news_num/reviewContent[0].news_num) * 40}%`}>
+                    sentiment={obj.sentiment}
+                    standpoint={obj.standpoint}
+                    width= {`${50 + (obj.news_num/props.reviewContent[0].newsNum) * 40}%`}>
                 </ReviewFrame>
     })
 

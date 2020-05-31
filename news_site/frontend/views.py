@@ -16,7 +16,7 @@ def foreignPage(request):
 def mediaPage(request):
     return render(request, 'media.html')
 
-def keywordAnalysisPage(request):
+def keywordAnalysisPage(request, keyword):
     return render(request, 'keyword_analysis.html')
 
 def keywordChoosePage(request):

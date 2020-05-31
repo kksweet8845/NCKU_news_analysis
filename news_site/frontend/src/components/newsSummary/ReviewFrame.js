@@ -162,20 +162,20 @@ export default function ReviewFrame(props) {
                         <Grid item xs={6}>
                             <BarChart
                                 categories = {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}
-                                data = {[44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43]}
+                                data = {props.reportNum}
                             />
                         </Grid>
                         <Grid className={`${classes.aligner}`} item xs={6} align="center" >
                             <Grid item xs={12}>
                                 <PieChart
-                                    grades = {[4.51, 1, 2.18]}
+                                    grades = {props.sentiment}
                                     nodeId = {'position'}
                                     chartType = {0}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <PieChart
-                                    grades = {[3.51, 2]}
+                                    grades = {props.standpoint}
                                     nodeId = {'sentiment'}
                                     chartType = {1}
                                 />

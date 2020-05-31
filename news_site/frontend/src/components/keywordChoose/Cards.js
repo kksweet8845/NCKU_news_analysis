@@ -121,7 +121,7 @@ export default function Cards(props) {
             }}
           />
           <span className={classes.imageBackdrop} />
-          <a className={classes.imageButton} href="http://localhost:8000/frontend/keyword_analysis">
+          <a className={classes.imageButton} href={`http://localhost:8000/frontend/keyword_analysis/${image.title}`}>
             <Typography
               component="span"
               variant="subtitle1"

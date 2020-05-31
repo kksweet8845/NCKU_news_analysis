@@ -1,11 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 
 import Topic from './keywordChoose/Topic';
 import Cards from './keywordChoose/Cards';
 
 export default function KeywordChoose(props) {
-    const cardContents = ['新冠肺炎', '美國', '疫苗', '義大利', '測試', '貓咪', '韓國瑜', '小豬', '疫情', '學測', '罷免', '總統']
+    const [cardContents, setCardContents] = useState (
+            ['新冠肺炎', '美國', '疫苗', '義大利', '測試', '貓咪', '韓國瑜', '小豬', '疫情', '學測', '罷免', '總統']
+        )
+    const [isFetch, setIsFetch] = useState(false)
+
+    useEffect(() => {
+        if(isFetch == false) {
+            fetch('/analysis/top20Keywords', {
+                method: "get",
+            })
+            .then((res) => {
+                return res.json()
+            })
+            .then((data)=> {
+                setCardContents(data);
+                setIsFetch(true)
+            })
+        }
+    });
+
     const style = {
         'main': {
             height: "100%",
