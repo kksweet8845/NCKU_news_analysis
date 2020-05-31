@@ -10,6 +10,7 @@ from tqdm import tqdm
 import numpy as np
 from newsdb.models import Word
 from datetime import datetime, timedelta
+from analysis.apis import KeywordToday, KeywordThreeDay
 # Create your views here.
 
 # hd = Hotword()
@@ -94,6 +95,17 @@ def dumpArticle(request):
 
 def wordFreq(request):
 
-    keywords, relative_news = get_word_freq([Q(date__lt='2020-05-21'), Q(date__gt='2020-05-13'), Q(brand_id=10) | Q(brand_id=18)])
+    keywordToday = KeywordToday()
+    # keywordToday.getWordFreq()
+    keywords, relative_news = keywordToday.getGroupKeywords()
+    # df = keywordToday.getNewHotword()
+    keywords_analysis, relative_wordCloud = keywordToday.genData(keywords[0], relative_news)
 
-    return HttpResponse(json.dumps(relative_news))
+    return HttpResponse(json.dumps([keywords, keywords_analysis, relative_wordCloud]))
+
+def newsMemory(request):
+    keywordToday = KeywordThreeDay()
+    keywords, relative_news = keywordToday.getGroupKeywords()
+
+    mem, keyword_ls = keywordToday.genData(keywords, relative_news)
+    return HttpResponse(json.dumps([relative_news, mem, keyword_ls]))

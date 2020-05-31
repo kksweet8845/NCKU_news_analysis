@@ -11,6 +11,7 @@ dump
 news_site/analysis/apis/utils/ckiptagger
 backup*.sql
 venv
+**/migrations/
 
 
 # Byte-compiled / optimized / DLL files

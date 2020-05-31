@@ -11,11 +11,11 @@ from datetime import date
 class SentimentAnalysis:
     def __init__(self):
         pass
-    
+
     def seperate(self, sentence):
         words = pseg.cut(sentence)
         return words
-    
+
     def is_chinese(self, uchar):
         if uchar >= u'\u4e00' and uchar <= u'\u9fa5':
             return True
@@ -43,11 +43,11 @@ class SentimentAnalysis:
             content = query.content
             content = self.remove_covid_message(content)
             news_list.append(content)
-        
+
         chinese_list = []
         for line in news_list:
             chinese_list.append(self.format_str(line))
-        
+
         for news in tqdm(news_list):
             temp_list = []
             words = self.seperate(news)
@@ -55,7 +55,7 @@ class SentimentAnalysis:
                 temp_list.append((word, flag))
             seperated_word_list.append(temp_list)
         return seperated_word_list
-    
+
     def get_score(self, seperated_word_list, query_set):
         sentiment_dict = pd.read_excel("/home/boldcentaur/Desktop/coding/NCKU_news_analysis/news_site/sentiment_dictionary.xlsx")
         word_list = list(sentiment_dict['詞語'])
@@ -82,7 +82,7 @@ class SentimentAnalysis:
                     if sentiment_classifier[index] in ['PC']:
                         surprise += sentiment_score[index]
                     if sentiment_classifier[index] in ['NAG']:
-                        anger += sentiment_score[index]   
+                        anger += sentiment_score[index]
                     if sentiment_classifier[index] in ['NB', 'NJ', 'NH', 'PF']:
                         sad += sentiment_score[index]
                     if sentiment_classifier[index] in ['NI', 'NC', 'NG']:
