@@ -8,7 +8,7 @@ from django.db.models import Q
 from newsdb.models import New, sentiment, tagger
 from datetime import date
 
-class SentimentAnalysis:
+class Split:
     def __init__(self):
         pass
     
