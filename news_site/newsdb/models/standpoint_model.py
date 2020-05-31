@@ -1,7 +1,7 @@
 from django.db import models
 from .news_model import New
 
-class standpoint(models.Model):
+class Standpoint(models.Model):
     news = models.ForeignKey(New, on_delete=models.CASCADE)
     standpoint = models.DecimalField(
         max_digits=2,

@@ -9,44 +9,37 @@ from news_site import settings
 import pickle
 import json, re
 import pandas as pd
-from analysis.apis import AspectModule
+from analysis.apis import AspectModule, Split, SentimentAnalysis, standpoint_analysis
 from newsdb.models import New
 from django.db.models import Q
 
 
-def todayNews_crawling(request):
-    ls = [
-        ('ltn',ltn_crawling()),
-        ('nowNews', nowNews_crawling()),
-        ('udn', udn_crawling()),
-        ('ftvnews', ftvnews_crawling()),
-        ('pts', pts_crawling()),
-        ('cts', cts_crawling())
+def get_news_today(request):
+    apis = [
+        SETNCrawler,
+        CNACrawler,
+        EBCCrawler,
+        NewtalkCrawler,
+        TVBSCrawler,
+        UpmediaCrawler,
+        StormCrawler,
+        ChinatimesCrawler,
     ]
-    errors = []
-    df = pd.DataFrame(columns=['id', 'title', 'content', 'author', 'brand_id', 'sub_id', 'date', 'update_time', 'url'])
-    for name, i in ls:
-        print("="*150)
-        new_data = []
-        # data = i.getNews(date=['2020-05-18', '2020-05-19'])
-        data = i.getNews(date=['2020-05-30'])
-        for j in data:
-            n = NewSerializer(data=j)
-            try:
-                if not n.is_valid():
-                    raise ValueError
-                new_data.append(j)
-            except ValueError:
-                errors.append({'error': n.errors, 'data': n.data})
-                pass
-        result = i.insertNews(new_data)
-        result = pd.DataFrame(result,
-                              columns=['id', 'title', 'content', 'author', 'brand_id', 'sub_id', 'date', 'update_time', 'url'])
-        df.append(result)
-        print(f"{name} finished")
-    with open(f'{settings.BASE_DIR}/../error/{date.today().isoformat()}_error.json',"w+") as file:
-        file.write(json.dumps(errors))
-    return df
+
+    for api in apis:
+        try:
+            crawler = api()
+            news_today = crawler.get_news_today()
+            #news_today = crawler.get_news_by_date(date_list=["2020-05-24", "2020-05-25", "2020-05-26", "2020-05-27", "2020-05-28", "2020-05-29"])
+            result = crawler.insert_news(news_today)
+
+            print('successful')
+        except Exception as e:
+            print(e)
+            print('error in crawler')
+            pass
+
+    return HttpResponse(True)
 
 
 def analysis_aspect(df):
@@ -73,7 +66,7 @@ def analysis_aspect(df):
         return row
     # df = df.apply(cleanP, axis=1)
     # df.to_csv(util_path + 'eval_tc.csv')
-    
+
     aspectModule = AspectModule(df, 'eval', 8)
     result = aspectModule.eval('bert-base-chinese-e-3.ckpt')
 
@@ -84,15 +77,66 @@ def analysis_aspect(df):
             tmp = Aspect(**{'aspect': dp, 'new':all_news.get(id=di)})
             tmp.save()
 
-
     print(result)
-    
 
-def run():
-    # Crawling the news
-    # todayNews_crawling(None)
-    # tagger
-    news = New.objects.filter(*[Q(date__gte='2020-05-30')])
+
+def todayNews_crawling(request):
+    ls = [
+        ('cts', cts_crawling()),
+        ('ltn',ltn_crawling()),
+        ('nowNews', nowNews_crawling()),
+        ('udn', udn_crawling()),
+        ('ftvnews', ftvnews_crawling()),
+        ('pts', pts_crawling()),
+    ]
+    errors = []
+    df = pd.DataFrame(columns=['id', 'title', 'content', 'author', 'brand_id', 'sub_id', 'date', 'update_time', 'url'])
+    for name, i in ls:
+        print("="*150)
+        new_data = []
+        # data = i.getNews(date=['2020-05-30', '2020-05-28', '2020-05-07', '2020-05-06','2020-05-05', '2020-05-04','2020-05-03', '2020-05-02', '2020-05-01', '2020-04-28', '2020-04-29', '2020-04-30'])
+        data = i.getNews(date=[date.today().isoformat()])
+        for j in data:
+            n = NewSerializer(data=j)
+            try:
+                if not n.is_valid():
+                    raise ValueError
+                new_data.append(j)
+            except ValueError:
+                errors.append({'error': n.errors, 'data': n.data})
+                pass
+        print(len(new_data))
+        result = i.insertNews(new_data)
+        if result != None:
+            result = pd.DataFrame([ dr.__dict__ for dr in result],
+                              columns=['id', 'title', 'content', 'author', 'brand_id', 'sub_id', 'date', 'update_time', 'url'])
+            df.append(result)
+        print(f"{name} finished")
+    with open(f'{settings.BASE_DIR}/../error/{date.today().isoformat()}_error.json',"w+") as file:
+        file.write(json.dumps(errors))
+    return df
+
+
+def crawling():
+    todayNews_crawling()
+    get_news_today()
+
+def autoTagger():
+    news_query = New.objects.filter(Q(date=date.today().isoformat()))
+    sentiment_analysis = Split()
+    data = sentiment_analysis.seperate_news(news_query)
+
+def autoSentiment():
+    news_query = Tagger.objects.filter(Q(date=date.today().isoformat()))
+    sentiment_analysis = SentimentAnalysis()
+    sentiment_analysis.get_score(news_query)
+
+def autoStandpoint():
+    news_query = New.objects.filter(Q(date=date.today().isoformat()))
+    prediction = standpoint_analysis(news_query)
+
+def autoAspect():
+    news = New.objects.filter(*[Q(date=date.today().isoformat())])
     df = pd.DataFrame(list(news.values()),
                       columns=[
                       'id',
@@ -105,5 +149,22 @@ def run():
                       'update_time',
                       'url']
     )
-    print(df.head())
     analysis_aspect(df)
+
+
+def run():
+    # Crawling the news
+    # todayNews_crawling(None)
+    # tagger
+    crawling()
+
+    autoTagger()
+
+    autoSentiment
+
+    autoAspect()
+
+    autoStandpoint()
+
+
+

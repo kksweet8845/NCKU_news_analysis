@@ -15,6 +15,8 @@ from crawling.apis import ltn_crawling, nowNews_crawling, pts_crawling, udn_craw
 from newsdb.models import Subject, Brand, Brand_sub
 from multiprocessing import Pool
 from newsdb.serializers import NewSerializer
+
+from datetime import date
 '''
 def get_foreign_news_today(request):
     apis = [
@@ -71,7 +73,7 @@ def get_dimestic_news_today(request):
 '''
 def test_ltn_crawling(request):
     c = ltn_crawling()
-    data = c.getNews(date=['2020-04-24'])
+    data = c.getNews(date=[date.today().isoformat()])
     # data = c.getNewsToday()
     errors = []
     for j in data:
@@ -84,11 +86,11 @@ def test_ltn_crawling(request):
                 errors.append({'error': n.errors, 'data': n.data})
                 pass
     # result = c.insertNews(data)
-    return HttpResponse([errors])
+    return HttpResponse([errors, data])
 
 def test_nowNews_crawling(request):
     c = nowNews_crawling()
-    data = c.getNews(date=['2020-04-24'])
+    data = c.getNews(date=[date.today().isoformat()])
     errors = []
     for j in data:
             n = NewSerializer(data=j)

@@ -59,8 +59,3 @@ class Split:
             a.save()
             i += 1
         return seperated_word_list
-
-def run():
-    news_query = New.objects.filter(Q(date__gt="2020-05-29"))
-    sentiment_analysis = Split()
-    data = sentiment_analysis.seperate_news(news_query)

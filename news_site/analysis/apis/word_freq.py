@@ -149,7 +149,6 @@ def get_word_freq(where):
     # day wise corpus
     corpus = tagger(pre_df['content'], date_dict)
 
-
     vectorizer = TfidfVectorizer()
     try:
         tfidf_vec = vectorizer.fit_transform([dc[1] for dc in corpus])
@@ -162,7 +161,8 @@ def get_word_freq(where):
     print(sort)
     names = vectorizer.get_feature_names()
     keywords = pd.Index(names)[sort].values
-    print(keywords)
+    keywords_dict = list(zip([dc[0] for dc in corpus], keywords))
+    print(keywords_dict)
 
 
     def get_newsHotword(df, universe_num):
@@ -199,7 +199,7 @@ def get_word_freq(where):
         for i in keywords_ls:
             tmp = {}
             for j in i:
-                tmp[j] = []
+                tmp[j] = {}
             ls.append(tmp)
         keywords_ls_np = np.array(keywords_ls)
         key_row, key_col = keywords_ls_np.shape
@@ -214,12 +214,20 @@ def get_word_freq(where):
                     if keywords_ls_np[dr, dc] in news_keywords:
                         for di in dt_sort:
                             if keywords_ls_np[dr, dc] != news_keywords[di]:
-                                ls[dr][keywords_ls_np[dr, dc]].append((news_keywords[di], id, row.url, row.date))
+                                tmp_dict = ls[dr][keywords_ls_np[dr, dc]]
+                                if row.date in tmp_dict.keys():
+                                    if id in tmp_dict[row.date].keys():
+                                        tmp_dict[row.date][id]['keywords'].append(news_keywords[di])
+                                    else:
+                                        tmp_dict[row.date][id] = {}
+                                        tmp_dict[row.date][id]['keywords'] = []
+                                        tmp_dict[row.date][id]['url'] = row.url
+                                else:
+                                    tmp_dict[row.date] = {}
+                                # ls[dr][keywords_ls_np[dr, dc]].append((news_keywords[di], id, row.url, row.date))
         return ls
 
     relative_news = find_relative_news(keywords, pre_df)
-
-    # print(relative_news)
 
     return keywords.tolist(), relative_news
 
