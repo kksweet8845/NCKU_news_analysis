@@ -22,7 +22,7 @@ const linkContents = [
 
 
 export default function NavigationBar(props) {
-    let   links = <BreadLink contents={linkContents}/>;
+    let links = <BreadLink contents={linkContents}/>;
 
     return (
         <Header

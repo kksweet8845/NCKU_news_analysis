@@ -35,7 +35,7 @@ const useStyle = makeStyles( {
         display: 'flex',
         alignSelf: 'center',
         color: '#5eb7b7',
-        fontSize: '28px',
+        fontSize: '22px',
         fontWeight: 'bold',
     },
     frameContent: {
@@ -73,22 +73,27 @@ const useStyle = makeStyles( {
         width: '90%',
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginTop: '5px',
-        marginBottom: '10px'
+        marginTop: '0vh',
+        marginBottom: '3vh',
+        // marginBottom: '10px'
     },
     linkTitle: {
         display: 'flex',
         width: '200px',
-        padding: '10px 5px',
-        fontSize: '24px',
+        // padding: '10px 5px',
+        fontSize: '20px',
         fontWeight: '600',
+        marginTop: '0',
     },
     linkHref: {
         display: 'block',
-        color: 'block',
+        // color: 'block',
         fontSize: '20px',
-        fontWeight: '400',
+        fontWeight: '500',
         lineHeight: '1.2',
+        textAlign: 'left',
+        textDecoration: 'none',
+        color: 'inherit',
     },
     frameHover: {
         cursor: 'pointer',
@@ -117,8 +122,18 @@ export default function Focus_item(props) {
         setExtend( (isExtend)? false: true )
     }
 
-    const linkDOM = props.links.map((link)=> {
-        return <a className={classes.linkHref}>{link}</a>
+    const stopPropagation = (e)=>{
+        e.stopPropagation()
+    }
+
+    const linkDOM = props.links.map((obj)=> {
+        return <a 
+                className={classes.linkHref} 
+                href={obj.href}
+                target="_blank"
+                onClick={stopPropagation}>
+                {obj.title}
+                </a>
     })
 
     return (
@@ -136,10 +151,10 @@ export default function Focus_item(props) {
             >
                 {/* <p className={`${classes.contentSummary}`}>{props.summary}</p> */}
                 <article className={classes.contentLink}>
-                    <h4 className={`${classes.linkTitle}`} style={colorClasses.fontColor}>新聞連結</h4>
+                    {/* <h4 className={`${classes.linkTitle}`} style={colorClasses.fontColor}>新聞連結</h4> */}
                     {linkDOM}
                 </article>
-                <p className={`${classes.contentReadmore}`} style={colorClasses.fontColor}>看更多</p>
+                {/* <p className={`${classes.contentReadmore}`} style={colorClasses.fontColor}> watch more </p> */}
             </section>
         </article>
     )

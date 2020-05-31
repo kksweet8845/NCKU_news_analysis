@@ -22,7 +22,7 @@ function normalize(array) {
     {
         if(num > max)
             max = num
-        else if(num < min)
+        if(num < min)
             min = num
     }
 

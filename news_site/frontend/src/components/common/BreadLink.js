@@ -14,7 +14,7 @@ const styles = {
 
 
 export default function BreadLink(props) {
-    console.log(props.contents)
+    // console.log(props.contents)
 
     const links = props.contents.map((content)=> {
         return <Button color="inherit" href={content.link}>{content.name}</Button>
