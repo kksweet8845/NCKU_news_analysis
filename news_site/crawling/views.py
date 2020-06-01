@@ -105,7 +105,7 @@ def test_nowNews_crawling(request):
 
 def test_pts_crawling(request):
     c = pts_crawling()
-    data = c.getNews(date=['2020-04-24'])
+    data = c.getNews(date=['2020-06-01', '2020-05-31', '2020-05-30', '2020-05-29'])
     errors = []
     for j in data:
             n = NewSerializer(data=j)
