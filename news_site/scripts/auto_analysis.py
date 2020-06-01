@@ -4,6 +4,7 @@ from crawling.apis import ltn_crawling, nowNews_crawling, pts_crawling, udn_craw
 from newsdb.models import Subject, Brand, Brand_sub, New, Aspect
 from multiprocessing import Pool
 from newsdb.serializers import NewSerializer
+from crawling.apis import CNACrawler, EBCCrawler, NewtalkCrawler, SETNCrawler, TVBSCrawler, UpmediaCrawler, StormCrawler, ChinatimesCrawler
 from datetime import datetime, date
 from news_site import settings
 import pickle
@@ -154,13 +155,13 @@ def run():
     # Crawling the news
     # todayNews_crawling(None)
     # tagger
-    # crawling()
+    crawling()
 
-    # autoTagger()
+    autoTagger()
 
-    # autoSentiment()
+    autoSentiment()
 
-    # autoAspect()
+    autoAspect()
 
     autoStandpoint()
 

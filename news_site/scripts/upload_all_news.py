@@ -47,7 +47,7 @@ def todayNews_crawling(request):
     ls = [
         ('cts', cts_crawling()),
         ('ltn',ltn_crawling()),
-        ('nowNews', nowNews_crawling()),
+        # ('nowNews', nowNews_crawling()),
         ('udn', udn_crawling()),
         ('ftvnews', ftvnews_crawling()),
         ('pts', pts_crawling()),
@@ -102,6 +102,6 @@ def analysis_aspect(df):
 
 def run():
     # Crawling the news
-    # get_news_today(None)
+    get_news_today(None)
     todayNews_crawling(None)
     # tagger
