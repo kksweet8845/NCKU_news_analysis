@@ -29,6 +29,10 @@ const circleRender = (data, nodeId, treshold) => {
             .fontSize(function (d) {
                 return normalize(d.size);
             })
+            .padding(function (d) {
+                console.log(d.text.length)
+                return d.text.length + 2
+            })
             .on('end', draw)
             .start();
 

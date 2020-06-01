@@ -250,6 +250,7 @@ def sentimentWeek(request):
     seventWeekAgoDate = base - timedelta(days=7)
 
     news_query = Sentiment.objects.filter(Q(date__gte=f'{seventWeekAgoDate.year}-{zero(seventWeekAgoDate.month)}-{zero(seventWeekAgoDate.day)}'))
+
     good_q = news_query.order_by('-good')[0]
     surprise_q = news_query.order_by('-surprise')[0]
     sad_q = news_query.order_by('-sad')[0]
@@ -260,14 +261,13 @@ def sentimentWeek(request):
 
     alpha = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
     tmp = {}
-    for da in alpha:
-        for dq in [good_q, surprise_q, sad_q, fear_q, disgust_q, happy_q, anger_q]:
-            tmp[da] = {
-                        'title': dq.news.title,
-                        'url'  : dq.news.url,
-                        'score': [str(dq.good), str(dq.surprise), str(dq.sad), str(dq.fear),
-                                  str(dq.disgust), str(dq.happy), str(dq.anger)]
-                      }
+    for da, dq in zip(alpha, [good_q, surprise_q, sad_q, fear_q, disgust_q, happy_q, anger_q]):
+        tmp[da] = {
+                    'title': dq.news.title,
+                    'url'  : dq.news.url,
+                    'data': [str(dq.good), str(dq.surprise), str(dq.sad), str(dq.fear),
+                                str(dq.disgust), str(dq.happy), str(dq.anger)]
+                    }
 
     print(tmp)
     return HttpResponse(json.dumps(tmp))
@@ -346,14 +346,15 @@ def relativeKeyword(request, word):
     return HttpResponse(json.dumps(relative_wordCloud))
 
 def mediaAnalysis(requeset):
+    print('mediaAnalysis')
     dt = {}
 
-    all_news = New.objects.all()
+    all_news = New.objects.filter(date__gte='2020-05-01')
     all_brands = Brand.objects.all()
     for i in range(17):
         news_no = []
         news_query = Cluster_three_day.objects.filter(Q(cluster__lte=10)
-                     & Q(date_today=date.today().isoformat()))
+                     & Q(date_today='2020-05-31'))
         for query in news_query:
             if query.news.brand_id == i+1:
                 news_no.append(query.news_id)
@@ -362,8 +363,8 @@ def mediaAnalysis(requeset):
         news_query2 = Standpoint.objects.filter(Q(news__in=news_no))
         china = 0
         setn = 0
-        for i in news_query2:
-            if i.standpoint == 1:
+        for k in news_query2:
+            if k.standpoint == 1:
                 china += 1
             else:
                 setn += 1

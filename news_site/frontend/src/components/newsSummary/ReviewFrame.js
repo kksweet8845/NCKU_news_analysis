@@ -162,7 +162,7 @@ export default function ReviewFrame(props) {
                     <Grid container justify="center" spacing={1}>
                         <Grid item xs={6}>
                             <BarChart
-                                categories = {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}
+                                categories = {["TVBS", "三立", "上報", "中央社", "中時電子報", "今日新聞", "公視", "自由時報", "民視新聞", "風傳媒", "東森ETtoday", "新頭殼", "聯合新聞網", "華視"]}
                                 data = {props.reportNum}
                             />
                         </Grid>

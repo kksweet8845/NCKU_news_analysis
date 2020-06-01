@@ -24,13 +24,13 @@ class KeywordToday:
         self.keywords_group = []
 
         for i in range(1, 20):
-            self.keywords_group.append(New.objects.filter(cluster_day__cluster=i, cluster_day__date=date.today().isoformat()))
+            self.keywords_group.append(New.objects.filter(cluster_day__cluster=i, cluster_day__date=(date.today() - timedelta(days=1)).isoformat()))
 
     def getWordFreq(self):
-        news = New.objects.filter(cluster_day__date=date.today().isoformat())
+        news = New.objects.filter(cluster_day__date=(date.today() - timedelta(days=1)).isoformat() )
 
-        if os.path.isfile(f'{self.util_path}/{date.today().isoformat()}.pkl'):
-            with open(f'{self.util_path}/{date.today().isoformat()}.pkl', 'rb') as file:
+        if os.path.isfile(f'{self.util_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl'):
+            with open(f'{self.util_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl', 'rb') as file:
                 return pickle.load(file)
         # news = New.objects.filter(cluster_day__date='2020-05-30', cluster_day__cluster=1)
         df = self.preprocessing(news)
@@ -58,7 +58,7 @@ class KeywordToday:
                 sum += matrix[dr, dc]
             count[name[dc]] = sum
 
-        with open(f'{self.util_path}/{date.today().isoformat()}.pkl', 'wb') as file:
+        with open(f'{self.util_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl', 'wb') as file:
             pickle.dump(count, file)
         return count
 
@@ -300,7 +300,7 @@ class KeywordThreeDay:
         date_list = [ base - timedelta(days=x) for x in range(3)]
         date_list = [ f'{dd.year}-{zero(dd.month)}-{zero(dd.day)}' for dd in date_list]
         for i in range(1, 6):
-            self.keywords_group.append(New.objects.filter(cluster_day__cluster=i, cluster_day__date=date.today().isoformat()))
+            self.keywords_group.append(New.objects.filter(cluster_day__cluster=i, cluster_day__date='2020-05-31'))
 
     def getWordFreq(self):
         news = New.objects.filter(cluster_day__date=date.today().isoformat())

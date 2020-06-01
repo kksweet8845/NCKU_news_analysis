@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import { makeStyles } from '@material-ui/core'
@@ -140,207 +140,169 @@ export default function MediaApp(props) {
 
     const classes = useStyles()
 
-    const [nowidx, setNowidx] = useState(1)
+    const [nowidx, setNowidx] = useState(11)
 
     const media_index = [
-        1,4,5,7,8,9,11,12,13,14,15,16,18
+        1,4,5,7,8,9,10,11,12,13,14,15,16,18
     ]
 
-    var tmp_obj = {
-        1: {'name': 'TVBS', 
+    const initObj = {
+        '1': {'name': 'TVBS', 
             'news_number': 3000,
             'sentiment': [44, 55, 41],
             'standpoint': [44, 55],
-            'focus_news': [[{title: '發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },
-        4: {'name': '三立',
+        '4': {'name': '三立',
             'news_number': 2000,
             'sentiment': [14, 85, 41],
             'standpoint': [90, 15],
-            'focus_news': [[{title: '1發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '1隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '1又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '1拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '1謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '1罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },
-        5: {'name': '上報',
+        '5': {'name': '上報',
             'news_number': 1000,
             'sentiment': [91, 25, 11],
             'standpoint': [25, 74],
-            'focus_news': [[{title: '2發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '2隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '2又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '2拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '2謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '2罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },
-        7: {'name': '三立',
+        '7': {'name': '三立',
             'news_number': 7,
             'sentiment': [14, 85, 41],
             'standpoint': [90, 15],
-            'focus_news': [[{title: '發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },
-        8: {'name': '三立',
+        '8': {'name': '三立',
             'news_number': 8,
             'sentiment': [14, 85, 41],
             'standpoint': [90, 15],
-            'focus_news': [[{title: '發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },
-        9: {'name': '三立',
+        '9': {'name': '三立',
             'news_number': 9,
             'sentiment': [14, 85, 41],
             'standpoint': [90, 15],
-            'focus_news': [[{title: '發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },
-        11: {'name': '三立',
+        '10': {'name': '三立',
+            'news_number': 9,
+            'sentiment': [14, 85, 41],
+            'standpoint': [90, 15],
+            'focus_news': [[{'title': '', 'href': ''}]]
+        },
+        '11': {'name': '三立',
             'news_number': 11,
             'sentiment': [14, 85, 41],
             'standpoint': [90, 15],
-            'focus_news': [[{title: '發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },
-        12: {'name': '三立',
+        '12': {'name': '三立',
             'news_number': 12,
             'sentiment': [14, 85, 41],
             'standpoint': [90, 15],
-            'focus_news': [[{title: '發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },
-        13: {'name': '三立',
+        '13': {'name': '三立',
             'news_number': 13,
             'sentiment': [14, 85, 41],
             'standpoint': [90, 15],
-            'focus_news': [[{title: '發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },
-        14: {'name': '三立',
+        '14': {'name': '三立',
             'news_number': 14,
             'sentiment': [14, 85, 41],
             'standpoint': [90, 15],
-            'focus_news': [[{title: '發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },
-        15: {'name': '三立',
+        '15': {'name': '三立',
             'news_number': 15,
             'sentiment': [14, 85, 41],
             'standpoint': [90, 15],
-            'focus_news': [[{title: '發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },
-        16: {'name': '三立',
+        '16': {'name': '三立',
             'news_number': 16,
             'sentiment': [14, 85, 41],
             'standpoint': [90, 15],
-            'focus_news': [[{title: '發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },
-        18: {'name': '三立',
+        '18': {'name': '三立',
             'news_number': 18,
             'sentiment': [14, 85, 41],
             'standpoint': [90, 15],
-            'focus_news': [[{title: '發票沒中卻爽拿2千獎金　真相驚呆眾人：竟還有此招', href: 'https://news.tvbs.com.tw/life/1331355?from=Popular_txt_click'},
-                            {title: '隔35天IG再發文！羅志祥「特別致謝2人」讚數破萬', href: 'https://news.tvbs.com.tw/entertainment/1331806?from=Popular_txt_click'},
-                            {title: '又是QR818班機！　83乘客16人染新冠肺炎', href: 'https://news.tvbs.com.tw/world/1332213?from=Popular_txt_click'}],
-                            [{title: '拒出席罷韓說明會！韓國瑜勘農損、跑市政對抗', href: 'https://news.tvbs.com.tw/politics/1331974'},
-                            {title: '謝立功將接民眾黨秘書長　國民黨：不排除開除黨籍', href: 'https://news.tvbs.com.tw/politics/1332139'},
-                            {title: '罷韓倒數「冷處理」　韓國瑜曝心境：相信市民', href: 'https://news.tvbs.com.tw/politics/1332298'}]]
+            'focus_news': [[{'title': '', 'href': ''}]]
         },        
     }
 
+    const initChartData = {
+        'labels': ["Jan", "Feb", "Mar"],
+        'series': [44, 55, 41],
+    }
+
+    const [isFetch, setIsFetch] = useState(false)
+    const [dataObj, setDataObj] = useState(initObj)
+    const [newsNumObj, setNewsNumObj] = useState(initChartData)
+
+    useEffect(()=>{
+        console.log(isFetch)
+        if(!isFetch){
+            setIsFetch(true)
+            console.log('----')
+            console.log(isFetch)
+            fetch('/analysis/mediaAnalysis', {
+                method: 'get',
+            }).then((res) => {
+                return res.json()
+            }).then((obj) => {
+                console.log(obj)
+                setDataObj(obj)
+                setNowidx(Object.keys(obj)[0])
+                // setIsFetch(true)
+            }).then(() => {
+                fetch('/analysis/mediaReport', {
+                    method: 'get',
+                }).then((res) => {
+                    return res.json()
+                }).then((obj) => {
+                    setNewsNumObj(obj)
+                })
+            })
+        }
+    })
+
     const media_map = {
         1: {'name': 'TVBS', 
-            'img': 'https://imgur.com/edI5QMN.png',
-            'content': '',},
+            'img': 'https://imgur.com/edI5QMN.png',},
         4: {'name': '三立', 
-            'img': 'https://imgur.com/HsDdh8C.png',
-            'content': '',},
+            'img': 'https://imgur.com/HsDdh8C.png',},
         5: {'name': '上報', 
-            'img': 'https://imgur.com/98Ec7R0.png',
-            'content': '',},
+            'img': 'https://imgur.com/98Ec7R0.png',},
         7: {'name': '中央社', 
-            'img': 'https://imgur.com/uu3KeZh.png',
-            'content': '',},
+            'img': 'https://imgur.com/uu3KeZh.png',},
         8: {'name': '中時電子報',
-            'img': 'https://imgur.com/VLtOCJQ.png',
-            'content': '',},
+            'img': 'https://imgur.com/VLtOCJQ.png',},
         9: {'name': '今日新聞',
-            'img': 'https://imgur.com/KVdihFa.png',
-            'content': '',},
+            'img': 'https://imgur.com/KVdihFa.png',},
+        10: {'name': '公視',
+            'img': 'https://imgur.com/DvrxIyE.png',},
         11: {'name': '自由時報',
-            'img': 'https://imgur.com/CU0Nq42.png',
-            'content': '',},
+            'img': 'https://imgur.com/CU0Nq42.png',},
         12: {'name': '民視新聞',
-            'img': 'https://imgur.com/XmifsA8.png',
-            'content': '',},
+            'img': 'https://imgur.com/XmifsA8.png',},
         13: {'name': '風傳媒',
-            'img': 'https://imgur.com/6TzTmHZ.png',
-            'content': '',},
+            'img': 'https://imgur.com/6TzTmHZ.png',},
         14: {'name': '東森ETtoday',
-            'img': 'https://imgur.com/yRuX5jc.png',
-            'content': '',},
+            'img': 'https://imgur.com/yRuX5jc.png',},
         15: {'name': '新頭殼',
-            'img': 'https://imgur.com/OM1u1BS.png',
-            'content': '',},
+            'img': 'https://imgur.com/OM1u1BS.png',},
         16: {'name': '聯合新聞網',
-            'img': 'https://imgur.com/Y8x2Ugi.png',
-            'content': '',},
+            'img': 'https://imgur.com/Y8x2Ugi.png',},
         18: {'name': '華視',
-            'img': 'https://imgur.com/Ajq8wTX.png',
-            'content': '',},
+            'img': 'https://imgur.com/Ajq8wTX.png',},
     }
 
     var handleClick = (e) => {
-        console.log('click: ' + e)
+        // console.log('click: ' + e)
         setNowidx(e)
-        // window.scrollTo({
-        //     top: '1750',
-        //     behavior: 'smooth'
-        // })
         document.getElementById('scroll_target').scrollIntoView({behavior:'smooth'})
     }
 
@@ -350,47 +312,7 @@ export default function MediaApp(props) {
         speed: 400,
         slidesToShow: 3,
         slidesToScroll: 3,
-        // variableWidth: true,
     }
-
-    var barChartData = {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        series: [44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43],
-    }
-
-    // var barChartOptions = {
-    //     height: '45vh',
-    //     width: '40vw',
-    //     axisX: {
-    //         showGrid: false,
-    //         labelInterpolationFnc: function(value, index) {
-    //             return value
-    //         }
-    //     },
-    //     axisY: {
-    //         offset: 50,
-    //         showGrid: false,
-    //         // showLabel: false,
-    //         scaleMinSpace: 20,
-    //     },
-    // }
-
-    // labels: ['中時', '三立'],
-    var standpointChartData = tmp_obj[nowidx].standpoint
-
-    // labels: ['正面', '中立', '負面'],
-    var sentimentChartData = tmp_obj[nowidx].sentiment
-
-    // var standpointChartOptions = {
-    //     height: '20rem',
-    //     width: '20rem',
-    //     donut: true,
-    //     donutWidth: 60,
-    //     donutSolid: true,
-    //     startAngle: 150,
-    //     total: tmp_obj[nowidx].standpoint.reduce((a, b) => a + b, 0),
-    //     showLabel: true,
-    // }
 
     var chooseColor = (e) => {
         if(e%3==0)
@@ -411,8 +333,8 @@ export default function MediaApp(props) {
                             <h1 className={classes.head_title}>媒體分析</h1>
                             <div className={classes.barchart_layout}>
                                 <BarChart
-                                    categories = {barChartData.labels}
-                                    data = {barChartData.series}
+                                    categories = {newsNumObj.labels}
+                                    data = {newsNumObj.series}
                                 />
                             </div>
                         </Grid>
@@ -425,13 +347,12 @@ export default function MediaApp(props) {
 
             <Container maxWidth="xl" >
                 <Slider {...slide_setting}>
-                    {media_index.map((value, index) => (
-                        <Paper className={classNames(classes.carousel_grid, chooseColor(index))} onClick={()=>handleClick(value)}>
+                    {media_index.map((value, index) => {
+                        return <Paper className={classNames(classes.carousel_grid, chooseColor(index))} onClick={()=>handleClick(value)}>
                             <img src = {media_map[value].img} className={classes.img} />
-                            <h1 className={classes.carousel_title}> {media_map[value].name} </h1>
-                            {/* <p>{media_map[value].content}</p> */}
+                            <h1 className={classes.carousel_title}> {media_map[value].name}</h1>
                         </Paper>
-                    ))}
+                    })}
                 </Slider>
             </Container>
 
@@ -440,7 +361,7 @@ export default function MediaApp(props) {
                     <Grid container justify="center" spacing={3}>
                         <Grid item sm={12}>
                             <h1 className={classes.h1_style}> {media_map[nowidx].name} </h1>
-                            <h2 className={classes.h2_style}> 報導篇數: {tmp_obj[nowidx].news_number} 篇 </h2>
+                            <h2 className={classes.h2_style}> 報導篇數: {dataObj[nowidx].news_number} 篇 </h2>
                         </Grid>
                     </Grid>
                     <Grid container justify="center" spacing={3} className={classes.pieChart}>
@@ -448,7 +369,7 @@ export default function MediaApp(props) {
                             <h3 style={paddings.senti_h3}> 情緒分數 </h3>
                             <PieChart
                                 // labels: ['正面', '中立', '負面'],
-                                grades = {tmp_obj[nowidx].sentiment}
+                                grades = {dataObj[nowidx].sentiment}
                                 nodeId = {'sentiment'}
                                 chartType = {0}
                             />
@@ -457,36 +378,18 @@ export default function MediaApp(props) {
                             <h3 style={paddings.stand_h3}> 立場分數 </h3>
                             <PieChart
                                 // labels: ['中時', '三立']
-                                grades = {tmp_obj[nowidx].standpoint}
+                                grades = {dataObj[nowidx].standpoint}
                                 nodeId = {'position'}
                                 chartType = {1}
                             />
                         </Grid>
                     </Grid>
                     <Grid className={classes.news_block} container justify="center" spacing={3}>
-                        {/* <Grid item sm={6}>
-                            <h2>重點新聞</h2>
-                            <List component="nav" className={classes.list_item} aria-label="mailbox folders">
-                                <ListItem button>
-                                    <ListItemText primary={tmp_obj[nowidx].focus_news[0]} />
-                                </ListItem>
-                                <Divider />
-                                <ListItem button divider>
-                                    <ListItemText primary={tmp_obj[nowidx].focus_news[1]} />
-                                </ListItem>
-                                <ListItem button>
-                                    <ListItemText primary={tmp_obj[nowidx].focus_news[2]} />
-                                </ListItem>
-                                <Divider light />
-                                <ListItem button>
-                                    <ListItemText primary={tmp_obj[nowidx].focus_news[3]} />
-                                </ListItem>
-                            </List>
-                        </Grid> */}
-
                         <Grid item sm={10}>
                             <h2  className={classes.h2_style}>重點新聞</h2>
-                            {tmp_obj[nowidx].focus_news.map((obj, index) => {
+                            {dataObj[nowidx].focus_news.map((obj, index) => {
+                                if(obj.length === 0)
+                                    obj = [{'title': '', 'href': ''}]
                                 return <Focus_item 
                                         color= "#27496d"
                                         num= {obj.length} // num= {index + 1}

@@ -9,6 +9,8 @@ from newsdb.models import New, Sentiment, Tagger
 from datetime import date
 import ast
 from news_site import settings
+import json
+
 
 class SentimentAnalysis:
     def __init__(self):
@@ -69,8 +71,7 @@ class SentimentAnalysis:
         sentiment_score = list(sentiment_dict['強度'])
         i = 0
         for news in tqdm(query_set):
-            news = news.split
-            news = ast.literal_eval(news)
+            news = json.loads(news.split)
             #positive = 0
             #negative = 0
             anger = 0
@@ -81,8 +82,8 @@ class SentimentAnalysis:
             good = 0
             happy = 0
             for word in news:
-                if word in word_list:
-                    index = word_list.index(word)
+                if word[0] in word_list:
+                    index = word_list.index(word[0])
                     if sentiment_classifier[index] in ['PA', 'PE']:
                         happy += sentiment_score[index]
                     if sentiment_classifier[index] in ['PD', 'PH', 'PG', 'PB', 'PK']:
@@ -111,6 +112,6 @@ class SentimentAnalysis:
         return True
 
 def run():
-    news_query = Tagger.objects.filter(Q(date__gt="2020-05-29"))
+    news_query = Tagger.objects.filter(Q(date__gt="2020-05-28"))
     sentiment_analysis = SentimentAnalysis()
     sentiment_analysis.get_score(news_query)
