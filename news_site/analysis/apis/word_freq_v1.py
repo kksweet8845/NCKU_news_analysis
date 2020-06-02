@@ -62,6 +62,43 @@ class KeywordToday:
             pickle.dump(count, file)
         return count
 
+    def getWordFreqToday(self):
+        news = New.objects.filter(cluster_day__date=date.today().isoformat() )
+
+        if os.path.isfile(f'{self.util_path}/{date.today().isoformat()}.pkl'):
+            with open(f'{self.util_path}/{date.today().isoformat()}.pkl', 'rb') as file:
+                return pickle.load(file)
+        # news = New.objects.filter(cluster_day__date='2020-05-30', cluster_day__cluster=1)
+        df = self.preprocessing(news)
+
+        # print(len(df))
+
+        # word_ls = self.ws(df['content'])
+        word_ls = [ json.loads(dtag.split) for dtag in Tagger.objects.filter(news_id__in=df['id'])]
+
+        ls = []
+        for dword in word_ls:
+            ls.append(' '.join(word[0] for word in dword))
+        # ls = [ self.tagger([content]) for content in tqdm(df['content']) ]
+
+        # print(len(ls))
+        vec = CountVectorizer()
+        matrix = vec.fit_transform(ls)
+        name = vec.get_feature_names()
+        row, col = matrix.shape
+
+        count = {}
+        for dc in range(col):
+            sum = 0
+            for dr in range(row):
+                sum += matrix[dr, dc]
+            count[name[dc]] = sum
+
+        with open(f'{self.util_path}/{date.today().isoformat()}.pkl', 'wb') as file:
+            pickle.dump(count, file)
+        return count
+
+
     def getGroupKeywords(self):
 
         ls = []

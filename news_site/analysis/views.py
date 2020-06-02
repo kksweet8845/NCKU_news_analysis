@@ -337,7 +337,6 @@ def relativeKeyword(request, word):
     global relative_news
     keywordToday = KeywordToday()
     if relative_wordCloud == None:
-        
         # keywordToday.getWordFreq()
         keywords, relative_news = keywordToday.getGroupKeywords()
         # df = keywordToday.getNewHotword()
