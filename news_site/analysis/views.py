@@ -353,8 +353,8 @@ def mediaAnalysis(requeset):
     all_brands = Brand.objects.all()
     for i in range(17):
         news_no = []
-        news_query = Cluster_three_day.objects.filter(Q(cluster__lte=10)
-                     & Q(date_today='2020-05-31'))
+        news_query = Cluster_three_day.objects.filter(Q(cluster__lte=50)
+                     & Q(date_today=date.today().isoformat()))
         for query in news_query:
             if query.news.brand_id == i+1:
                 news_no.append(query.news_id)

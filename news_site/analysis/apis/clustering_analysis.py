@@ -40,7 +40,8 @@ class NewsClustering:
 
     def getNewsCluster(self, similarity):
         cluster_list = []
-        dbscan = DBSCAN(eps=0.4*np.log(len(similarity))-1.15, min_samples=2).fit_predict(1-similarity)
+        eps_val = 0.4*np.log(len(similarity))-1.15
+        dbscan = DBSCAN(eps=eps_val if eps_val > 0 else 1.5, min_samples=2).fit_predict(1-similarity)
         for i in range(len(similarity)):
             temp = []
             for j in range(len(similarity)):

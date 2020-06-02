@@ -192,6 +192,7 @@ export default function ForeignPubApp(props) {
 
     useEffect(() => {
         if(isFetchWordcloud == false) {
+            setIsFetchWordcloud(true)
             fetch(`/analysis/relativeKeyword/${topic}`, {
                 method: "get",
             })
@@ -202,7 +203,6 @@ export default function ForeignPubApp(props) {
                 data = data.sort((a, b)=>{
                     return a.size - b.size
                 })
-                setIsFetchWordcloud(true)
                 setWordCloudData(data.slice(0,20));
             })
         }

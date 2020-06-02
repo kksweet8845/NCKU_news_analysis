@@ -12,6 +12,7 @@ export default function KeywordChoose(props) {
 
     useEffect(() => {
         if(isFetch == false) {
+            setIsFetch(true)
             fetch('/analysis/top20Keywords', {
                 method: "get",
             })
@@ -20,7 +21,6 @@ export default function KeywordChoose(props) {
             })
             .then((data)=> {
                 setCardContents(data);
-                setIsFetch(true)
             })
         }
     });
