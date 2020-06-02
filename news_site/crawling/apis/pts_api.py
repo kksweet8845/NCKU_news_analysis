@@ -17,24 +17,36 @@ class pts_crawling:
             'name': '政治',
             'link': [
                 'https://news.pts.org.tw/category/2'
+            ],
+            'sublinks' : [
+                'https://news.pts.org.tw/subcategory/9'
             ]
         },
         {
             'name': '國際',
             'link': [
                 'https://news.pts.org.tw/category/4',
+            ],
+            'sublinks' : [
+                "https://news.pts.org.tw/subcategory/11"
             ]
         },
         {
             'name': '生活',
             'link': [
                 'https://news.pts.org.tw/category/5'
+            ],
+            'sublinks':[
+                "https://news.pts.org.tw/subcategory/12"
             ]
         },
         {
             'name': '社會',
             'link': [
                 'https://news.pts.org.tw/category/7'
+            ],
+            'sublinks' : [
+                "https://news.pts.org.tw/subcategory/14"
             ]
         },
         {
@@ -81,28 +93,28 @@ class pts_crawling:
             return (x.attrs['href'], x.get_text())
 
 
-    def request_newsUrl(self, url, type_cn):
+    def request_newsUrl(self, url, type_cn, date):
         ls = []
         res = requests.get(url)
         soup = bs(res.text, 'html.parser')
-        contents = soup.select('div.text-title > a')
-        contents = list(map(self.fn, contents))
+        contents = soup.select('div.new-wrap')
+        # contents = list(map(self.fn, contents))
         for i in contents:
-            ls.append({
-                'url': i[0],
-                'title': i[1],
-                'sub': self.sub.get(sub_name=type_cn)
-            })
+            href, title = self.fn( i.select('div.text-title > a')[0] )
+            try:
+                time = i.select('div.sweet-info > span')[1].get_text()
+            except IndexError:
+                continue
+            if date == 'all' or time in date:
+                ls.append({
+                    'url': href,
+                    'title': title,
+                    'sub': self.sub.get(sub_name=type_cn),
+                    'date' : time,
+                })
         return ls
 
-    def request_subCategory(self, url):
-        res = requests.get(url)
-        soup = bs(res.text, 'html.parser')
-        contents = soup.select('div.more > a')
-        contents = list(map(lambda x: x.attrs['href'], contents))
-        return contents
-
-    def aux_request_ajax(self, cid, type_cn, i):
+    def aux_request_ajax(self, cid, type_cn, i, date):
         ls = []
         url = "https://news.pts.org.tw/subcategory/category_more.php"
         res = requests.post(url, data={
@@ -114,21 +126,23 @@ class pts_crawling:
             if len(res_json) == 0:
                 return None
             for dn in res_json:
-                ls.append({
-                    'url': 'https://news.pts.org.tw/article/'+dn['news_id'],
-                    'title': dn['subject'],
-                    'sub': self.sub.get(sub_name=type_cn)
-                })
+                if date == 'all' or dn['news_date'] in date:
+                    ls.append({
+                        'url': 'https://news.pts.org.tw/article/'+dn['news_id'],
+                        'title': dn['subject'],
+                        'sub': self.sub.get(sub_name=type_cn),
+                        'date' : dn['news_date']
+                    })
         except:
             return None
         return ls
 
-    def request_ajax(self, cid, type_cn):
+    def request_ajax(self, cid, type_cn, date):
         ls = []
         result = []
         pool = ThreadPool(processes=4)
         for i in range(1, 51):
-            ls.append(pool.apply_async(self.aux_request_ajax, (cid, type_cn, i)))
+            ls.append(pool.apply_async(self.aux_request_ajax, (cid, type_cn, i, date)))
 
         for i in ls:
             tmp = i.get()
@@ -137,57 +151,53 @@ class pts_crawling:
         return result
 
 
-    def crawl_newsUrl(self, type_cn=''):
+    def crawl_newsUrl(self, type_cn='', date='all'):
         """ """
         newsUrl = []
         ls = []
         pool = Pool(processes=8)
         for dm in tqdm(self.menuList, total=len(self.menuList), desc="L1"):
             try:
-                links = dm['link']
+                links = dm['sublinks']
             except:
                 links = dm['sub_link']
-            for index_url in tqdm(links, total=len(links), desc="L2"):
-                sub_category = self.request_subCategory(index_url)
-                for dnewsUrl in tqdm(sub_category, total=len(sub_category), desc="L3"):
-                    cid = dnewsUrl.split('/')[-1]
-                    ls.append(pool.apply_async(self.request_newsUrl, (dnewsUrl, dm['name'])))
-                    ls.append(pool.apply_async(self.request_ajax, (cid, dm['name'])))
+            for dnewsUrl in tqdm(links, total=len(links), desc=f"sub category {dm['name']}"):
+                cid = dnewsUrl.split('/')[-1]
+                ls.append(pool.apply_async(self.request_newsUrl, (dnewsUrl, dm['name'], date)))
+                ls.append(pool.apply_async(self.request_ajax, (cid, dm['name'], date)))
         for i in tqdm(ls, total=len(ls)):
             newsUrl.extend(i.get())
         self.newsUrl = newsUrl
 
 
-    def request_newsContent(self, data, date):
+    def request_newsContent(self, data):
         """ """
         dn = data
         news = requests.get(dn['url'])
         news_soup = bs(news.content, 'html.parser')
-        time = news_soup.select('div.maintype-wapper > h2')[0].get_text()
-        time = re.sub(r'[年月]','-', time )
-        time = re.sub(r'日','', time)
-        if date == 'all' or time in date:
-            article = news_soup.select('div.article_content')[0].get_text()
-            author = news_soup.select('div.subtype-sort')[0].get_text()
-            return {
-                'title': dn['title'],
-                'content': article,
-                'author': author,
-                'brand': self.brand,
-                'sub': dn['sub'],
-                'date': time,
-                'url': dn['url']
-            }
-        else:
-            return None
+        # time = news_soup.select('div.maintype-wapper > h2')[0].get_text()
+        # time = re.sub(r'[年月]','-', time )
+        # time = re.sub(r'日','', time)
+        article = news_soup.select('div.article_content')[0].get_text()
+        author = news_soup.select('div.subtype-sort')[0].get_text()
+        return {
+            'title': dn['title'],
+            'content': article,
+            'author': author,
+            'brand': self.brand,
+            'sub': dn['sub'],
+            'date': dn['date'],
+            'url': dn['url']
+        }
 
-    def crawl_newsContent(self, date=[date.today().isoformat()]):
+
+    def crawl_newsContent(self):
         """ """
         pool = Pool(processes=8)
         final_news = []
         ls = []
         for dn in tqdm(self.newsUrl, total=len(self.newsUrl)):
-            ls.append(pool.apply_async(self.request_newsContent, (dn, date)))
+            ls.append(pool.apply_async(self.request_newsContent, (dn, )))
 
         for i in tqdm(ls, total=len(ls)):
             tmp = i.get()
@@ -197,8 +207,8 @@ class pts_crawling:
 
     def getNews(self, date=[date.today().isoformat()]):
         """ """
-        self.crawl_newsUrl()
-        return self.crawl_newsContent(date=date)
+        self.crawl_newsUrl(date=date)
+        return self.crawl_newsContent()
 
     def getNewsToday(self):
         """ """
