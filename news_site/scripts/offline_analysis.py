@@ -157,13 +157,13 @@ def run():
     # tagger
     # crawling()
 
-    autoTagger()
+    # autoTagger()
 
     autoSentiment()
 
-    autoAspect()
+    # autoAspect()
 
-    autoStandpoint()
+    # autoStandpoint()
 
 
 

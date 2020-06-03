@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from crawling.apis import ltn_crawling, nowNews_crawling, pts_crawling, udn_crawling, cts_crawling, ftvnews_crawling
-from newsdb.models import Subject, Brand, Brand_sub, New, Aspect
+from newsdb.models import Subject, Brand, Brand_sub, New, Aspect, Cluster_day, Cluster_three_day
 from multiprocessing import Pool
 from newsdb.serializers import NewSerializer
 from crawling.apis import CNACrawler, EBCCrawler, NewtalkCrawler, SETNCrawler, TVBSCrawler, UpmediaCrawler, StormCrawler, ChinatimesCrawler
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from news_site import settings
 import pickle
 import json, re
@@ -13,6 +13,16 @@ import pandas as pd
 from analysis.apis import AspectModule, Split, SentimentAnalysis, standpoint_analysis
 from newsdb.models import New, Tagger
 from django.db.models import Q
+from analysis.apis import NewsClustering, KeywordToday
+import tensorflow.compat.v2 as tf
+from tensorflow_text import SentencepieceTokenizer
+import tensorflow_hub as hub
+import sklearn.metrics.pairwise
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.cluster import DBSCAN
+import numpy as np
+from tqdm import tqdm
+
 def get_news_today():
     apis = [
         SETNCrawler,
@@ -125,6 +135,11 @@ def autoTagger():
     sentiment_analysis = Split()
     data = sentiment_analysis.seperate_news(news_query)
 
+def autoWordFreq():
+    keywordToday = KeywordToday()
+    keywordToday.getWordFreqToday()
+    # keywordToday.getWordFreq()
+
 def autoSentiment():
     news_query = Tagger.objects.filter(Q(date=date.today().isoformat()))
     sentiment_analysis = SentimentAnalysis()
@@ -150,20 +165,67 @@ def autoAspect():
     )
     analysis_aspect(df)
 
+def autoClustering():
+    news_clustering = NewsClustering()
+    date_list = [date.today().isoformat()]
+    for dd in date_list:
+        news_query = New.objects.filter(Q(date=dd))
+        if len(news_query) == 0:
+            continue
+        text = tf.Variable(np.empty((0,512)), dtype=np.float32)
+        for i in tqdm(range(int(len(news_query)/100) + 1)):
+            temp = news_clustering.getEmbed(news_query[(i*100):((i+1)*100)])
+            text = tf.concat((text, temp), axis=0)
+        top_news = news_clustering.getTopNews(text)
+        top_news.sort(key=len, reverse=True)
+
+        # print(top_news)
+        cluster_no = 1
+        for news_list in tqdm(top_news):
+            for news in news_list:
+                a = Cluster_day(news=news_query[news], date=news_query[news].date, cluster=cluster_no)
+                a.save()
+            cluster_no += 1
+
+def autoClusteringThree():
+    news_clustering = NewsClustering()
+
+    for j in range(17):
+        news_query = New.objects.filter(Q(date__gt=((date.today()-timedelta(days=3)).isoformat())) & Q(brand=j+1))
+        if len(news_query) == 0:
+            continue
+        text = tf.Variable(np.empty((0,512)), dtype=np.float32)
+        for i in tqdm(range(int(len(news_query)/100) + 1)):
+            temp = news_clustering.getEmbed(news_query[(i*100):((i+1)*100)])
+            text = tf.concat((text, temp), axis=0)
+        top_news = news_clustering.getTopNews(text)
+        top_news.sort(key=len, reverse=True)
+
+        cluster_no = 1
+        for news_list in tqdm(top_news):
+            for news in news_list:
+                a = Cluster_three_day(news=news_query[news], date=news_query[news].date, cluster=cluster_no, date_today=date.today().isoformat())
+                a.save()
+            cluster_no += 1
+
 
 def run():
     # Crawling the news
     # todayNews_crawling(None)
     # tagger
-    crawling()
+    # crawling()
 
-    autoTagger()
+    # autoTagger()
 
     autoSentiment()
 
-    autoAspect()
+    # autoAspect()
 
-    autoStandpoint()
+    # autoStandpoint()
 
+    # autoClustering()
 
+    # autoClusteringThree()
+
+    # autoWordFreq()
 

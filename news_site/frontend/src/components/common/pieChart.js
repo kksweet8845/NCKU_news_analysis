@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { CircularProgress } from '@material-ui/core'
 import color from '@material-ui/core/colors/amber';
 
+import 'chartist-plugin-legend'
 import '../css/pieChart.css'
 
 const useStyles = makeStyles({
@@ -60,11 +61,12 @@ export default function (props) {
 
         let chart = new Chartist.Pie(`#${nodeId}`, {
                 series: grades,
-                showLabel: false,
                 labels,
             }, {
                 donut: true,
                 showLabel: true,
+                plugins: [
+                ],
             },
         );
         chart.on('draw', function(data) {

@@ -204,20 +204,20 @@ export default function ForeignPubApp(props) {
                     return a.size - b.size
                 })
                 setWordCloudData(data.slice(0,20));
+                fetch(`/analysis/keywordAnalysis/${topic}`, {
+                    method: "get",
+                })
+                .then((res) => {
+                    return res.json()
+                })
+                .then((data)=> {
+                    setTimelineData(data);
+                })
             })
         }
 
         if(isFetchTimeline == false) {
-            fetch(`/analysis/keywordAnalysis/${topic}`, {
-                method: "get",
-            })
-            .then((res) => {
-                return res.json()
-            })
-            .then((data)=> {
-                setIsFetchTimeline(true)
-                setTimelineData(data);
-            })
+            setIsFetchTimeline(true)
         }
     });
 

@@ -50,6 +50,7 @@
     "d3": "^5.16.0",
     "d3-cloud": "^1.2.5",
     "d3-dispatch": "^1.0.6",
+    "extract-loader": "^5.1.0",
     "file-loader": "^5.1.0",
     "image-webpack-loader": "^6.0.0",
     "node-sass": "^4.13.1",
@@ -64,6 +65,7 @@
     "react-transition-group": "^4.3.0",
     "sass-loader": "^8.0.2",
     "slick-carousel": "^1.8.1",
+    "to-string-loader": "^1.1.6",
     "url-loader": "^4.1.0"
   }
 }

@@ -68,3 +68,4 @@ wrapt==1.12.1
 zipp==3.1.0
 simpletransformers==0.30.0
 ast==0.0.2
+extract-loader

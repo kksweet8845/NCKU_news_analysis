@@ -84,7 +84,7 @@ class SentimentAnalysis:
             happy = 0
             for word in news:
                 if word in word_list:
-                    index = word_list.index(word)
+                    index = word_list.index(word[0])
                     if sentiment_classifier[index] in ['PA', 'PE']:
                         happy += sentiment_score[index]
                     if sentiment_classifier[index] in ['PD', 'PH', 'PG', 'PB', 'PK']:

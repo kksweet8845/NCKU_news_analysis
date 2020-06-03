@@ -323,7 +323,7 @@ def keywordAnalysis(request, word):
     print(word)
     keywordToday = KeywordToday()
     if keywords_analysis == None:
-        # keywordToday.getWordFreq()
+        # keywordToday.getWordFreq() 
         keywords, relative_news = keywordToday.getGroupKeywords()
         # df = keywordToday.getNewHotword()
     keywords_analysis, relative_wordCloud = keywordToday.genData(word, relative_news)
@@ -337,7 +337,6 @@ def relativeKeyword(request, word):
     global relative_news
     keywordToday = KeywordToday()
     if relative_wordCloud == None:
-        
         # keywordToday.getWordFreq()
         keywords, relative_news = keywordToday.getGroupKeywords()
         # df = keywordToday.getNewHotword()
@@ -353,7 +352,7 @@ def mediaAnalysis(requeset):
     all_brands = Brand.objects.all()
     for i in range(17):
         news_no = []
-        news_query = Cluster_three_day.objects.filter(Q(cluster__lte=50)
+        news_query = Cluster_three_day.objects.filter(Q(cluster__lte=10)
                      & Q(date_today=date.today().isoformat()))
         for query in news_query:
             if query.news.brand_id == i+1:

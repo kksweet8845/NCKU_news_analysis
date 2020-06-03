@@ -9,3 +9,50 @@
 .negative-stroke {
     stroke: red !important;
 }
+
+.ct-legend {
+    position: relative !important;
+    z-index: 10 !important;
+
+    li {
+        position: relative !important;
+        padding-left: 23px !important;
+        margin-bottom: 3px !important;
+    }
+
+    li:before {
+        width: 12px !important;
+        height: 12px !important;
+        position: absolute !important;
+        left: 0 !important;
+        content: '' !important;
+        border: 3px solid transparent !important;
+        border-radius: 2px !important;
+    }
+
+    li.inactive:before {
+        background: transparent !important;
+    }
+
+    &.ct-legend-inside {
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+    }
+
+
+    .ct-series-0:before {
+        background-color: nth($ct-series-colors, 0 + 1) !important;
+        border-color: nth($ct-series-colors, 0 + 1) !important;
+    }
+
+    .ct-series-1:before {
+        background-color: nth($ct-series-colors, 1 + 1) !important;
+        border-color: nth($ct-series-colors, 1 + 1) !important;
+    }
+
+    .ct-series-2:before {
+        background-color: nth($ct-series-colors, 2 + 1) !important;
+        border-color: nth($ct-series-colors, 2 + 1) !important;
+    }
+}

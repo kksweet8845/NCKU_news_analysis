@@ -27,11 +27,13 @@ class KeywordToday:
             self.keywords_group.append(New.objects.filter(cluster_day__cluster=i, cluster_day__date=(date.today() - timedelta(days=1)).isoformat()))
 
     def getWordFreq(self):
+
         news = New.objects.filter(cluster_day__date=(date.today() - timedelta(days=1)).isoformat() )
 
         if os.path.isfile(f'{self.util_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl'):
             with open(f'{self.util_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl', 'rb') as file:
                 return pickle.load(file)
+
         # news = New.objects.filter(cluster_day__date='2020-05-30', cluster_day__cluster=1)
         df = self.preprocessing(news)
 
@@ -62,6 +64,43 @@ class KeywordToday:
             pickle.dump(count, file)
         return count
 
+    def getWordFreqToday(self):
+        news = New.objects.filter(cluster_day__date=date.today().isoformat() )
+
+        if os.path.isfile(f'{self.util_path}/{date.today().isoformat()}.pkl'):
+            with open(f'{self.util_path}/{date.today().isoformat()}.pkl', 'rb') as file:
+                return pickle.load(file)
+        # news = New.objects.filter(cluster_day__date='2020-05-30', cluster_day__cluster=1)
+        df = self.preprocessing(news)
+
+        # print(len(df))
+
+        # word_ls = self.ws(df['content'])
+        word_ls = [ json.loads(dtag.split) for dtag in Tagger.objects.filter(news_id__in=df['id'])]
+
+        ls = []
+        for dword in word_ls:
+            ls.append(' '.join(word[0] for word in dword))
+        # ls = [ self.tagger([content]) for content in tqdm(df['content']) ]
+
+        # print(len(ls))
+        vec = CountVectorizer()
+        matrix = vec.fit_transform(ls)
+        name = vec.get_feature_names()
+        row, col = matrix.shape
+
+        count = {}
+        for dc in range(col):
+            sum = 0
+            for dr in range(row):
+                sum += matrix[dr, dc]
+            count[name[dc]] = sum
+
+        with open(f'{self.util_path}/{date.today().isoformat()}.pkl', 'wb') as file:
+            pickle.dump(count, file)
+        return count
+
+
     def getGroupKeywords(self):
 
         ls = []
@@ -86,7 +125,6 @@ class KeywordToday:
         df = self.getNewHotword()
 
         relative_news = self.find_relative_news(keywords, df)
-
         return keywords, relative_news
 
     def text_preprocessing(self, raw):
@@ -152,10 +190,11 @@ class KeywordToday:
 
     def genTfidf(self, matrix_tuple):
         vectorizer = TfidfVectorizer()
-        try:
-            tfidf_vec = vectorizer.fit_transform([ dl[1] for dl in matrix_tuple])
-        except:
-            print(matrix_tuple)
+        # try:
+        tfidf_vec = vectorizer.fit_transform([ dl[1] for dl in matrix_tuple])
+        # except:
+        #     # print(matrix_tuple)
+        #     print("error")
 
         tfidf_arr = tfidf_vec.toarray()
         sort = np.argsort(tfidf_arr, axis=1)[:, -20:]
@@ -174,7 +213,7 @@ class KeywordToday:
         """
 
         # todayNews = New.objects.filter(cluster_day__date__gte=date.today().isoformat())
-        threeDayNews = New.objects.filter(date__gte='2020-05-29')
+        threeDayNews = New.objects.filter(date__gte=(date.today() - timedelta(days=3)).isoformat())
         df = pd.DataFrame(
             list(threeDayNews.values()),
             columns=['id', 'title', 'content', 'author', 'brand_id', 'sub_id', 'date', 'update_time', 'url']
@@ -192,7 +231,6 @@ class KeywordToday:
         for i in words:
             if len(i[1]) != 0:
                 ll.append(' '.join(word[0] for word in i[1]))
-        # print(len(ll), len(df))
         # assert len(ll) == len(df)
         vectorizer = TfidfVectorizer()
         try:
@@ -207,7 +245,7 @@ class KeywordToday:
             keywords = pd.Index(names)[sort].values
         except:
             keywords = pd.Index(names)[sort]
-        # print(len(df), len(keywords))
+
         keywords_tuple = list(zip([dt[0]for dt in words], keywords))
 
         return keywords_tuple
@@ -483,7 +521,7 @@ class KeywordThreeDay:
             keywords = pd.Index(names)[sort].values
         except:
             keywords = pd.Index(names)[sort]
-        print(len(df), len(keywords))
+
         keywords_tuple = list(zip([dt[0]for dt in words], keywords))
 
         return keywords_tuple
@@ -494,7 +532,7 @@ class KeywordThreeDay:
         for i in keywords:
             ls[i] = {}
 
-        for news_id, news_keywords in keywords_tuple:
+        for news_id, news_keywords in tqdm(keywords_tuple):
             news = New.objects.get(id=news_id)
             id = news.id
             date = news.date.isoformat()
