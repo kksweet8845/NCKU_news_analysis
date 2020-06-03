@@ -274,11 +274,11 @@ def sentimentWeek(request):
 
 
 def newsReview(request):
-    keywordToday = KeywordThreeDay()
-    keywords, relative_news = keywordToday.getGroupKeywords()
+    keywordThree = KeywordThreeDay()
+    keywords, relative_news = keywordThree.getGroupKeywords()
 
-    mem, keyword_ls = keywordToday.genData(keywords, relative_news)
-
+    mem, keyword_ls = keywordThree.genData(keywords, relative_news)
+    
     for i, dm in enumerate(mem):
         rst = get_standpoint(keyword_ls[i]['relative_news'])
         dm.update(rst)

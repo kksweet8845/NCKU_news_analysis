@@ -83,7 +83,7 @@ class SentimentAnalysis:
             good = 0
             happy = 0
             for word in news:
-                if word in word_list:
+                if word[0] in word_list:
                     index = word_list.index(word[0])
                     if sentiment_classifier[index] in ['PA', 'PE']:
                         happy += sentiment_score[index]
@@ -102,7 +102,6 @@ class SentimentAnalysis:
 
             #positive_list.append(positive/len(news))
             #negative_list.append(negative/len(news))
-
             a = Sentiment(news=query_set[i].news, date=query_set[i].date, happy=happy,
                           good=good, surprise=surprise,
                           anger=anger, sad=sad,

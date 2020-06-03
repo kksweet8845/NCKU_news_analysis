@@ -172,6 +172,7 @@ export default function KeywordChoose(props) {
 
     useEffect(() => {
         if(isFetchSentiment == false) {
+            setIsFetchSentiment(true)
             fetch('/analysis/sentimentWeek', {
                 method: "get",
             })
@@ -180,9 +181,9 @@ export default function KeywordChoose(props) {
             })
             .then((data)=> {
                 setSentiment(data);
-                setIsFetchSentiment(true)
 
                 if(isFetchReview == false) {
+                    setIsFetchReview(true)
                     fetch('/analysis/newsReview', {
                         method: "get",
                     })
@@ -191,7 +192,6 @@ export default function KeywordChoose(props) {
                     })
                     .then((data)=> {
                         setReviewContent(data);
-                        setIsFetchReview(true)
                     })
                 }
             })

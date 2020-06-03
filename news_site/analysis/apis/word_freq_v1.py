@@ -392,15 +392,18 @@ class KeywordThreeDay:
             # groupWised_content.append((i, self.tagger(dl['content'])))
 
         # print(groupWised_content)
-
+        print("here")
         keywords_tuple = self.genTfidf(groupWised_content)
 
+        print("here1")
         keywords = [ dk[1][0] for dk in keywords_tuple ]
 
         df = self.getNewHotword()
 
+        print("here2")
         relative_news = self.find_relative_news(keywords, df)
 
+        print("here3")
         return keywords, relative_news
 
     def text_preprocessing(self, raw):
@@ -488,19 +491,19 @@ class KeywordThreeDay:
         """
 
         # todayNews = New.objects.filter(cluster_day__date__gte=date.today().isoformat())
-        threeDayNews = New.objects.filter(date__gte='2020-05-29')
-        df = pd.DataFrame(
-            list(threeDayNews.values()),
-            columns=['id', 'title', 'content', 'author', 'brand_id', 'sub_id', 'date', 'update_time', 'url']
-        )
-        df = df \
-            .apply(self.text_preprocessing, axis=1) \
-            .apply(self.value_convert, axis=1) \
-            .dropna()
+        # threeDayNews = New.objects.filter(date__gte=(date.today() - timedelta(days=3)).isoformat())
+        # df = pd.DataFrame(
+        #     list(threeDayNews.values()),
+        #     columns=['id', 'title', 'content', 'author', 'brand_id', 'sub_id', 'date', 'update_time', 'url']
+        # )
+        # df = df \
+        #     .apply(self.text_preprocessing, axis=1) \
+        #     .apply(self.value_convert, axis=1) \
+        #     .dropna()
 
         # words = self.ws(df['content'])
 
-        words = [ (dtag.news_id, json.loads(dtag.split))  for dtag in Tagger.objects.filter(news_id__in=df['id'])]
+        words = [ (dtag.news_id, json.loads(dtag.split))  for dtag in Tagger.objects.filter(news__date__gte=(date.today() - timedelta(days=3)).isoformat())]
         # TODO need to be done in workflow
         ll = []
         for i in words:
