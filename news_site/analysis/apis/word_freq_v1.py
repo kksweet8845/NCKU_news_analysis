@@ -224,7 +224,6 @@ class KeywordToday:
         # words = self.ws(df['content'])
 
         words = [ (dtag.news_id, json.loads(dtag.split))  for dtag in Tagger.objects.filter(news_id__in=df['id'])]
-        # TODO need to be done in workflow
         ll = []
         for i in words:
             if len(i[1]) != 0:

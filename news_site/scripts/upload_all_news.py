@@ -38,7 +38,7 @@ def get_news_today(request):
         except Exception as e:
             print(e)
             print('error in crawler')
-            continue
+            pass
 
     return HttpResponse(True)
 
@@ -47,7 +47,7 @@ def todayNews_crawling(request):
     ls = [
         ('cts', cts_crawling()),
         ('ltn',ltn_crawling()),
-        # ('nowNews', nowNews_crawling()),
+        ('nowNews', nowNews_crawling()),
         ('udn', udn_crawling()),
         ('ftvnews', ftvnews_crawling()),
         ('pts', pts_crawling()),
@@ -69,7 +69,7 @@ def todayNews_crawling(request):
                 errors.append({'error': n.errors, 'data': n.data})
                 pass
         print(len(new_data))
-        # result = i.insertNews(new_data)
+        result = i.insertNews(new_data)
         if result != None:
             result = pd.DataFrame([ dr.__dict__ for dr in result],
                               columns=['id', 'title', 'content', 'author', 'brand_id', 'sub_id', 'date', 'update_time', 'url'])
@@ -102,6 +102,6 @@ def analysis_aspect(df):
 
 def run():
     # Crawling the news
-    get_news_today(None)
+    # get_news_today(None)
     todayNews_crawling(None)
     # tagger
