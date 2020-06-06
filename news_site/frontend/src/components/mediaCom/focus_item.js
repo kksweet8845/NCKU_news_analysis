@@ -35,7 +35,7 @@ const useStyle = makeStyles( {
         display: 'flex',
         alignSelf: 'center',
         color: '#5eb7b7',
-        fontSize: '22px',
+        fontSize: '1.45rem',
         fontWeight: 'bold',
     },
     frameContent: {
@@ -88,12 +88,14 @@ const useStyle = makeStyles( {
     linkHref: {
         display: 'block',
         // color: 'block',
-        fontSize: '20px',
+        fontSize: '1.35rem',
         fontWeight: '500',
         lineHeight: '1.2',
         textAlign: 'left',
         textDecoration: 'none',
         color: 'inherit',
+        marginBottom: '10px',
+        paddingLeft: '40px', 
     },
     frameHover: {
         cursor: 'pointer',
@@ -136,6 +138,20 @@ export default function Focus_item(props) {
                 </a>
     })
 
+    let linkDOM2 = []
+    for(const [i, obj] of props.links.entries()){
+        if(i>=10){
+            break
+        }
+        linkDOM2.push(<a 
+            className={classes.linkHref} 
+            href={obj.href}
+            target="_blank"
+            onClick={stopPropagation}>
+            {obj.title}
+            </a>)
+    }
+
     return (
         <article
             className={`${classes.frame}`}
@@ -152,7 +168,7 @@ export default function Focus_item(props) {
                 {/* <p className={`${classes.contentSummary}`}>{props.summary}</p> */}
                 <article className={classes.contentLink}>
                     {/* <h4 className={`${classes.linkTitle}`} style={colorClasses.fontColor}>新聞連結</h4> */}
-                    {linkDOM}
+                    {linkDOM2}
                 </article>
                 {/* <p className={`${classes.contentReadmore}`} style={colorClasses.fontColor}> watch more </p> */}
             </section>

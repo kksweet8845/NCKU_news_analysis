@@ -72,11 +72,14 @@ const useStyles = makeStyles({
         border: '3px solid #aacfcf',
         backgroundColor: 'white',
         gridArea: 'pos',
+        paddingRight: '40px',
+        textAlign: 'right'
     },
     newsNeg: {
         border: '3px solid #b21f66',
         backgroundColor: 'white',
         gridArea: 'neg',
+        textAlign: 'left'
     },
     link: {
         display: 'block',
