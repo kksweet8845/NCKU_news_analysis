@@ -198,7 +198,6 @@ export default function KeywordChoose(props) {
                     })
                     .then((data)=> {
                         setReviewContent(data);
-                        setIsFetchReview(true);
                     })
                 }
             })
