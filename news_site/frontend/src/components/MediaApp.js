@@ -143,7 +143,7 @@ export default function MediaApp(props) {
     const [nowidx, setNowidx] = useState(11)
 
     const media_index = [
-        1,4,5,7,8,9,10,11,12,13,14,15,16,18
+        1,4,5,7,8,10,11,12,13,14,15
     ]
 
     const initObj = {
@@ -280,8 +280,6 @@ export default function MediaApp(props) {
             'img': 'https://imgur.com/uu3KeZh.png',},
         8: {'name': '中時電子報',
             'img': 'https://imgur.com/VLtOCJQ.png',},
-        9: {'name': '今日新聞',
-            'img': 'https://imgur.com/KVdihFa.png',},
         10: {'name': '公視',
             'img': 'https://imgur.com/DvrxIyE.png',},
         11: {'name': '自由時報',
@@ -294,10 +292,10 @@ export default function MediaApp(props) {
             'img': 'https://imgur.com/yRuX5jc.png',},
         15: {'name': '新頭殼',
             'img': 'https://imgur.com/OM1u1BS.png',},
-        16: {'name': '聯合新聞網',
-            'img': 'https://imgur.com/Y8x2Ugi.png',},
-        18: {'name': '華視',
-            'img': 'https://imgur.com/Ajq8wTX.png',},
+        // 16: {'name': '聯合新聞網',
+        //     'img': 'https://imgur.com/Y8x2Ugi.png',},
+        // 18: {'name': '華視',
+        //     'img': 'https://imgur.com/Ajq8wTX.png',},
     }
 
     var handleClick = (e) => {

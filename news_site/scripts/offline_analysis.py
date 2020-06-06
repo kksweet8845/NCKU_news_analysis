@@ -121,7 +121,7 @@ def crawling():
     get_news_today()
 
 def autoTagger():
-    news_query = New.objects.filter(Q(date__gte="2020-05-18") & Q(date__lte='2020-06-01'))
+    news_query = New.objects.filter(Q(date__gte="2020-05-18") & Q(date__lte='2020-06-05'))
     sentiment_analysis = Split()
     data = sentiment_analysis.seperate_news(news_query)
 
@@ -159,11 +159,11 @@ def run():
 
     autoTagger()
 
-    autoSentiment()
+    # autoSentiment()
 
-    autoAspect()
+    # autoAspect()
 
-    autoStandpoint()
+    # autoStandpoint()
 
 
 

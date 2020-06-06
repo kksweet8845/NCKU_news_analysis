@@ -138,6 +138,7 @@ def autoTagger():
 def autoWordFreq():
     keywordToday = KeywordToday()
     keywordToday.getWordFreqToday()
+    # keywordToday.getWordFreq()
 
 def autoSentiment():
     news_query = Tagger.objects.filter(Q(date=date.today().isoformat()))
@@ -212,19 +213,19 @@ def run():
     # Crawling the news
     # todayNews_crawling(None)
     # tagger
-    crawling()
+    # crawling()
 
-    autoTagger()
+    # autoTagger()
 
     autoSentiment()
 
-    autoAspect()
+    # autoAspect()
 
-    autoStandpoint()
+    # autoStandpoint()
 
-    autoClustering()
+    # autoClustering()
 
-    autoClusteringThree()
+    # autoClusteringThree()
 
-    autoWordFreq()
+    # autoWordFreq()
 

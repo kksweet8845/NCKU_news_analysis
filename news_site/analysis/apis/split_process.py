@@ -7,7 +7,7 @@ from tqdm import tqdm
 from django.db.models import Q
 from newsdb.models import New, Sentiment, Tagger
 from datetime import date
-import json
+import json, re
 from news_site import settings
 from ckiptagger import data_utils, WS, POS
 
@@ -18,10 +18,17 @@ class Split:
         # self.ws = WS(util_path + '/data')
         pass
 
-    def seperate(self, sentence):
-        words = pseg.cut(sentence)
-        # words = self.ws([sentence])[0]
-        return words
+    def seperate(self, content):
+
+        sents = re.split(r'[;。？?!！]', content)
+
+        sents_ls = []
+        words_ls = []
+        for sent in sents:
+            sents_ls.append(( sent, pseg.cut(sent)))
+            words_ls.extend(pseg.cut(sent))
+
+        return words_ls, sents_ls
 
     def is_chinese(self, uchar):
         if uchar >= u'\u4e00' and uchar <= u'\u9fa5':
@@ -57,11 +64,11 @@ class Split:
         i = 0
         for news in tqdm(news_list):
             temp_list = []
-            words = self.seperate(news)
+            words, sents = self.seperate(news)
             for word, flag in words:
                 temp_list.append((word, flag))
             seperated_word_list.append(temp_list)
-            a = Tagger(news=query_set[i], split=json.dumps(temp_list), date=query_set[i].date)
+            a = Tagger(news=query_set[i], split=json.dumps(temp_list), sents_split=json.dumps(sents), date=query_set[i].date)
             a.save()
             i += 1
         return seperated_word_list

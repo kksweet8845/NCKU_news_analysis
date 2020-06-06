@@ -192,6 +192,7 @@ export default function ForeignPubApp(props) {
 
     useEffect(() => {
         if(isFetchWordcloud == false) {
+            setIsFetchWordcloud(true)
             fetch(`/analysis/relativeKeyword/${topic}`, {
                 method: "get",
             })
@@ -202,22 +203,21 @@ export default function ForeignPubApp(props) {
                 data = data.sort((a, b)=>{
                     return a.size - b.size
                 })
-                setIsFetchWordcloud(true)
                 setWordCloudData(data.slice(0,20));
+                fetch(`/analysis/keywordAnalysis/${topic}`, {
+                    method: "get",
+                })
+                .then((res) => {
+                    return res.json()
+                })
+                .then((data)=> {
+                    setTimelineData(data);
+                })
             })
         }
 
         if(isFetchTimeline == false) {
-            fetch(`/analysis/keywordAnalysis/${topic}`, {
-                method: "get",
-            })
-            .then((res) => {
-                return res.json()
-            })
-            .then((data)=> {
-                setIsFetchTimeline(true)
-                setTimelineData(data);
-            })
+            setIsFetchTimeline(true)
         }
     });
 
