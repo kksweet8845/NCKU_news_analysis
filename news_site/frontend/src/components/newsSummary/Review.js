@@ -67,6 +67,7 @@ export default function Review(props) {
     const widthReview = ['60%', '66%', '71%', '76%', '80%', '75%', '70%', '65%'];
 
     const content = props.reviewContent.map((obj, index)=>{
+        console.log(obj.newsNum)
         return  <ReviewFrame
                     color= {colorReview[index%4]}
                     num= {index + 1}
@@ -76,7 +77,7 @@ export default function Review(props) {
                     links={obj.links}
                     sentiment={obj.sentiment}
                     standpoint={obj.standpoint}
-                    width= {`${50 + (obj.news_num/props.reviewContent[0].newsNum) * 40}%`}>
+                    width= {`${50 + (obj.newsNum/props.reviewContent[0].newsNum) * 40}%`}>
                 </ReviewFrame>
     })
 

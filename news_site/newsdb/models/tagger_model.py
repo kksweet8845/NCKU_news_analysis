@@ -4,6 +4,9 @@ from datetime import date
 class Tagger(models.Model):
     news = models.ForeignKey(New, on_delete=models.CASCADE)
     split = models.TextField()
+    sents_split = models.TextField(
+        default=""
+    )
     date = models.DateField(
         auto_now=False,
         auto_now_add=False,

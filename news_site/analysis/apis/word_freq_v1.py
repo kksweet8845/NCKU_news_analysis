@@ -1,4 +1,4 @@
-from newsdb.models import Subject, Brand, Brand_sub, New, Word, Tagger
+from newsdb.models import Subject, Brand, Brand_sub, New, Word, Tagger, Aspect
 # from ckiptagger import data_utils, construct_dictionary, WS, POS
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 import numpy as np
@@ -15,8 +15,8 @@ import json
 class KeywordToday:
     def __init__(self):
         self.get20Group()
-        self.util_path = settings.BASE_DIR + '/analysis/apis/utils/ckiptagger'
-        self.util = settings.BASE_DIR + '/analysis/apis/utils/word_count'
+        self.util_path = settings.BASE_DIR + '/analysis/apis/utils/'
+        self.util_count_path = settings.BASE_DIR + '/analysis/apis/utils/word_count'
         # self.ws = WS(self.util_path + '/data')
         # self.pos = POS(self.util_path + '/data')
 
@@ -30,8 +30,8 @@ class KeywordToday:
 
         news = New.objects.filter(cluster_day__date=(date.today() - timedelta(days=1)).isoformat() )
 
-        if os.path.isfile(f'{self.util_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl'):
-            with open(f'{self.util_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl', 'rb') as file:
+        if os.path.isfile(f'{self.util_count_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl'):
+            with open(f'{self.util_count_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl', 'rb') as file:
                 return pickle.load(file)
 
         # news = New.objects.filter(cluster_day__date='2020-05-30', cluster_day__cluster=1)
@@ -60,15 +60,15 @@ class KeywordToday:
                 sum += matrix[dr, dc]
             count[name[dc]] = sum
 
-        with open(f'{self.util_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl', 'wb') as file:
+        with open(f'{self.util_count_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl', 'wb') as file:
             pickle.dump(count, file)
         return count
 
     def getWordFreqToday(self):
         news = New.objects.filter(cluster_day__date=date.today().isoformat() )
 
-        if os.path.isfile(f'{self.util_path}/{date.today().isoformat()}.pkl'):
-            with open(f'{self.util_path}/{date.today().isoformat()}.pkl', 'rb') as file:
+        if os.path.isfile(f'{self.util_count_path}/{date.today().isoformat()}.pkl'):
+            with open(f'{self.util_count_path}/{date.today().isoformat()}.pkl', 'rb') as file:
                 return pickle.load(file)
         # news = New.objects.filter(cluster_day__date='2020-05-30', cluster_day__cluster=1)
         df = self.preprocessing(news)
@@ -96,12 +96,22 @@ class KeywordToday:
                 sum += matrix[dr, dc]
             count[name[dc]] = sum
 
-        with open(f'{self.util_path}/{date.today().isoformat()}.pkl', 'wb') as file:
+        with open(f'{self.util_count_path}/{date.today().isoformat()}.pkl', 'wb') as file:
             pickle.dump(count, file)
         return count
 
 
     def getGroupKeywords(self):
+
+        keywords_filename = f"{self.util_path}/group_keywords/keywords-oneDay-{(date.today() - timedelta(days=1)).isoformat()}.pkl"
+        relative_filename = f"{self.util_path}/group_keywords/relative-news-oneDay-{(date.today() - timedelta(days=1)).isoformat()}.pkl"
+
+        if os.path.isfile(keywords_filename) and os.path.isfile(relative_filename):
+
+            keywords_file = open(keywords_filename, "rb")
+            relative_file = open(relative_filename, "rb")
+
+            return pickle.load(keywords_file), pickle.load(relative_file)
 
         ls = []
         for i, dq in enumerate(self.keywords_group):
@@ -125,6 +135,12 @@ class KeywordToday:
         df = self.getNewHotword()
 
         relative_news = self.find_relative_news(keywords, df)
+
+        with open(keywords_filename, "wb") as file:
+            pickle.dump(keywords, file)
+        with open(relative_filename, "wb") as file:
+            pickle.dump(relative_news, file)
+
         return keywords, relative_news
 
     def text_preprocessing(self, raw):
@@ -226,7 +242,6 @@ class KeywordToday:
         # words = self.ws(df['content'])
 
         words = [ (dtag.news_id, json.loads(dtag.split))  for dtag in Tagger.objects.filter(news_id__in=df['id'])]
-        # TODO need to be done in workflow
         ll = []
         for i in words:
             if len(i[1]) != 0:
@@ -274,6 +289,19 @@ class KeywordToday:
                         ls[main_keyword]['relative_keywords'] = []
         return ls
 
+    def chooseKeyword(self, uni_key, uni_count):
+
+        # wordFreq = None
+        # if os.path.isfile(f'{self.util_count_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl'):
+        #     with open(f'{self.util_count_path}/{date.today().isoformat()}.pkl', 'rb') as file:
+        #         wordFreq = pickle.load(file)
+
+        max_index = np.argmax(uni_count)
+
+        print(uni_key[max_index])
+        return uni_key[max_index]
+
+
     def genData(self, keyword, relative_news):
         ls = []
         # print(relative_news[keyword].keys())
@@ -281,16 +309,18 @@ class KeywordToday:
             if date != 'relative_keywords':
                 tmp = {
                     'date': date,
-                    'keyword': 'test'
+                    'keyword': relative_news[keyword]['relative_keywords'][0]
                 }
                 posLinks = []
                 negLinks = []
                 n = 0
                 # print(relative_news[keyword][date])
+                keyword_list = []
                 for news_id in relative_news[keyword][date].keys():
                     url = relative_news[keyword][date][news_id]['url']
                     title = relative_news[keyword][date][news_id]['title']
-                    if (n % 2) == 0:
+                    keyword_list.extend(relative_news[keyword][date][news_id]['keywords'])
+                    if Aspect.objects.get(new__id=news_id).aspect <= 1:
                         posLinks.append({
                             'title': title,
                             'url' : url
@@ -303,6 +333,8 @@ class KeywordToday:
                     n += 1
                 tmp['posLinks'] = posLinks
                 tmp['negLinks'] = negLinks
+                uni_keywords, keywords_counts = np.unique(keyword_list, return_counts=True)
+                tmp['keyword'] = self.chooseKeyword(uni_keywords, keywords_counts)
                 ls.append(tmp)
 
         wordCloud = []
@@ -326,8 +358,8 @@ def zero(num):
 class KeywordThreeDay:
     def __init__(self):
         self.get20Group()
-        self.util_path = settings.BASE_DIR + '/analysis/apis/utils/ckiptagger'
-        self.util = settings.BASE_DIR + '/analysis/apis/utils/word_count'
+        self.util_path = settings.BASE_DIR + '/analysis/apis/utils'
+        self.util_count_path = settings.BASE_DIR + '/analysis/apis/utils/word_count'
         # self.ws = WS(self.util_path + '/data')
         # self.pos = POS(self.util_path + '/data')
 
@@ -343,7 +375,7 @@ class KeywordThreeDay:
     def getWordFreq(self):
         news = New.objects.filter(cluster_day__date=date.today().isoformat())
 
-        if os.path.isfile(f'{self.util_path}/{date.today().isoformat()}.pkl'):
+        if os.path.isfile(f'{self.util_count_path}/{date.today().isoformat()}.pkl'):
             with open(f'{self.util_path}/{date.today().isoformat()}.pkl', 'rb') as file:
                 return pickle.load(file)
         # news = New.objects.filter(cluster_day__date='2020-05-30', cluster_day__cluster=1)
@@ -372,11 +404,22 @@ class KeywordThreeDay:
                 sum += matrix[dr, dc]
             count[name[dc]] = sum
 
-        with open(f'{self.util_path}/{date.today().isoformat()}.pkl', 'wb') as file:
+        with open(f'{self.util_count_path}/{date.today().isoformat()}.pkl', 'wb') as file:
             pickle.dump(count, file)
         return count
 
     def getGroupKeywords(self):
+
+
+        keywords_filename = f"{self.util_path}/group_keywords/keywords-threeDay-{(date.today() - timedelta(days=1)).isoformat()}.pkl"
+        relative_filename = f"{self.util_path}/group_keywords/relative-news-threeDay-{(date.today() - timedelta(days=1)).isoformat()}.pkl"
+
+        if os.path.isfile(keywords_filename) and \
+            os.path.isfile(relative_filename):
+            file_keywords = open(keywords_filename, "rb")
+            file_relative = open(relative_filename, "rb")
+
+            return pickle.load(file_keywords), pickle.load(file_relative)
 
         ls = []
         for i, dq in enumerate(self.keywords_group):
@@ -392,18 +435,25 @@ class KeywordThreeDay:
             # groupWised_content.append((i, self.tagger(dl['content'])))
 
         # print(groupWised_content)
-        print("here")
         keywords_tuple = self.genTfidf(groupWised_content)
 
-        print("here1")
         keywords = [ dk[1][0] for dk in keywords_tuple ]
 
         df = self.getNewHotword()
 
-        print("here2")
-        relative_news = self.find_relative_news(keywords, df)
+        relative_news, ids_ls = self.find_relative_news(keywords, df)
 
-        print("here3")
+
+        for key in ids_ls.keys():
+            sum_i = Summary(ids_ls[key])
+            relative_news[key]['summary'] = sum_i.getSummary()
+
+        with open(keywords_filename, "wb") as file:
+            pickle.dump(keywords, file)
+
+        with open(relative_filename, "wb") as file:
+            pickle.dump(relative_news, file)
+
         return keywords, relative_news
 
     def text_preprocessing(self, raw):
@@ -535,11 +585,17 @@ class KeywordThreeDay:
         for i in keywords:
             ls[i] = {}
 
+        ids_ls = {}
         for news_id, news_keywords in tqdm(keywords_tuple):
             news = New.objects.get(id=news_id)
             id = news.id
             date = news.date.isoformat()
             for main_keyword in keywords:
+                if main_keyword in ids_ls.keys():
+                    ids_ls[main_keyword].append(id)
+                else:
+                    ids_ls[main_keyword] = []
+                    ids_ls[main_keyword].append(id)
                 if main_keyword in news_keywords:
                     if date in ls[main_keyword].keys():
                         t = pd.Series(news_keywords)
@@ -551,7 +607,7 @@ class KeywordThreeDay:
                     else:
                         ls[main_keyword][date] = {}
                         ls[main_keyword]['relative_keywords'] = []
-        return ls
+        return ls, ids_ls
 
     def genData(self, keywords, relative_news):
         ls = []
@@ -560,7 +616,8 @@ class KeywordThreeDay:
         for keyword in keywords:
             tmp = {
                 'keyword' : keyword,
-                'summary' : 'test',
+                # 'summary' : relative_news[keyword]['summary'],
+                'summary' : '',
                 'reportNum' : [0]*18
             }
             keyword_tmp = {
@@ -570,7 +627,7 @@ class KeywordThreeDay:
             newsNum = 0
             links = []
             for date in relative_news[keyword].keys():
-                if date != 'relative_keywords':
+                if date != 'relative_keywords' and date != "summary":
                     for id in relative_news[keyword][date].keys():
                         brand_index = New.objects.get(id=id).brand_id - 1
                         links.append({
@@ -589,3 +646,63 @@ class KeywordThreeDay:
 
 
         return ls, keywords_ls
+
+
+
+class Summary:
+    def __init__(self, ids):
+        self.ids = ids
+        self.util_count_path = settings.BASE_DIR + '/analysis/apis/utils/word_count'
+        with open(f"{self.util_count_path}/{(date.today() - timedelta(days=1)).isoformat()}.pkl", "rb") as file:
+            self.freq_table = pickle.load(file)
+
+
+    def fetchNews(self):
+        # news = New.objects.filter(id__in=self.ids)
+        # print(Tagger.objects.filter(news__id__in=self.ids)[0].sents_split)
+        all_sents = [  ( dtag.news_id, json.loads(dtag.sents_split)) for dtag in Tagger.objects.filter(news__id__in=self.ids)]
+
+        self.all_sents = all_sents
+
+
+    def sentence_scores(self):
+
+        sent_weight = []
+        cand_sents = []
+        for news_id, data in tqdm(self.all_sents):
+            for raw_sent, splitted_sent in data:
+                sent_wordcount_without_stop_words = 0
+                sent_word_weight = 0
+                for word, flag in splitted_sent:
+                    if word in self.freq_table and len(word) >= 2:
+                        sent_wordcount_without_stop_words += 1
+                        sent_word_weight += self.freq_table[word]
+                if sent_wordcount_without_stop_words != 0:
+                    sent_word_weight = sent_word_weight / sent_wordcount_without_stop_words
+                sent_weight.append(sent_word_weight)
+                cand_sents.append(raw_sent)
+
+        sum = 0
+        for score in sent_weight:
+            sum += score
+
+        avg_score = sum / len(sent_weight)
+
+        assert len(cand_sents) == len(sent_weight)
+        return list(zip(cand_sents, sent_weight)), avg_score
+
+
+    def article_summary(self, sents_tuple, treshold):
+        tmp = ""
+        for cand_sent, sent_weight in sents_tuple:
+            if sent_weight > treshold*3:
+                tmp += " " + cand_sent
+
+        return tmp
+
+
+    def getSummary(self):
+        self.fetchNews()
+        sents_tuple, treshold = self.sentence_scores()
+        return self.article_summary(sents_tuple, treshold)
+

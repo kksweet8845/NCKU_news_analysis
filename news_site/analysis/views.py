@@ -383,7 +383,7 @@ def mediaAnalysis(requeset):
         for x in range(10):
             temp_list = []
             for y in news_no:
-                y = Cluster_three_day.objects.get(news__id=y, date_today=(date.today() - timedelta(days=1)).isoformat())
+                y = Cluster_three_day.objects.get(news__id=y, date_today=(date.today() - timedelta(days=1)).isoformat()).order_by('date')
                 if y.cluster == x+1:
                     temp_list.append({'title': all_news.get(id=y.news_id).title, 'url': all_news.get(id=y.news_id).url})
             focus_news.append(temp_list)

@@ -61,6 +61,6 @@ class Split:
         return seperated_word_list
 
 def run():
-    news_query = New.objects.filter(Q(date__gt="2020-05-24") & Q(date__lt='2020-06-01'))
+    news_query = New.objects.filter(Q(date__gt="2020-05-29"))
     sentiment_analysis = Split()
     data = sentiment_analysis.seperate_news(news_query)
