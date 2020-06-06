@@ -273,25 +273,25 @@ export default function News(props) {
                 data-aos-duration='800'
                 // onMouseEnter={()=>{setChart({gridArea: 'a', show: true, data: data.a.data})}}
             >
-                <h4 className={classes.a_topic}>{data.a.topic}</h4>
+                <h4 className={classes.a_topic}>正向</h4>
                 <p className={classes.a_title}>{data.a.title}</p>
             </section>
             <section
                 className={`${classes.small_frame} ${classes.frame_b}`}
                 data-aos='flip-up'
                 data-aos-duration='800'
-                onMouseEnter={()=>{setChart({gridArea: 'b', show: true, data: data.b.data})}}
+                onMouseEnter={()=>{setChart({gridArea: 'b', show: true, data: data.b.score})}}
             >
-                <h4 className={`${classes.small_topic} ${classes.b_topic}`}>{data.b.topic}</h4>
+                <h4 className={`${classes.small_topic} ${classes.b_topic}`}>驚奇</h4>
                 <p className={`${classes.small_title} ${classes.b_title}`}>{data.b.title}</p>
             </section>
             <section
                 className={`${classes.small_frame} ${classes.frame_c}`}
                 data-aos='flip-up'
                 data-aos-duration='800'
-                onMouseEnter={()=>{setChart({gridArea: 'c', show: true, data: data.c.data})}}
+                onMouseEnter={()=>{setChart({gridArea: 'c', show: true, data: data.c.score})}}
             >
-                <h4 className={`${classes.small_topic} ${classes.c_topic}`}>{data.c.topic}</h4>
+                <h4 className={`${classes.small_topic} ${classes.c_topic}`}>哀傷</h4>
                 <p className={`${classes.small_title} ${classes.c_title}`}>{data.c.title}</p>
             </section>
             <section
@@ -303,27 +303,27 @@ export default function News(props) {
                 className={`${classes.frame} ${classes.frame_e}`}
                 data-aos='zoom-in'
                 data-aos-duration='1200'
-                onMouseEnter={()=>{setChart({gridArea: 'e', show: true, data: data.e.data})}}
+                onMouseEnter={()=>{setChart({gridArea: 'e', show: true, data: data.e.score})}}
             >
-                <h4 className={classes.e_topic}>{data.e.topic}</h4>
+                <h4 className={classes.e_topic}>負面</h4>
                 <p className={classes.e_title}>{data.e.title}</p>
             </section>
             <section
                 className={`${classes.small_frame} ${classes.frame_f}`}
                 data-aos='flip-up'
                 data-aos-duration='800'
-                onMouseEnter={()=>{setChart({gridArea: 'f', show: true, data: data.f.data})}}
+                onMouseEnter={()=>{setChart({gridArea: 'f', show: true, data: data.f.score})}}
             >
-                <h4 className={`${classes.small_topic} ${classes.f_topic}`}>{data.f.topic}</h4>
+                <h4 className={`${classes.small_topic} ${classes.f_topic}`}>快樂</h4>
                 <p className={`${classes.small_title} ${classes.f_title}`}>{data.f.title}</p>
             </section>
             <section
                 className={`${classes.small_frame} ${classes.frame_g}`}
                 data-aos='flip-up'
                 data-aos-duration='800'
-                onMouseEnter={()=>{setChart({gridArea: 'g', show: true, data: data.g.data})}}
+                onMouseEnter={()=>{setChart({gridArea: 'g', show: true, data: data.g.score})}}
             >
-                <h4 className={`${classes.small_topic} ${classes.g_topic}`}>{data.g.topic}</h4>
+                <h4 className={`${classes.small_topic} ${classes.g_topic}`}>憤怒</h4>
                 <p className={`${classes.small_title} ${classes.g_title}`}>{data.g.title}</p>
             </section>
             <SentimentChart
