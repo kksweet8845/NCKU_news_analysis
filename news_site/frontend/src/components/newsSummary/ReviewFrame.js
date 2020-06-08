@@ -92,7 +92,7 @@ const useStyle = makeStyles( {
         color: 'black',
         fontSize: '20px',
         fontWeight: '400',
-        lineHeight: '1.2',
+        lineHeight: '1.6',
     },
     frameHover: {
         cursor: 'pointer',
@@ -188,7 +188,14 @@ export default function ReviewFrame(props) {
                     <h4 className={`${classes.linkTitle}`} style={colorClasses.fontColor}>新聞連結</h4>
                     {linkDOM}
                 </article>
-                <p className={`${classes.contentReadmore}`} style={colorClasses.fontColor}>看更多</p>
+                <a 
+                    className={`${classes.contentReadmore}`} 
+                    style={colorClasses.fontColor}
+                    href={`/frontend/keyword_analysis/${props.keyword}`}
+                    onClick={stopPropagation}
+                >
+                    看更多
+                </a>
             </section>
         </article>
     )

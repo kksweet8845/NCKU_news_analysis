@@ -274,11 +274,11 @@ def sentimentWeek(request):
 
 
 def newsReview(request):
-    keywordToday = KeywordThreeDay()
-    keywords, relative_news = keywordToday.getGroupKeywords()
+    keywordThree = KeywordThreeDay()
+    keywords, relative_news = keywordThree.getGroupKeywords()
 
-    mem, keyword_ls = keywordToday.genData(keywords, relative_news)
-
+    mem, keyword_ls = keywordThree.genData(keywords, relative_news)
+    
     for i, dm in enumerate(mem):
         rst = get_standpoint(keyword_ls[i]['relative_news'])
         dm.update(rst)
@@ -353,7 +353,7 @@ def mediaAnalysis(requeset):
     for i in range(17):
         news_no = []
         news_query = Cluster_three_day.objects.filter(Q(cluster__lte=10)
-                     & Q(date_today=date.today().isoformat()))
+                     & Q(date_today=(date.today()-timedelta(days=1)).isoformat()))
         for query in news_query:
             if query.news.brand_id == i+1:
                 news_no.append(query.news_id)
@@ -383,7 +383,7 @@ def mediaAnalysis(requeset):
         for x in range(10):
             temp_list = []
             for y in news_no:
-                y = Cluster_three_day.objects.get(news__id=y)
+                y = Cluster_three_day.objects.get(news__id=y, date_today=(date.today() - timedelta(days=1)).isoformat()).order_by('date')
                 if y.cluster == x+1:
                     temp_list.append({'title': all_news.get(id=y.news_id).title, 'url': all_news.get(id=y.news_id).url})
             focus_news.append(temp_list)
@@ -590,34 +590,28 @@ def testKeywordAnalysis(request, word):
 def testSevenSemantic(request):
     data = {
         'a': {
-            'topic': '正向',
             'title': '屏榮高中陳守心錄取醫學系 盼未來結合興趣回饋部落',
-            'data': [400, 430, 448, 470, 540, 1200, 1380],
+            'score': [400, 430, 448, 470, 540, 1200, 1380],
         },
         'b': {
-            'topic': '驚奇',
             'title': '北市助攻都會農友 讓農業變有趣又吸睛',
-            'data': [400, 430, 448, 470, 540, 200, 1380],
+            'score': [400, 430, 448, 470, 540, 200, 1380],
         },
         'c': {
-            'topic': '哀傷',
             'title': '新冠肺炎燒三個月 來台觀光收益損近千億元',
-            'data': [400, 430, 448, 1470, 540, 1200, 380],
+            'score': [400, 430, 448, 1470, 540, 1200, 380],
         },
         'e': {
-            'topic': '負面',
-            'title': '48公斤「世界最胖山貓」大叔照爆紅 因心臟病死亡',
-            'data': [400, 430, 448, 470, 540, 1200, 1380],
+            'title': '50公斤「世界最胖山貓」大叔照爆紅 因心臟病死亡',
+            'score': [400, 430, 448, 470, 540, 1200, 1380],
         },
         'f': {
-            'topic': '快樂',
             'title': '屏榮高中陳守心錄取醫學系 盼未來結合興趣回饋部落',
-            'data': [1400, 430, 448, 470, 540, 200, 380],
+            'score': [1400, 430, 448, 470, 540, 200, 380],
         },
         'g': {
-            'topic': '憤怒',
             'title': '屏榮高中陳守心錄取醫學系 盼未來結合興趣回饋部落',
-            'data': [400, 430, 1048, 470, 540, 100, 130],
+            'score': [400, 430, 1048, 470, 540, 100, 130],
         },
     }
     return JsonResponse(data, safe=False)

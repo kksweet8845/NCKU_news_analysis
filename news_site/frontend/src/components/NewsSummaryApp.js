@@ -47,32 +47,32 @@ export default function KeywordChoose(props) {
         a: {
             topic: '正向',
             title: '屏榮高中陳守心錄取醫學系 盼未來結合興趣回饋部落',
-            data: [400, 430, 448, 470, 540, 1200, 1380],
+            score: [400, 430, 448, 470, 540, 1200, 1380],
         },
         b: {
             topic: '驚奇',
             title: '北市助攻都會農友 讓農業變有趣又吸睛',
-            data: [400, 430, 448, 470, 540, 200, 1380],
+            score: [400, 430, 448, 470, 540, 200, 1380],
         },
         c: {
             topic: '哀傷',
             title: '新冠肺炎燒三個月 來台觀光收益損近千億元',
-            data: [400, 430, 448, 1470, 540, 1200, 380],
+            score: [400, 430, 448, 1470, 540, 1200, 380],
         },
         e: {
             topic: '負面',
-            title: '48公斤「世界最胖山貓」大叔照爆紅 因心臟病死亡',
-            data: [400, 430, 448, 470, 540, 1200, 1380],
+            title: '49公斤「世界最胖山貓」大叔照爆紅 因心臟病死亡',
+            score: [400, 430, 448, 470, 540, 1200, 1380],
         },
         f: {
             topic: '快樂',
             title: '屏榮高中陳守心錄取醫學系 盼未來結合興趣回饋部落',
-            data: [1400, 430, 448, 470, 540, 200, 380],
+            score: [1400, 430, 448, 470, 540, 200, 380],
         },
         g: {
             topic: '憤怒',
             title: '屏榮高中陳守心錄取醫學系 盼未來結合興趣回饋部落',
-            data: [400, 430, 1048, 470, 540, 100, 130],
+            score: [400, 430, 1048, 470, 540, 100, 130],
         },
     })
 
@@ -80,7 +80,7 @@ export default function KeywordChoose(props) {
         {
             keyword: '武漢肺炎',
             summary: '新冠肺炎疫情從1月底開始爆發，迄今已延燒近四個月，據內政部移民署最新統計顯示，今年2、3、4月疫情嚴重的時候，來台旅客量逐月驟減，4月份來台旅客數僅2,559人，創下歷史新低量，而三個月來台旅客量較去年同期狂減260.9萬人次，觀光收益減損多達969.3億元。',
-            news_num: 60,
+            newsNum: 60,
             reportNum: [44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43],
             sentiment: [4.51, 1, 2.18],
             standpoint: [3.51, 2],
@@ -101,7 +101,7 @@ export default function KeywordChoose(props) {
         },{
             keyword: '美國',
             summary: '新冠肺炎疫情從1月底開始爆發，迄今已延燒近四個月，據內政部移民署最新統計顯示，今年2、3、4月疫情嚴重的時候，來台旅客量逐月驟減，4月份來台旅客數僅2,559人，創下歷史新低量，而三個月來台旅客量較去年同期狂減260.9萬人次，觀光收益減損多達969.3億元。',
-            news_num: 55,
+            newsNum: 55,
             reportNum: [44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43],
             sentiment: [4.51, 1, 2.18],
             standpoint: [3.51, 2],
@@ -122,7 +122,7 @@ export default function KeywordChoose(props) {
         },{
             keyword: '義大利',
             summary: '新冠肺炎疫情從1月底開始爆發，迄今已延燒近四個月，據內政部移民署最新統計顯示，今年2、3、4月疫情嚴重的時候，來台旅客量逐月驟減，4月份來台旅客數僅2,559人，創下歷史新低量，而三個月來台旅客量較去年同期狂減260.9萬人次，觀光收益減損多達969.3億元。',
-            news_num: 45,
+            newsNum: 45,
             reportNum: [44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43],
             sentiment: [4.51, 1, 2.18],
             standpoint: [3.51, 2],
@@ -143,7 +143,7 @@ export default function KeywordChoose(props) {
         },{
             keyword: '中國',
             summary: '新冠肺炎疫情從1月底開始爆發，迄今已延燒近四個月，據內政部移民署最新統計顯示，今年2、3、4月疫情嚴重的時候，來台旅客量逐月驟減，4月份來台旅客數僅2,559人，創下歷史新低量，而三個月來台旅客量較去年同期狂減260.9萬人次，觀光收益減損多達969.3億元。',
-            news_num: 44,
+            newsNum: 44,
             reportNum: [44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43],
             sentiment: [4.51, 1, 2.18],
             standpoint: [3.51, 2],
@@ -151,7 +151,7 @@ export default function KeywordChoose(props) {
         },{
             keyword: '蔡英文',
             summary: '新冠肺炎疫情從1月底開始爆發，迄今已延燒近四個月，據內政部移民署最新統計顯示，今年2、3、4月疫情嚴重的時候，來台旅客量逐月驟減，4月份來台旅客數僅2,559人，創下歷史新低量，而三個月來台旅客量較去年同期狂減260.9萬人次，觀光收益減損多達969.3億元。',
-            news_num: 40,
+            newsNum: 40,
             reportNum: [44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43],
             sentiment: [4.51, 1, 2.18],
             standpoint: [3.51, 2],
@@ -159,7 +159,7 @@ export default function KeywordChoose(props) {
         },{
             keyword: '香港',
             summary: '新冠肺炎疫情從1月底開始爆發，迄今已延燒近四個月，據內政部移民署最新統計顯示，今年2、3、4月疫情嚴重的時候，來台旅客量逐月驟減，4月份來台旅客數僅2,559人，創下歷史新低量，而三個月來台旅客量較去年同期狂減260.9萬人次，觀光收益減損多達969.3億元。',
-            news_num: 35,
+            newsNum: 35,
             reportNum: [44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43],
             sentiment: [4.51, 1, 2.18],
             standpoint: [3.51, 2],
@@ -172,6 +172,7 @@ export default function KeywordChoose(props) {
 
     useEffect(() => {
         if(isFetchSentiment == false) {
+            setIsFetchSentiment(true)
             fetch('/analysis/sentimentWeek', {
                 method: "get",
             })
@@ -180,18 +181,23 @@ export default function KeywordChoose(props) {
             })
             .then((data)=> {
                 setSentiment(data);
-                setIsFetchSentiment(true)
 
                 if(isFetchReview == false) {
+                    setIsFetchReview(true)
                     fetch('/analysis/newsReview', {
                         method: "get",
                     })
                     .then((res) => {
                         return res.json()
                     })
+                    .then((data) => {
+                        data.sort((a, b) => {
+                            return b.newsNum - a.newsNum
+                        })
+                        return data
+                    })
                     .then((data)=> {
                         setReviewContent(data);
-                        setIsFetchReview(true)
                     })
                 }
             })

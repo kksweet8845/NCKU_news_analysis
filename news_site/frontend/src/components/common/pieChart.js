@@ -45,7 +45,7 @@ export default function (props) {
                 grades = normalize(grades)
                 break
             case 1:
-                labels = ['三立', '中時']
+                labels = ['中時', '三立']
                 grades = [
                     {
                         value: grades[0],

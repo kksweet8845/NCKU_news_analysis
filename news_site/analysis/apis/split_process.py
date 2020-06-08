@@ -25,8 +25,9 @@ class Split:
         sents_ls = []
         words_ls = []
         for sent in sents:
-            sents_ls.append(( sent, pseg.cut(sent)))
-            words_ls.extend(pseg.cut(sent))
+            ls = [ (word, flag) for word, flag in pseg.cut(sent)]
+            sents_ls.append(( sent, ls))
+            words_ls.extend(ls)
 
         return words_ls, sents_ls
 
@@ -68,7 +69,13 @@ class Split:
             for word, flag in words:
                 temp_list.append((word, flag))
             seperated_word_list.append(temp_list)
-            a = Tagger(news=query_set[i], split=json.dumps(temp_list), sents_split=json.dumps(sents), date=query_set[i].date)
+            try:
+                a = Tagger.objects.get(news__id=query_set[i].id)
+                a.sents_split = json.dumps(list(sents))
+            except Tagger.DoesNotExist:
+                print("Does not exist" + f"{query_set[i].id}")
+                a = Tagger(news=query_set[i], split=json.dumps(temp_list), sents_split=json.dumps(sents), date=query_set[i].date)
+            # print(list(sents))
             a.save()
             i += 1
         return seperated_word_list

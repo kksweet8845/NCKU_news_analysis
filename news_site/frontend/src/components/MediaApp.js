@@ -393,7 +393,7 @@ export default function MediaApp(props) {
                                         num= {obj.length} // num= {index + 1}
                                         keyword= {obj[0].title}
                                         links= {obj}
-                                        width= "80%"
+                                        width= "70%"
                                         />
                             })}
                         </Grid>

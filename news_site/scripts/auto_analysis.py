@@ -213,19 +213,19 @@ def run():
     # Crawling the news
     # todayNews_crawling(None)
     # tagger
-    # crawling()
+    crawling()
 
-    # autoTagger()
+    autoTagger()
 
     autoSentiment()
 
-    # autoAspect()
+    autoAspect()
 
-    # autoStandpoint()
+    autoStandpoint()
 
-    # autoClustering()
+    autoClustering()
 
-    # autoClusteringThree()
+    autoClusteringThree()
 
-    # autoWordFreq()
+    autoWordFreq()
 
