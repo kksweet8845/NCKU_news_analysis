@@ -45,7 +45,7 @@ def analysis_aspect(df):
     util_path = settings.BASE_DIR + '/analysis/apis/utils/aspect_data/chineseGLUE/inews/'
 
 
-    print(df.head())
+    # print(df.head())
     # save the current file into csv
     df.drop('author',axis=1,inplace=True)
     df.drop('date',axis=1,inplace=True)
