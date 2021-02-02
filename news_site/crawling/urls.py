@@ -16,5 +16,4 @@ urlpatterns = [
     path('api/ltn/', test_ltn_crawling, name='test ltn')
     #path('api/get_foreign/', get_foreign_news_today, name='test foregin'),
     #path('api/get_dimestic/', get_dimestic_news_today, name='test dimestic'),
-    
 ]

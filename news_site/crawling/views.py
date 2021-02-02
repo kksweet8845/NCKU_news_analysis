@@ -153,7 +153,7 @@ def test_chinatimes_crawling(request):
     c = TVBSCrawler()
     # data = c.get_news_today()
     data = c.get_news_by_date(date_list=['2020-03-26'])
-    result = c.insert_news(data)
+    # result = c.insert_news(data)
     # data = c.get_news_headline()
     return HttpResponse(data)
 

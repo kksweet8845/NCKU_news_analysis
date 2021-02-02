@@ -14,9 +14,9 @@ from analysis.apis import AspectModule, Split, SentimentAnalysis, standpoint_ana
 from newsdb.models import New, Tagger
 from django.db.models import Q
 from analysis.apis import NewsClustering, KeywordToday
-import tensorflow.compat.v2 as tf
-from tensorflow_text import SentencepieceTokenizer
-import tensorflow_hub as hub
+# import tensorflow.compat.v2 as tf
+# from tensorflow_text import SentencepieceTokenizer
+# import tensorflow_hub as hub
 import sklearn.metrics.pairwise
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.cluster import DBSCAN
@@ -96,7 +96,7 @@ def todayNews_crawling():
         ('nowNews', nowNews_crawling()),
         ('udn', udn_crawling()),
         ('ftvnews', ftvnews_crawling()),
-        ('pts', pts_crawling()),
+        # ('pts', pts_crawling()),
     ]
     errors = []
     df = pd.DataFrame(columns=['id', 'title', 'content', 'author', 'brand_id', 'sub_id', 'date', 'update_time', 'url'])
@@ -215,17 +215,17 @@ def run():
     # tagger
     crawling()
 
-    autoTagger()
+    # autoTagger()
 
-    autoSentiment()
+    # autoSentiment()
 
-    autoAspect()
+    # autoAspect()
 
-    autoStandpoint()
+    # autoStandpoint()
 
-    autoClustering()
+    # autoClustering()
 
-    autoClusteringThree()
+    # autoClusteringThree()
 
-    autoWordFreq()
+    # autoWordFreq()
 

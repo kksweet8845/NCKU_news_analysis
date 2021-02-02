@@ -33,7 +33,7 @@ class SETNCrawler:
             return ''
         title = soup.find('h1', class_='news-title-3').text
         return title
-    
+
     def getDate(self, soup):
         date = soup.find('time', class_='page-date').text.split(" ")
         return str(datetime.datetime.strptime(date[0], "%Y/%m/%d")).split(" ")[0]

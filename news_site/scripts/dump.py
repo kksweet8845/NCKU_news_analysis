@@ -41,11 +41,32 @@ def run():
     #     row['content'] = re.sub(r'[，\r]', ' ', row['content'])
     #     row['title'] = re.sub(r'[，\r]', ' ', row['title'])
 
+    dump_json = []
 
-    df.to_csv(f"{settings.BASE_DIR}/../dump/{date.today().isoformat()}_dump.csv", index=False)
+    for row in df.iterrows():
+        row = row[1]
+        # print(row['date'])
+        obj = {
+            'title' : row['title'],
+            'content' : row['content'],
+            'author' : row['author'],
+            'brand_id' : row['brand_id'],
+            'date' : str(row['date']),
+            'url' : row['url'],
+        }
+        dump_json.append(obj)
+
+    json_str = json.dumps(dump_json, indent=4, ensure_ascii=False)
+
+    with open(f"{settings.BASE_DIR}/../dump/{date.today().isoformat()}_dump.json", 'w', encoding='utf8') as file:
+        file.write(json_str)
+    file.close()
 
 
-    read_df = pd.read_csv(f"{settings.BASE_DIR}/../dump/{date.today().isoformat()}_dump.csv")
+    # df.to_csv(f"{settings.BASE_DIR}/../dump/{date.today().isoformat()}_dump.csv", index=False)
+
+
+    # read_df = pd.read_csv(f"{settings.BASE_DIR}/../dump/{date.today().isoformat()}_dump.csv")
 
     # print(len(df), len(read_df))
-    assert len(read_df) == len(df)
+    # assert len(read_df) == len(df)

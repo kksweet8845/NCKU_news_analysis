@@ -77,7 +77,7 @@ class ChinatimesCrawler:
                     news_href  = news_DOM.select('div.row div.col h3.title a')[0]['href']
 
                     if datetime.strptime(news_date, '%Y-%m-%d %H:%M').date() > date:
-                        continue
+                        url_category.append( 'https://www.chinatimes.com%s' % news_href )
                     elif datetime.strptime(news_date, '%Y-%m-%d %H:%M').date() == date:
                         url_category.append( 'https://www.chinatimes.com%s' % news_href )
                     else:
