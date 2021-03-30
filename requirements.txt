@@ -1,6 +1,6 @@
 beautifulsoup4==4.7.1
 ckiptagger==0.1.0
-Django==3.0.3
+Django==3.0.12
 django-rest-knox==4.1.0
 django-webpack-loader==0.7.0
 djangorestframework==3.11.0
